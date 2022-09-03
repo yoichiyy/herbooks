@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "950899399586",
+    "project_id": "herbooks-5894b",
+    "storage_bucket": "herbooks-5894b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950899399586:android:7fbc7144f7ecb92432b0fb",
+        "android_client_info": {
+          "package_name": "com.example.herbooks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950899399586-m60am2k78bt2k0evpfav2pmkf8lua1be.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARXIMLioTQ-7D_RbnJVSBcdaJNWMi6ntQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950899399586-m60am2k78bt2k0evpfav2pmkf8lua1be.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "950899399586-3l82an4rk1hnqd5obrjbc29bu3veac03.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jp.yoichiyy.herbooks"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
