@@ -16,8 +16,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   //consumer statefulninatteirunoで、再度取得するコードかくでもOK
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final historyCount =
+  final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
+  final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
+  final totalCount = "total";
 
   @override
   Widget build(BuildContext context) {
@@ -48,27 +50,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 60,
                       child: FloatingActionButton(
                         onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection('ehoncount')
-                              .doc() // ドキュメントID自動生成
-                              .set({
-                            'ehon_year': "${DateTime.now().year}",
-                            'ehon_month': "${DateTime.now().month}",
-                            'ehon_date': "${DateTime.now().day}",
-                            'ehon_pm': "plus"
-                          });
-                          //1
+                          //全カウント登録
                           FirebaseFirestore.instance
-                              .collection('historyCounter')
-                              .doc(historyCount)
+                              .collection('totalCount')
+                              .doc(totalCount)
                               .get()
                               .then(
+                                //ここから
                                 (docSnapshot) => {
                                   if (docSnapshot.exists)
                                     {
                                       FirebaseFirestore.instance
-                                          .collection('historyCounter')
-                                          .doc(historyCount)
+                                          .collection('totalCount')
+                                          .doc(totalCount)
                                           .update({
                                         "count": FieldValue.increment(1)
                                       })
@@ -76,8 +70,39 @@ class _MyHomePageState extends State<MyHomePage> {
                                   else
                                     {
                                       FirebaseFirestore.instance
-                                          .collection('historyCounter')
-                                          .doc(historyCount)
+                                          .collection('totalCount')
+                                          .doc(totalCount)
+                                          .set(
+                                        {
+                                          "count": 1,
+                                        },
+                                      ),
+                                    },
+                                },
+                              ); //then
+
+                          //月単位のカウンター登録
+                          FirebaseFirestore.instance
+                              .collection('monthlyCount')
+                              .doc(monthlyCount)
+                              .get()
+                              .then(
+                                //ここから
+                                (docSnapshot) => {
+                                  if (docSnapshot.exists)
+                                    {
+                                      FirebaseFirestore.instance
+                                          .collection('monthlyCount')
+                                          .doc(monthlyCount)
+                                          .update({
+                                        "count": FieldValue.increment(1)
+                                      })
+                                    }
+                                  else
+                                    {
+                                      FirebaseFirestore.instance
+                                          .collection('monthlyCount')
+                                          .doc(monthlyCount)
                                           .set(
                                         {
                                           "date":
@@ -89,12 +114,51 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                     },
                                 },
-                              );
+                              ); //then
+
+
+                            // 'ehon_year': "${DateTime.now().year}",
+                            // 'ehon_month': "${DateTime.now().month}",
+                            // 'ehon_date': "${DateTime.now().day}",
+                            // 'ehon_pm': "plus"
+                          //日単位のカウンター登録
+                          FirebaseFirestore.instance
+                              .collection('dailyCount')
+                              .doc(dailyCount)
+                              .get()
+                              .then(
+                                //ここから
+                                (docSnapshot) => {
+                                  if (docSnapshot.exists)
+                                    {
+                                      FirebaseFirestore.instance
+                                          .collection('dailyCount')
+                                          .doc(dailyCount)
+                                          .update({
+                                        "count": FieldValue.increment(1)
+                                      })
+                                    }
+                                  else
+                                    {
+                                      FirebaseFirestore.instance
+                                          .collection('dailyCount')
+                                          .doc(dailyCount)
+                                          .set(
+                                        {
+                                          "date":
+                                              "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
+                                          //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                          //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                          "count": 1,
+                                        },
+                                      ),
+                                    },
+                                },
+                              ); //then
+
                           setState(() {
-                            getCounterForDay(DateTime.now().year,
-                                DateTime.now().month, DateTime.now().day);
-                            getCounterForMonth(
-                                DateTime.now().year, DateTime.now().month);
+                            getCounterForDay(dailyCount);
+                            getCounterForMonth(monthlyCount);
                             getCounterForAll();
                           });
                         },
@@ -132,8 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               margin: const EdgeInsets.all(4),
               child: FutureBuilder<int>(
-                  future: getCounterForDay(DateTime.now().year,
-                      DateTime.now().month, DateTime.now().day),
+                  future: getCounterForDay(dailyCount),
                   builder: (context, snapshot) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
@@ -150,8 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               margin: const EdgeInsets.all(4),
               child: FutureBuilder<int>(
-                future: getCounterForMonth(
-                    DateTime.now().year, DateTime.now().month),
+                future: getCounterForMonth(monthlyCount),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),

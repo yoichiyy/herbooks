@@ -1,22 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // 月の冊数カウント
-Future<int> getCounterForMonth(int year, int month) async {
+Future<int> getCounterForMonth(String monthlyCount) async {
   final _store = FirebaseFirestore.instance;
-  final ehonData = await _store.collection('ehoncount').get();
-  final ehonCountStream = _store.collection('ehoncount').snapshots();
-  ehonCountStream.listen((qs) {
-    //変更があったら、listen以下がはしる。
-    // print("おはよう");
-  });
-  var countAll = ehonData.docs.length;
-  var monthData = await _store
-      .collection('ehoncount')
-      .where('ehon_year', isEqualTo: year.toString())
-      .where('ehon_month', isEqualTo: month.toString())
+  final monthData = await _store
+      .collection('monthlyCount')
+      .where('month', isEqualTo: monthlyCount)
       .get();
-  var countMonth = monthData.docs.length;
+
+  final data = monthData.docs[0].data();
+  final countMonth = data['count'];
   return countMonth;
+
 //Kboyさんとのセッション。stampをStringとして表示させること＋QUERYの書き方
   //https://stackoverflow.com/questions/54014679/return-type-of-timestamp-from-firestore-and-comparing-to-datetime-now-in-flutt
   //firebase firestore timestamp greater than flutter
@@ -27,26 +22,27 @@ Future<int> getCounterForMonth(int year, int month) async {
 //2.firesotore→cloudfunctionで集計できる。書き込んだタイミング→→全日付データのdoc KEY日付　VALUE冊数。新しいコレクション
 //oncleate　トリガー。来たら、それが作られるようなのつくる。「valueを１増やして」・・・functionを一つかまさないと成らぬ。難易度高い。
 
-
-
 // 日の冊数カウント
-Future<int> getCounterForDay(int year, int month, int day) async {
+Future<int> getCounterForDay(String dailyCount) async {
+  //細かく切って、一つ一つデータをとれているか確認すべし
   final _store = FirebaseFirestore.instance;
   var dayData = await _store
-      .collection('ehoncount')
-      .where('ehon_year', isEqualTo: year.toString())
-      .where('ehon_month', isEqualTo: month.toString())
-      .where('ehon_date', isEqualTo: day.toString())
+      .collection('dailyCount')
+      .where('date', isEqualTo: dailyCount)
       .get();
-  var countDay = dayData.docs.length;
+
+  //querysnapshotから中のデータを取り出す。
+  final data = dayData.docs[0].data();
+  final countDay = data['count'];
   return countDay;
 }
 
 //　全冊数のカウント
 Future<int> getCounterForAll() async {
   final _store = FirebaseFirestore.instance;
-  var allData = await _store.collection('ehoncount').get();
-  var countAll = allData.docs.length;
+  var allData = await _store.collection('totalCount').where("count").get();
+  final data = allData.docs[0].data();
+  final countAll = data['count'];
   return countAll;
 }
 
