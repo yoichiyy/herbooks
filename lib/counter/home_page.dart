@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Expanded(
-            flex: 2,
+            flex: 1,
             child: HomeCardWidget(
               title: "えほん",
               color: Colors.white60,
@@ -45,121 +45,497 @@ class _MyHomePageState extends State<MyHomePage> {
                   _countArea(),
                   Center(
                     //Button_area
-                    child: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: FloatingActionButton(
-                        onPressed: () async {
-                          //全カウント登録
-                          FirebaseFirestore.instance
-                              .collection('totalCount')
-                              .doc(totalCount)
-                              .get()
-                              .then(
-                                //ここから
-                                (docSnapshot) => {
-                                  if (docSnapshot.exists)
-                                    {
-                                      FirebaseFirestore.instance
-                                          .collection('totalCount')
-                                          .doc(totalCount)
-                                          .update({
-                                        "count": FieldValue.increment(1)
-                                      })
-                                    }
-                                  else
-                                    {
-                                      FirebaseFirestore.instance
-                                          .collection('totalCount')
-                                          .doc(totalCount)
-                                          .set(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: FloatingActionButton(
+                            onPressed: () async {
+                              //全カウント登録
+                              FirebaseFirestore.instance
+                                  .collection('totalCount')
+                                  .doc(totalCount)
+                                  .get()
+                                  .then(
+                                    //ここから
+                                    (docSnapshot) => {
+                                      if (docSnapshot.exists)
                                         {
-                                          "count": 1,
-                                        },
-                                      ),
-                                    },
-                                },
-                              ); //then
-
-                          //月単位のカウンター登録
-                          FirebaseFirestore.instance
-                              .collection('monthlyCount')
-                              .doc(monthlyCount)
-                              .get()
-                              .then(
-                                //ここから
-                                (docSnapshot) => {
-                                  if (docSnapshot.exists)
-                                    {
-                                      FirebaseFirestore.instance
-                                          .collection('monthlyCount')
-                                          .doc(monthlyCount)
-                                          .update({
-                                        "count": FieldValue.increment(1)
-                                      })
-                                    }
-                                  else
-                                    {
-                                      FirebaseFirestore.instance
-                                          .collection('monthlyCount')
-                                          .doc(monthlyCount)
-                                          .set(
+                                          FirebaseFirestore.instance
+                                              .collection('totalCount')
+                                              .doc(totalCount)
+                                              .update({
+                                            "count": FieldValue.increment(1)
+                                          })
+                                        }
+                                      else
                                         {
-                                          "date": monthlyCount,
-                                          //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
-                                          //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
-                                          "count": 1,
+                                          FirebaseFirestore.instance
+                                              .collection('totalCount')
+                                              .doc(totalCount)
+                                              .set(
+                                            {
+                                              "count": 1,
+                                            },
+                                          ),
                                         },
-                                      ),
                                     },
-                                },
-                              ); //then
+                                  ); //then
 
-                          //日単位のカウンター登録
-                          FirebaseFirestore.instance
-                              .collection('dailyCount')
-                              .doc(dailyCount)
-                              .get()
-                              .then(
-                                //ここから
-                                (docSnapshot) => {
-                                  if (docSnapshot.exists)
-                                    {
-                                      FirebaseFirestore.instance
-                                          .collection('dailyCount')
-                                          .doc(dailyCount)
-                                          .update({
-                                        "count": FieldValue.increment(1)
-                                      })
-                                    }
-                                  else
-                                    {
-                                      FirebaseFirestore.instance
-                                          .collection('dailyCount')
-                                          .doc(dailyCount)
-                                          .set(
+                              //月単位のカウンター登録
+                              FirebaseFirestore.instance
+                                  .collection('monthlyCount')
+                                  .doc(monthlyCount)
+                                  .get()
+                                  .then(
+                                    //ここから
+                                    (docSnapshot) => {
+                                      if (docSnapshot.exists)
                                         {
-                                          "date": dailyCount,
-                                          "date_string":
-                                              "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
-                                          //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
-                                          //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
-                                          "count": 1,
+                                          FirebaseFirestore.instance
+                                              .collection('monthlyCount')
+                                              .doc(monthlyCount)
+                                              .update({
+                                            "count": FieldValue.increment(1)
+                                          })
+                                        }
+                                      else
+                                        {
+                                          FirebaseFirestore.instance
+                                              .collection('monthlyCount')
+                                              .doc(monthlyCount)
+                                              .set(
+                                            {
+                                              "date": monthlyCount,
+                                              //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                              //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                              "count": 1,
+                                            },
+                                          ),
                                         },
-                                      ),
                                     },
-                                },
-                              ); //then
+                                  ); //then
 
-                          setState(() {
-                            debugPrint("setState実行");
-                            getCounterForDay(dailyCount);
-                            getCounterForMonth(monthlyCount);
-                            getCounterForAll();
-                          });
-                        },
-                        child: const Icon(Icons.add),
-                      ),
+                              //日単位のカウンター登録
+                              FirebaseFirestore.instance
+                                  .collection('dailyCount')
+                                  .doc(dailyCount)
+                                  .get()
+                                  .then(
+                                    //ここから
+                                    (docSnapshot) => {
+                                      if (docSnapshot.exists)
+                                        {
+                                          FirebaseFirestore.instance
+                                              .collection('dailyCount')
+                                              .doc(dailyCount)
+                                              .update({
+                                            "count": FieldValue.increment(1)
+                                          })
+                                        }
+                                      else
+                                        {
+                                          FirebaseFirestore.instance
+                                              .collection('dailyCount')
+                                              .doc(dailyCount)
+                                              .set(
+                                            {
+                                              "date": dailyCount,
+                                              "date_string":
+                                                  "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
+                                              //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                              //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                              "count": 1,
+                                            },
+                                          ),
+                                        },
+                                    },
+                                  ); //then
+
+                              setState(() {
+                                debugPrint("setState実行");
+                                getCounterForDay(dailyCount);
+                                getCounterForMonth(monthlyCount);
+                                getCounterForAll();
+                              });
+                            },
+                            child: const Icon(Icons.add),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: ElevatedButton(
+                                child: const Text('3'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey[300],
+                                  onPrimary: Colors.purple,
+                                ),
+                                onPressed: () async {
+                                  //全カウント登録
+                                  FirebaseFirestore.instance
+                                      .collection('totalCount')
+                                      .doc(totalCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('totalCount')
+                                                  .doc(totalCount)
+                                                  .update({
+                                                "count": FieldValue.increment(3)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('totalCount')
+                                                  .doc(totalCount)
+                                                  .set(
+                                                {
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  //月単位のカウンター登録
+                                  FirebaseFirestore.instance
+                                      .collection('monthlyCount')
+                                      .doc(monthlyCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('monthlyCount')
+                                                  .doc(monthlyCount)
+                                                  .update({
+                                                "count": FieldValue.increment(3)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('monthlyCount')
+                                                  .doc(monthlyCount)
+                                                  .set(
+                                                {
+                                                  "date": monthlyCount,
+                                                  //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                                  //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  //日単位のカウンター登録
+                                  FirebaseFirestore.instance
+                                      .collection('dailyCount')
+                                      .doc(dailyCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('dailyCount')
+                                                  .doc(dailyCount)
+                                                  .update({
+                                                "count": FieldValue.increment(3)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('dailyCount')
+                                                  .doc(dailyCount)
+                                                  .set(
+                                                {
+                                                  "date": dailyCount,
+                                                  "date_string":
+                                                      "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
+                                                  //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                                  //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  setState(() {
+                                    debugPrint("setState実行");
+                                    getCounterForDay(dailyCount);
+                                    getCounterForMonth(monthlyCount);
+                                    getCounterForAll();
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: ElevatedButton(
+                                child: const Text('5'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey[300],
+                                  onPrimary: Colors.purple,
+                                ),
+                                onPressed: () async {
+                                  //全カウント登録
+                                  FirebaseFirestore.instance
+                                      .collection('totalCount')
+                                      .doc(totalCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('totalCount')
+                                                  .doc(totalCount)
+                                                  .update({
+                                                "count": FieldValue.increment(5)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('totalCount')
+                                                  .doc(totalCount)
+                                                  .set(
+                                                {
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  //月単位のカウンター登録
+                                  FirebaseFirestore.instance
+                                      .collection('monthlyCount')
+                                      .doc(monthlyCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('monthlyCount')
+                                                  .doc(monthlyCount)
+                                                  .update({
+                                                "count": FieldValue.increment(5)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('monthlyCount')
+                                                  .doc(monthlyCount)
+                                                  .set(
+                                                {
+                                                  "date": monthlyCount,
+                                                  //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                                  //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  //日単位のカウンター登録
+                                  FirebaseFirestore.instance
+                                      .collection('dailyCount')
+                                      .doc(dailyCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('dailyCount')
+                                                  .doc(dailyCount)
+                                                  .update({
+                                                "count": FieldValue.increment(5)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('dailyCount')
+                                                  .doc(dailyCount)
+                                                  .set(
+                                                {
+                                                  "date": dailyCount,
+                                                  "date_string":
+                                                      "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
+                                                  //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                                  //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  setState(() {
+                                    debugPrint("setState実行");
+                                    getCounterForDay(dailyCount);
+                                    getCounterForMonth(monthlyCount);
+                                    getCounterForAll();
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: ElevatedButton(
+                                child: const Text('-1'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.grey[300],
+                                  onPrimary: Colors.purple,
+                                ),
+                                onPressed: () async {
+                                  //全カウント登録
+                                  FirebaseFirestore.instance
+                                      .collection('totalCount')
+                                      .doc(totalCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('totalCount')
+                                                  .doc(totalCount)
+                                                  .update({
+                                                "count":
+                                                    FieldValue.increment(-1)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('totalCount')
+                                                  .doc(totalCount)
+                                                  .set(
+                                                {
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  //月単位のカウンター登録
+                                  FirebaseFirestore.instance
+                                      .collection('monthlyCount')
+                                      .doc(monthlyCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('monthlyCount')
+                                                  .doc(monthlyCount)
+                                                  .update({
+                                                "count":
+                                                    FieldValue.increment(-1)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('monthlyCount')
+                                                  .doc(monthlyCount)
+                                                  .set(
+                                                {
+                                                  "date": monthlyCount,
+                                                  //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                                  //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  //日単位のカウンター登録
+                                  FirebaseFirestore.instance
+                                      .collection('dailyCount')
+                                      .doc(dailyCount)
+                                      .get()
+                                      .then(
+                                        //ここから
+                                        (docSnapshot) => {
+                                          if (docSnapshot.exists)
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('dailyCount')
+                                                  .doc(dailyCount)
+                                                  .update({
+                                                "count":
+                                                    FieldValue.increment(-1)
+                                              })
+                                            }
+                                          else
+                                            {
+                                              FirebaseFirestore.instance
+                                                  .collection('dailyCount')
+                                                  .doc(dailyCount)
+                                                  .set(
+                                                {
+                                                  "date": dailyCount,
+                                                  "date_string":
+                                                      "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
+                                                  //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
+                                                  //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
+                                                  "count": 1,
+                                                },
+                                              ),
+                                            },
+                                        },
+                                      ); //then
+
+                                  setState(() {
+                                    debugPrint("setState実行");
+                                    getCounterForDay(dailyCount);
+                                    getCounterForMonth(monthlyCount);
+                                    getCounterForAll();
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -167,7 +543,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           const Expanded(
-            flex: 3,
+            flex: 1,
             child: HomeCardWidget(
               title: "TODO",
               color: Colors.white12,
