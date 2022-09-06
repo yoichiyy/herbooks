@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 // 月の冊数カウント
 Future<int> getCounterForMonth(String monthlyCount) async {
   final _store = FirebaseFirestore.instance;
   final monthData = await _store
       .collection('monthlyCount')
-      .where('month', isEqualTo: monthlyCount)
+      .where('date', isEqualTo: monthlyCount)
       .get();
 
   final data = monthData.docs[0].data();
+  //ぶんきをかく
+
   final countMonth = data['count'];
   return countMonth;
 
@@ -32,6 +35,11 @@ Future<int> getCounterForDay(String dailyCount) async {
       .get();
 
   //querysnapshotから中のデータを取り出す。
+  if (dayData.docs.isEmpty) {
+    debugPrint("そういうものはありません。");
+  } else {
+    debugPrint("そういうものが、あります。");
+  }
   final data = dayData.docs[0].data();
   final countDay = data['count'];
   return countDay;

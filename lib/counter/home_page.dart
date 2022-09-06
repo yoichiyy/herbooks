@@ -105,8 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           .doc(monthlyCount)
                                           .set(
                                         {
-                                          "date":
-                                              "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
+                                          "date": monthlyCount,
                                           //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
                                           //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
                                           "count": 1,
@@ -116,11 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                               ); //then
 
-
-                            // 'ehon_year': "${DateTime.now().year}",
-                            // 'ehon_month': "${DateTime.now().month}",
-                            // 'ehon_date': "${DateTime.now().day}",
-                            // 'ehon_pm': "plus"
                           //日単位のカウンター登録
                           FirebaseFirestore.instance
                               .collection('dailyCount')
@@ -145,7 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                           .doc(dailyCount)
                                           .set(
                                         {
-                                          "date":
+                                          "date": dailyCount,
+                                          "date_string":
                                               "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})",
                                           //0-6の数字を返す。0=月... →リストを作れば良い。アプリ中でどこからでも使えるように。utils
                                           //firebaseに、整数で入ってても、読み込むview側で、このjapaneseWeekday関数を使えば曜日表示可能。
@@ -157,6 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ); //then
 
                           setState(() {
+                            debugPrint("setState実行");
                             getCounterForDay(dailyCount);
                             getCounterForMonth(monthlyCount);
                             getCounterForAll();

@@ -24,7 +24,7 @@ class HistoryPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      leading: Text(historyData[index].date),
+                      leading: Text(historyData[index].dateString),
                       title: Text("${historyData[index].count.toString()}冊"),
                     ),
                   );
@@ -43,7 +43,7 @@ class HistoryModel extends ChangeNotifier {
 
   Future<void> fetchHistory() async {
     final docs =
-        await FirebaseFirestore.instance.collection('dailyCounter').get();
+        await FirebaseFirestore.instance.collection('dailyCount').get();
     final readingHistory = docs.docs.map((doc) => History(doc)).toList();
     readingHistory.sort((a, b) => b.date.compareTo(a.date));
     historyList = readingHistory;
@@ -55,7 +55,9 @@ class History {
   History(DocumentSnapshot doc) {
     count = doc['count'];
     date = doc['date'];
+    dateString = doc['date_string'];
   }
   int? count;
   String date = "";
+  String dateString = "";
 }
