@@ -37,12 +37,13 @@ Future<int> getCounterForDay(String dailyCount) async {
   //querysnapshotから中のデータを取り出す。
   if (dayData.docs.isEmpty) {
     debugPrint("そういうものはありません。");
+    return 0;
   } else {
+    final data = dayData.docs[0].data();
+    final countDay = data['count'];
     debugPrint("そういうものが、あります。");
+    return countDay;
   }
-  final data = dayData.docs[0].data();
-  final countDay = data['count'];
-  return countDay;
 }
 
 //　全冊数のカウント

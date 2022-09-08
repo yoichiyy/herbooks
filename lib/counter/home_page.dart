@@ -1,9 +1,11 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/counter/homeCard.dart';
 import 'package:counter/counter/count_model.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:counter/counter/count_area.dart';
 import '../utils/date_time.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -23,9 +25,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // return ChangeNotifierProvider<CounterModel>(
-    //   create: (_) => CounterModel(_),
-    //   child: Scaffold(
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -42,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _countArea(),
+                  countArea(),
                   Center(
                     //Button_area
                     child: Column(
@@ -178,6 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.grey[300],
                                   onPrimary: Colors.purple,
+                                  textStyle: const TextStyle(
+                                    fontSize: 20,
+                                  ),
                                 ),
                                 onPressed: () async {
                                   //全カウント登録
@@ -289,6 +291,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   });
                                 },
                               ),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                              height: 60,
                             ),
                             SizedBox(
                               width: 60,
@@ -298,6 +304,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.grey[300],
                                   onPrimary: Colors.purple,
+                                  textStyle: const TextStyle(
+                                    fontSize: 20,
+                                  ),
                                 ),
                                 onPressed: () async {
                                   //全カウント登録
@@ -410,6 +419,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                               ),
                             ),
+                            const SizedBox(
+                              width: 30,
+                              height: 60,
+                            ),
                             SizedBox(
                               width: 60,
                               height: 60,
@@ -418,6 +431,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.grey[300],
                                   onPrimary: Colors.purple,
+                                  textStyle: const TextStyle(
+                                    fontSize: 20,
+                                  ),
                                 ),
                                 onPressed: () async {
                                   //全カウント登録
@@ -558,71 +574,9 @@ class _MyHomePageState extends State<MyHomePage> {
       // ),
     );
   }
-
-  Widget _countArea() {
-    return Container(
-      margin: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              child: FutureBuilder<int>(
-                  future: getCounterForDay(dailyCount),
-                  builder: (context, snapshot) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "今日: ${snapshot.data}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 22),
-                      ),
-                    );
-                  }),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              child: FutureBuilder<int>(
-                future: getCounterForMonth(monthlyCount),
-                builder: (context, snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      "今月: ${snapshot.data}",
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 22),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(4),
-              child: FutureBuilder<int>(
-                  // future: getCounterForDay(DateTime.now()),
-                  future: getCounterForAll(),
-                  builder: (context, snapshot) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        "全部: ${snapshot.data}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 22),
-                      ),
-                    );
-                  }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
+//TASKカードセクション
 class TaskCard extends StatefulWidget {
   const TaskCard({Key? key}) : super(key: key);
 
@@ -636,8 +590,7 @@ class _TaskCardState extends State<TaskCard> {
   @override
   void dispose() {
     _controller.dispose();
-    super.dispose(); //このsuperはなんでしょう。FQ：
-    // flutter stateful dispose
+    super.dispose(); 
   }
 
   DateTime _pickedDate = DateTime.now();
@@ -655,42 +608,15 @@ class _TaskCardState extends State<TaskCard> {
           child: Center(
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-//１．singlechild scroll view　→　すくろールできるようにする方法もある。
-//expanded 1:2　になってるので、これをやめないと。高さを固定するなど。
-
-                        controller: _controller,
-                        decoration: const InputDecoration(hintText: "やること"),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final _result = await showDatePicker(
-                          context: context,
-                          currentDate: _pickedDate,
-                          initialDate: DateTime.now(),
-                          firstDate:
-                              DateTime.now().subtract(const Duration(days: 0)),
-                          lastDate: DateTime.now().add(
-                            const Duration(days: 3 * 365),
-                          ),
-                        );
-                        if (_result != null) {
-                          _pickedDate = _result;
-                        }
-
-                        setState(() {});
-                      },
-                      child: const Text("日付指定"),
-                    ),
-                  ],
+                TextFormField(
+                  //１．singlechild scroll view　→　すくろールできるようにする方法もある。
+                  //expanded 1:2　になってるので、これをやめないと。高さを固定するなど。
+                  controller: _controller,
+                  decoration: const InputDecoration(hintText: "やること"),
                 ),
                 const SizedBox(
                   width: double.infinity,
-                  height: 10,
+                  height: 30,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -722,19 +648,37 @@ class _TaskCardState extends State<TaskCard> {
                       child: const Text("来週"),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        setState(() => _pickedDate = DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month + 1,
-                              DateTime.now().day,
-                              DateTime.now().hour,
-                              DateTime.now().minute,
-                            ));
-                        debugPrint(_pickedDate.toString());
+                      child: const Text("日付指定"),
+                      // style: ElevatedButton.styleFrom(
+                      //   primary: Colors.grey[400],
+                      //   onPrimary: Colors.black,
+                      //   textStyle: const TextStyle(
+                      //     fontSize: 10,
+                      //   ),
+                      // ),
+                      onPressed: () async {
+                        final _result = await showDatePicker(
+                          context: context,
+                          currentDate: _pickedDate,
+                          initialDate: DateTime.now(),
+                          firstDate:
+                              DateTime.now().subtract(const Duration(days: 0)),
+                          lastDate: DateTime.now().add(
+                            const Duration(days: 3 * 365),
+                          ),
+                        );
+                        if (_result != null) {
+                          _pickedDate = _result;
+                        }
+
+                        setState(() {});
                       },
-                      child: const Text("来月〜"),
-                    )
+                    ),
                   ],
+                ),
+                const SizedBox(
+                  width: 10,
+                  height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -782,7 +726,7 @@ class _TaskCardState extends State<TaskCard> {
           ),
         ),
 
-        //これも、上のexpandedの中にどうして入れることができないか？
+        //登録ボタン
         MaterialButton(
           color: Colors.lightBlue.shade900,
           onPressed: () async {
@@ -792,7 +736,7 @@ class _TaskCardState extends State<TaskCard> {
                 builder: (context) {
                   return AlertDialog(
                     title: const Text("Oops"),
-                    content: const Text("You need to add a task"),
+                    content: const Text("ちゃんと書きなさい"),
                     actions: [
                       TextButton(
                         child: const Text('OK'),
