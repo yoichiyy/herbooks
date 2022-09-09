@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '950899399586',
     projectId: 'herbooks-5894b',
     storageBucket: 'herbooks-5894b.appspot.com',
-    iosClientId: '950899399586-3l82an4rk1hnqd5obrjbc29bu3veac03.apps.googleusercontent.com',
+    iosClientId:
+        '950899399586-3l82an4rk1hnqd5obrjbc29bu3veac03.apps.googleusercontent.com',
     iosBundleId: 'jp.yoichiyy.herbooks',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '950899399586',
     projectId: 'herbooks-5894b',
     storageBucket: 'herbooks-5894b.appspot.com',
-    iosClientId: '950899399586-gpvl6qjtm26kna0ds5o0rvc2kvg5nc17.apps.googleusercontent.com',
-    iosBundleId: 'com.example.herbooks',
+    iosClientId:
+        '950899399586-gpvl6qjtm26kna0ds5o0rvc2kvg5nc17.apps.googleusercontent.com',
+    iosBundleId: 'jp.yoichiro.ehon',
   );
 }

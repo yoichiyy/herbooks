@@ -1,41 +1,34 @@
 {
   "project_info": {
-    "project_number": "950899399586",
-    "project_id": "herbooks-5894b",
-    "storage_bucket": "herbooks-5894b.appspot.com"
+    "project_number": "897889345067",
+    "project_id": "herbooks-4d40c",
+    "storage_bucket": "herbooks-4d40c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:950899399586:android:7fbc7144f7ecb92432b0fb",
+        "mobilesdk_app_id": "1:897889345067:android:d2496e6fbe7efd67e8946e",
         "android_client_info": {
-          "package_name": "com.example.herbooks"
+          "package_name": "jp.yoichiro.ehon"
         }
       },
       "oauth_client": [
         {
-          "client_id": "950899399586-m60am2k78bt2k0evpfav2pmkf8lua1be.apps.googleusercontent.com",
+          "client_id": "897889345067-7poe23eje2pd5hra4ofmgrpae2o2p3ob.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyARXIMLioTQ-7D_RbnJVSBcdaJNWMi6ntQ"
+          "current_key": "AIzaSyANdwBxOyVO4TxrbiRUMMTRdgFHq4TMjjo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "950899399586-m60am2k78bt2k0evpfav2pmkf8lua1be.apps.googleusercontent.com",
+              "client_id": "897889345067-7poe23eje2pd5hra4ofmgrpae2o2p3ob.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "950899399586-3l82an4rk1hnqd5obrjbc29bu3veac03.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "jp.yoichiyy.herbooks"
-              }
             }
           ]
         }
