@@ -16,7 +16,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //consumer statefulninatteirunoで、再度取得するコードかくでもOK
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
