@@ -3,6 +3,10 @@
 // import 'package:flutter/material.dart';
 // import '../utils/date_time.dart';
 
+// //関数として切り出している。setStateは、そもそも相容れない。
+// //返り値のかた。widget。
+
+// //クラスとして切り出すことはできる！ →　基本的にはこっちが良い。パフォーマンスが良い場合も多い。
 
 //                          Widget countButton(){
 //   final dailyCount =

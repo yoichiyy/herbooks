@@ -282,12 +282,18 @@ class _MyHomePageState extends State<MyHomePage> {
                                             },
                                         },
                                       ); //then
+                                  //順番関係ないけど、終わってから次に行きたいとき。並行処理できない。効率悪い。
+                                  await Future.wait<void>([
+                                    getCounterForDay(dailyCount),
+                                    getCounterForMonth(monthlyCount),
+                                    getCounterForAll(),
+                                  ]);
 
                                   setState(() {
                                     debugPrint("setState実行");
-                                    getCounterForDay(dailyCount);
-                                    getCounterForMonth(monthlyCount);
-                                    getCounterForAll();
+                                    // getCounterForDay(dailyCount);
+                                    // getCounterForMonth(monthlyCount);
+                                    // getCounterForAll();
                                   });
                                 },
                               ),
@@ -590,7 +596,7 @@ class _TaskCardState extends State<TaskCard> {
   @override
   void dispose() {
     _controller.dispose();
-    super.dispose(); 
+    super.dispose();
   }
 
   DateTime _pickedDate = DateTime.now();
