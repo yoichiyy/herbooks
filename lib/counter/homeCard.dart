@@ -12,7 +12,7 @@ class HomeCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(2.0),
       child: Card(
         shape: const RoundedRectangleBorder(
           side: BorderSide(
@@ -21,7 +21,7 @@ class HomeCardWidget extends StatelessWidget {
         ),
         color: color,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(4.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

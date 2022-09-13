@@ -3,38 +3,28 @@ import 'package:counter/counter/count_model.dart';
 import 'package:flutter/material.dart';
 import '../utils/date_time.dart';
 
-class CountButton extends StatefulWidget {
+class FabButton extends StatefulWidget {
   final int booknum;
 
   //コンストラクタ　カウントボタンを使うときに、こういう引数を使えと、定義。
   //
-  const CountButton({Key? key, required this.booknum}) : super(key: key);
+  const FabButton({Key? key, required this.booknum}) : super(key: key);
   @override
-  State<CountButton> createState() => _CountButtonState();
+  State<FabButton> createState() => _FabButtonState();
 }
 
-class _CountButtonState extends State<CountButton> {
+class _FabButtonState extends State<FabButton> {
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
   final totalCount = "total";
 
   @override
-
   Widget build(BuildContext context) {
     return SizedBox(
       width: 60,
       height: 60,
-      child: ElevatedButton(
-        //ステートフルで、受け取った引数の使い方。さっきの記事にあった。
-        child: Text(widget.booknum.toString()),
-        style: ElevatedButton.styleFrom(
-          primary: Colors.grey[300],
-          onPrimary: Colors.purple,
-          textStyle: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
+      child: FloatingActionButton(
         onPressed: () async {
           //全カウント登録
           FirebaseFirestore.instance
