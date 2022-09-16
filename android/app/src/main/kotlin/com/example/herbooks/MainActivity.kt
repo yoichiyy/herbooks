@@ -1,4 +1,4 @@
-package jp.yoichiro.ehon
+package com.yoichiyy.herbooks
 
 import io.flutter.embedding.android.FlutterActivity
 

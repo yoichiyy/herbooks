@@ -80,6 +80,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'herbooks-5894b.appspot.com',
     iosClientId:
         '950899399586-gpvl6qjtm26kna0ds5o0rvc2kvg5nc17.apps.googleusercontent.com',
-    iosBundleId: 'jp.yoichiro.ehon',
+    iosBundleId: 'com.yoichiyy.herbooks',
   );
 }

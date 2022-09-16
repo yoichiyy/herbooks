@@ -25,6 +25,7 @@ class _FabButtonState extends State<FabButton> {
       width: 60,
       height: 60,
       child: FloatingActionButton(
+        child: const Icon(Icons.add),
         onPressed: () async {
           //全カウント登録
           FirebaseFirestore.instance

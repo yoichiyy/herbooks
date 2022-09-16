@@ -31,12 +31,11 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text("ehon"),
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: HomeCardWidget(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            HomeCardWidget(
               title: "えほん",
               color: Colors.white60,
               child: Column(
@@ -76,24 +75,25 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ],
                         ),
-                      ],
+                        const SizedBox(
+                          width: double.infinity,
+                          height: 20,
+                        ),
+                      ], //children
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          const Expanded(
-            flex: 1,
-            child: HomeCardWidget(
+            const HomeCardWidget(
               title: "TODO",
               color: Colors.white12,
               // color: Colors.amber[100], //これならうまくいかぬのはなぜ？FQ：
               // ここにあるのに→　https://api.flutter.dev/flutter/material/Colors-class.html
               child: TaskCard(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: const BottomBar(currentIndex: 1),
       // ),
@@ -129,132 +129,125 @@ class _TaskCardState extends State<TaskCard> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          child: Center(
-            child: Column(
-              children: [
-                TextFormField(
-                  //１．singlechild scroll view　→　すくろールできるようにする方法もある。
-                  //expanded 1:2　になってるので、これをやめないと。高さを固定するなど。
-                  controller: _controller,
-                  decoration: const InputDecoration(hintText: "やること"),
-                ),
-                const SizedBox(
-                  width: double.infinity,
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() => _pickedDate = DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month,
-                              DateTime.now().day + 1,
-                              DateTime.now().hour,
-                              DateTime.now().minute,
-                            ));
-                        debugPrint(_pickedDate.toString());
-                      },
-                      child: const Text("明日"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() => _pickedDate = DateTime(
-                              DateTime.now().year,
-                              DateTime.now().month,
-                              DateTime.now().day + 7,
-                              DateTime.now().hour,
-                              DateTime.now().minute,
-                            ));
-                        debugPrint(_pickedDate.toString());
-                      },
-                      child: const Text("来週"),
-                    ),
-                    ElevatedButton(
-                      child: const Text("日付指定"),
-                      // style: ElevatedButton.styleFrom(
-                      //   primary: Colors.grey[400],
-                      //   onPrimary: Colors.black,
-                      //   textStyle: const TextStyle(
-                      //     fontSize: 10,
-                      //   ),
-                      // ),
-                      onPressed: () async {
-                        final _result = await showDatePicker(
-                          context: context,
-                          currentDate: _pickedDate,
-                          initialDate: DateTime.now(),
-                          firstDate:
-                              DateTime.now().subtract(const Duration(days: 0)),
-                          lastDate: DateTime.now().add(
-                            const Duration(days: 3 * 365),
-                          ),
-                        );
-                        if (_result != null) {
-                          _pickedDate = _result;
-                        }
-
-                        setState(() {});
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 10,
-                  height: 3,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() => _pickedDate = DateTime(
-                              _pickedDate.year,
-                              _pickedDate.month,
-                              _pickedDate.day,
-                              6,
-                            ));
-                        debugPrint(_pickedDate.toString());
-                      },
-                      child: const TextStyle("朝"),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() => _pickedDate = DateTime(
-                              _pickedDate.year,
-                              _pickedDate.month,
-                              _pickedDate.day,
-                              12,
-                            ));
-                        debugPrint(_pickedDate.toString());
-                      },
-                      child: const Text("昼"),
-                    ),
-                    ElevatedButton(
-                      child: const Text(
-                        "夜",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 5,
-                          fontWeight: FontWeight.bold,
+        Center(
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _controller,
+                decoration: const InputDecoration(hintText: "やること"),
+              ),
+              const SizedBox(
+                width: double.infinity,
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() => _pickedDate = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day + 1,
+                            DateTime.now().hour,
+                            DateTime.now().minute,
+                          ));
+                      debugPrint(_pickedDate.toString());
+                    },
+                    child: const Text("明日"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() => _pickedDate = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day + 7,
+                            DateTime.now().hour,
+                            DateTime.now().minute,
+                          ));
+                      debugPrint(_pickedDate.toString());
+                    },
+                    child: const Text("来週"),
+                  ),
+                  ElevatedButton(
+                    child: const Text("日付指定"),
+                    // style: ElevatedButton.styleFrom(
+                    //   primary: Colors.grey[400],
+                    //   onPrimary: Colors.black,
+                    //   textStyle: const TextStyle(
+                    //     fontSize: 10,
+                    //   ),
+                    // ),
+                    onPressed: () async {
+                      final _result = await showDatePicker(
+                        context: context,
+                        currentDate: _pickedDate,
+                        initialDate: DateTime.now(),
+                        firstDate:
+                            DateTime.now().subtract(const Duration(days: 0)),
+                        lastDate: DateTime.now().add(
+                          const Duration(days: 3 * 365),
                         ),
-                      ),
-                      onPressed: () {
-                        setState(() => _pickedDate = DateTime(
-                              _pickedDate.year,
-                              _pickedDate.month,
-                              _pickedDate.day,
-                              19,
-                            ));
-                        debugPrint(_pickedDate.toString());
-                      },
-                    )
-                  ],
-                ),
-              ],
-            ),
+                      );
+                      if (_result != null) {
+                        _pickedDate = _result;
+                      }
+
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(
+                width: 10,
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() => _pickedDate = DateTime(
+                            _pickedDate.year,
+                            _pickedDate.month,
+                            _pickedDate.day,
+                            6,
+                          ));
+                      debugPrint(_pickedDate.toString());
+                    },
+                    child: const Text("朝"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() => _pickedDate = DateTime(
+                            _pickedDate.year,
+                            _pickedDate.month,
+                            _pickedDate.day,
+                            12,
+                          ));
+                      debugPrint(_pickedDate.toString());
+                    },
+                    child: const Text("昼"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() => _pickedDate = DateTime(
+                            _pickedDate.year,
+                            _pickedDate.month,
+                            _pickedDate.day,
+                            19,
+                          ));
+                      debugPrint(_pickedDate.toString());
+                    },
+                    child: const Text("夜"),
+                  )
+                ],
+              ),
+              const SizedBox(
+                width: 10,
+                height: 10,
+              ),
+            ],
           ),
         ),
 
@@ -296,10 +289,14 @@ class _TaskCardState extends State<TaskCard> {
             "登録",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 10,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
+        ),
+        const SizedBox(
+          width: 10,
+          height: 10,
         ),
       ],
     );
