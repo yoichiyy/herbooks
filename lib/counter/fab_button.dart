@@ -28,7 +28,8 @@ class _FabButtonState extends State<FabButton> {
         child: const Icon(Icons.add),
         onPressed: () async {
           //全カウント登録
-          FirebaseFirestore.instance
+
+          await FirebaseFirestore.instance
               .collection('totalCount')
               .doc(totalCount)
               .get()
@@ -58,7 +59,7 @@ class _FabButtonState extends State<FabButton> {
               ); //then
 
           //月単位のカウンター登録
-          FirebaseFirestore.instance
+          await FirebaseFirestore.instance
               .collection('monthlyCount')
               .doc(monthlyCount)
               .get()
@@ -91,10 +92,11 @@ class _FabButtonState extends State<FabButton> {
               ); //then
 
           //日単位のカウンター登録
-          FirebaseFirestore.instance
+          await FirebaseFirestore.instance
               .collection('dailyCount')
               .doc(dailyCount)
-              .get()
+              .get() //処理の順番を管理しにくくなってる
+              //一度、取得して、その値を別の所で使ったほうがよさそう。
               .then(
                 //ここから
                 (docSnapshot) => {
@@ -125,6 +127,7 @@ class _FabButtonState extends State<FabButton> {
                 },
               ); //then
           //順番関係ないけど、終わってから次に行きたいとき。並行処理できない。効率悪い。
+          // await Future.delayed(Duration(seconds: 3));
           await Future.wait<void>([
             getCounterForDay(dailyCount),
             getCounterForMonth(monthlyCount),
