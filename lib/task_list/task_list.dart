@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counter/task_list/todo_class.dart';
 import 'package:flutter/material.dart';
 import '../edit_task/edit_task.dart';
 import 'task_model.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 
 class TaskListPage extends StatefulWidget {
