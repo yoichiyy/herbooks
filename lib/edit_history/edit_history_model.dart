@@ -42,4 +42,3 @@ class EditHistoryModel extends ChangeNotifier {
 }
 
 
-//サブコレクション。
