@@ -5,6 +5,7 @@ import 'package:counter/counter/homeCard.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -22,80 +23,97 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("ehon"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            HomeCardWidget(
-              title: "えほん",
-              color: Colors.white60,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  countArea(),
-                  Center(
-                    //Button_area
-                    child: Column(
-                      children: [
-                        const FabButton(
-                          booknum: 1,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            CountButton(
-                              booknum: 3,
+    return MaterialApp(
+      //まて、ちぇんのてぃ、すきゃ、ぼでぃ
+      home: ChangeNotifierProvider<FabButton>(
+        create: (_) => FabButton(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: const Text("ehon"),
+          ),
+          body: Consumer<FabButton>(
+            builder: (context, model, child) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    HomeCardWidget(
+                      title: "えほん",
+                      color: Colors.white60,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          countArea(),
+                          Center(
+                            //Button_area
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  width: 60,
+                                  height: 60,
+                                  child: FloatingActionButton(
+                                    child: const Icon(Icons.add),
+                                    onPressed: () {
+                                      model.fabButtonFunction(1);
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    CountButton(
+                                      booknum: 3,
+                                    ),
+                                    SizedBox(
+                                      width: 30,
+                                      height: 60,
+                                    ),
+                                    CountButton(
+                                      booknum: 5,
+                                    ),
+                                    SizedBox(
+                                      width: 30,
+                                      height: 60,
+                                    ),
+                                    CountButton(
+                                      booknum: -1,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: double.infinity,
+                                  height: 20,
+                                ),
+                              ], //children
                             ),
-                            SizedBox(
-                              width: 30,
-                              height: 60,
-                            ),
-                            CountButton(
-                              booknum: 5,
-                            ),
-                            SizedBox(
-                              width: 30,
-                              height: 60,
-                            ),
-                            CountButton(
-                              booknum: -1,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          width: double.infinity,
-                          height: 20,
-                        ),
-                      ], //children
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const HomeCardWidget(
-              title: "TODO",
-              color: Colors.white12,
-              // color: Colors.amber[100], //これならうまくいかぬのはなぜ？FQ：
-              // ここにあるのに→　https://api.flutter.dev/flutter/material/Colors-class.html
-              child: TaskCard(),
-            ),
-          ],
+                    const HomeCardWidget(
+                      title: "TODO",
+                      color: Colors.white12,
+                      // color: Colors.amber[100], //これならうまくいかぬのはなぜ？FQ：
+                      // ここにあるのに→　https://api.flutter.dev/flutter/material/Colors-class.html
+                      child: TaskCard(),
+                    ),
+                  ],
+                ),
+              );
+              bottomNavigationBar:
+              const BottomBar(currentIndex: 1);
+            },
+          ),
         ),
       ),
-      bottomNavigationBar: const BottomBar(currentIndex: 1),
-      // ),
     );
-  }
-}
+  } //widget build
+} //class
 
 //TASKカードセクション
 class TaskCard extends StatefulWidget {
@@ -189,7 +207,7 @@ class _TaskCardState extends State<TaskCard> {
                         _pickedDate = _result;
                       }
 
-                      setState(() {});
+                      // setState(() {});
                     },
                   ),
                 ],
