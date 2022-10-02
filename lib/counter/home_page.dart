@@ -24,13 +24,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      //まて、ちぇんのてぃ、すきゃ、ぼでぃ
       home: ChangeNotifierProvider<FabButton>(
         create: (_) => FabButton(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: const Text("ehon"),
+            title: const Text("haruEhon"),
           ),
           body: Consumer<FabButton>(
             builder: (context, model, child) {
@@ -65,23 +64,68 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    CountButton(
-                                      booknum: 3,
-                                    ),
+                                  children: [
                                     SizedBox(
+                                      width: 60,
+                                      height: 60,
+                                      child: ElevatedButton(
+                                        child: const Text("3"),
+                                        style: ElevatedButton.styleFrom(
+                                          //backgroundColor,foregroundColor
+                                          backgroundColor: Colors.grey[300],
+                                          foregroundColor: Colors.purple,
+                                          textStyle: const TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          model.fabButtonFunction(3);
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
                                       width: 30,
                                       height: 60,
                                     ),
-                                    CountButton(
-                                      booknum: 5,
-                                    ),
                                     SizedBox(
+                                      width: 60,
+                                      height: 60,
+                                      child: ElevatedButton(
+                                        child: const Text("5"),
+                                        style: ElevatedButton.styleFrom(
+                                          //backgroundColor,foregroundColor
+                                          backgroundColor: Colors.grey[300],
+                                          foregroundColor: Colors.purple,
+                                          textStyle: const TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          model.fabButtonFunction(5);
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
                                       width: 30,
                                       height: 60,
                                     ),
-                                    CountButton(
-                                      booknum: -1,
+                                    SizedBox(
+                                      width: 60,
+                                      height: 60,
+                                      child: ElevatedButton(
+                                        child: const Text("-1"),
+                                        style: ElevatedButton.styleFrom(
+                                          //backgroundColor,foregroundColor
+                                          backgroundColor: Colors.grey[300],
+                                          foregroundColor: Colors.purple,
+                                          textStyle: const TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          model.fabButtonFunction(-1);
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -105,10 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
               );
-              bottomNavigationBar:
-              const BottomBar(currentIndex: 1);
             },
           ),
+          bottomNavigationBar: const BottomBar(currentIndex: 1),
         ),
       ),
     );
