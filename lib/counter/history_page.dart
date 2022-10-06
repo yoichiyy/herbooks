@@ -29,13 +29,14 @@ class HistoryPage extends StatelessWidget {
                       leading: Text(historyData[index].dateString),
                       title: Text("${historyData[index].count.toString()}冊"),
                       trailing: const Icon(Icons.more_vert),
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => EditHistoryPage(historyIndex),
                           ),
                         );
+                        model.fetchHistory();
                       },
                     ),
                   );
@@ -51,6 +52,10 @@ class HistoryPage extends StatelessWidget {
 
 class HistoryModel extends ChangeNotifier {
   List<History> historyList = [];
+
+  void reload() {
+    notifyListeners();
+  }
 
   Future<void> fetchHistory() async {
     final docs =

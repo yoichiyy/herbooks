@@ -60,7 +60,7 @@ class EditHistoryPage extends StatelessWidget {
                       try {
                         await model.update();
                         Navigator.of(context).pop(model.bookNumForEditpage);
-                        debugPrint("カウント履歴編集しています");
+                        debugPrint("カウント履歴編集して、navigatorで渡した");
                       } catch (e) {
                         final snackBar = SnackBar(
                           backgroundColor: Colors.red,

@@ -29,7 +29,8 @@ class EditHistoryModel extends ChangeNotifier {
     //asを使ったキャストは、基本、しないほうがいい。
 
     bookNumForEditpage = int.parse(bookNumController.text);
-    //try catch　
+
+    //try catch
 
     // .text
     await FirebaseFirestore.instance
@@ -38,7 +39,7 @@ class EditHistoryModel extends ChangeNotifier {
         .update({
       'count': bookNumForEditpage,
     });
+    
+    notifyListeners();
   }
 }
-
-

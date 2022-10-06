@@ -1,11 +1,12 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counter/counter/count_button.dart';
 import 'package:counter/counter/fab_button.dart';
 import 'package:counter/counter/homeCard.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';
 import 'package:provider/provider.dart';
+import 'package:confetti/confetti.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -15,11 +16,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
   final totalCount = "total";
+  final _controller =
+      ConfettiController(duration: const Duration(milliseconds: 500));
+
+  void _confettiEvent() {
+    setState(() {
+      _controller.play(); // ココ！
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // controllerを破棄する
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +69,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: FloatingActionButton(
                                     child: const Icon(Icons.add),
                                     onPressed: () {
+                                      //void call back　または　function
+                                      _confettiEvent();
+                                      // _controller.play(); // ココ！
+                                      debugPrint("confetti実行");
                                       model.fabButtonFunction(1);
                                     },
                                   ),
+                                ),
+                                ConfettiWidget(
+                                  confettiController: _controller,
+                                  blastDirectionality:
+                                      BlastDirectionality.explosive,
+                                  blastDirection: pi / 2,
+                                  // 紙吹雪を出す方向(この場合画面上に向けて発射)
+                                  emissionFrequency:
+                                      0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
+                                  minBlastForce: 5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
+                                  maxBlastForce:
+                                      10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
+                                  numberOfParticles: 7, // 1秒あたりの紙の枚数
+                                  gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
+                                  // colors: const <Color>[
+                                  //   // 紙吹雪の色指定
+                                  //   Colors.red,
+                                  //   Colors.blue,
+                                  //   //最初Colorsでなく、Constants、となっていた。
+                                  //   Colors.green,
+                                  // ],
                                 ),
                                 const SizedBox(
                                   width: 10,
