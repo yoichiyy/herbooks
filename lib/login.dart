@@ -1,19 +1,20 @@
+import 'package:counter/ui/pageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
-  // 初期化処理を追加
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
-  runApp(ChatApp());
-}
-
-/* --- 省略 --- */
-
-// ログイン画面用Widget
 class LoginPage extends StatefulWidget {
+  // const LoginPage({Key? key}) : super(key: key);
+    const LoginPage({super.key});//2.18以降
+
+  //静的解析における　ぜんぶのwidgetにつく。widを判定するためのIDをつけられるもの。
+  //このwidとか、探せる。
+  //「クラスもwidも、KEYが一緒だったら再描画しない」→最適化　→上級者
+  //reordable list view" → リスとたいるは同じだけど、KEYがあれば、何がどこに行ったか管理できる（上から◯番目、という情報だけだと、管理できぬ）
+
+
+//login
+
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -29,14 +30,15 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
+        
         child: Container(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // メールアドレス入力
               TextFormField(
-                decoration: InputDecoration(labelText: 'メールアドレス'),
+                decoration: const InputDecoration(labelText: 'メールアドレス'),
                 onChanged: (String value) {
                   setState(() {
                     email = value;
@@ -45,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               // パスワード入力
               TextFormField(
-                decoration: InputDecoration(labelText: 'パスワード'),
+                decoration: const InputDecoration(labelText: 'パスワード'),
                 obscureText: true,
                 onChanged: (String value) {
                   setState(() {
@@ -54,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 // メッセージ表示
                 child: Text(infoText),
               ),
@@ -62,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: double.infinity,
                 // ユーザー登録ボタン
                 child: ElevatedButton(
-                  child: Text('ユーザー登録'),
+                  child: const Text('ユーザー登録'),
                   onPressed: () async {
                     try {
                       // メール/パスワードでユーザー登録
@@ -71,11 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                         email: email,
                         password: password,
                       );
+
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return ChatPage();
+                          return PageViewClass();
                         }),
                       );
                     } catch (e) {

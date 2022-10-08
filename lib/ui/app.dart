@@ -1,4 +1,5 @@
 // import 'package:counter/counter/home_page.dart';
+import 'package:counter/login.dart';
 import 'package:counter/ui/pageview.dart';
 import 'package:flutter/material.dart';
 
@@ -8,14 +9,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'HaruEhonApp',
       // theme: ThemeData(
       //   primarySwatch: Colors.amber,
       // ),
       home: Scaffold(
         // appBar: AppBar(title: const Text("HaruEhonApp")),
-        body: PageViewClass(),
+        body: LoginPage(),
         // home: PageView(),
       ),
     );
