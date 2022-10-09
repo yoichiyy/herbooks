@@ -4,9 +4,10 @@ import '../counter/history_page.dart';
 import '../task_list/task_list.dart';
 
 class PageViewClass extends StatelessWidget {
-  PageViewClass({super.key});
+  const PageViewClass({super.key});
 
-  final pages = [
+//変数であった。final。中身が変わる。 pagesというメソッドにした（getter)。「Javaゲッター　dartゲッター」
+  List<Widget> get pages => [
     const TaskListPage(),
     const MyHomePage(),
     const HistoryPage(),

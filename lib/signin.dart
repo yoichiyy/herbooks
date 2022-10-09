@@ -2,15 +2,20 @@ import 'package:counter/ui/pageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class SigninPage extends StatefulWidget {
   // const LoginPage({Key? key}) : super(key: key);
-    const LoginPage({super.key});//2.18以降
+    const SigninPage({super.key});//2.18以降
+
+  //静的解析における　ぜんぶのwidgetにつく。widを判定するためのIDをつけられるもの。
+  //このwidとか、探せる。
+  //「クラスもwidも、KEYが一緒だったら再描画しない」→最適化　→上級者
+  //reordable list view" → リスとたいるは同じだけど、KEYがあれば、何がどこに行ったか管理できる（上から◯番目、という情報だけだと、管理できぬ）
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  SigninPageState createState() => SigninPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class SigninPageState extends State<SigninPage> {
   // メッセージ表示用
   String infoText = '';
   // 入力したメールアドレス・パスワード
@@ -63,8 +68,6 @@ class _LoginPageState extends State<LoginPage> {
                         email: email,
                         password: password,
                       );
-
-                      // auth.setPersistence(persistence)
 
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
