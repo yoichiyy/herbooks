@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter/services.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -69,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: FloatingActionButton(
                                     child: const Icon(Icons.add),
                                     onPressed: () {
+                                      HapticFeedback.mediumImpact(); // ココ！
                                       //void call back　または　function
                                       _confettiEvent();
                                       // _controller.play(); // ココ！
@@ -119,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         ),
                                         onPressed: () async {
+                                          HapticFeedback.mediumImpact(); // ココ！
                                           model.fabButtonFunction(3);
                                         },
                                       ),
@@ -141,6 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         ),
                                         onPressed: () async {
+                                          HapticFeedback.mediumImpact(); // ココ！
                                           model.fabButtonFunction(5);
                                         },
                                       ),
@@ -163,6 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         ),
                                         onPressed: () async {
+                                          HapticFeedback.mediumImpact();
                                           model.fabButtonFunction(-1);
                                         },
                                       ),
@@ -242,6 +247,7 @@ class _TaskCardState extends State<TaskCard> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      HapticFeedback.mediumImpact(); // ココ！
                       setState(() => _pickedDate = DateTime(
                             DateTime.now().year,
                             DateTime.now().month,
@@ -255,6 +261,7 @@ class _TaskCardState extends State<TaskCard> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      HapticFeedback.mediumImpact(); // ココ！
                       setState(() => _pickedDate = DateTime(
                             DateTime.now().year,
                             DateTime.now().month,
@@ -276,6 +283,7 @@ class _TaskCardState extends State<TaskCard> {
                     //   ),
                     // ),
                     onPressed: () async {
+                      HapticFeedback.mediumImpact(); // ココ！
                       final _result = await showDatePicker(
                         context: context,
                         currentDate: _pickedDate,
@@ -304,6 +312,7 @@ class _TaskCardState extends State<TaskCard> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      HapticFeedback.mediumImpact();
                       setState(() => _pickedDate = DateTime(
                             _pickedDate.year,
                             _pickedDate.month,
@@ -316,6 +325,7 @@ class _TaskCardState extends State<TaskCard> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      HapticFeedback.mediumImpact();
                       setState(() => _pickedDate = DateTime(
                             _pickedDate.year,
                             _pickedDate.month,
@@ -328,6 +338,7 @@ class _TaskCardState extends State<TaskCard> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      HapticFeedback.mediumImpact();
                       setState(() => _pickedDate = DateTime(
                             _pickedDate.year,
                             _pickedDate.month,
@@ -352,6 +363,7 @@ class _TaskCardState extends State<TaskCard> {
         MaterialButton(
           color: Colors.lightBlue.shade900,
           onPressed: () async {
+            HapticFeedback.mediumImpact();
             if (_controller.text.isEmpty) {
               showDialog(
                 context: context, //FQ：contextは何の情報を渡している？一度デバッグで見られるかな？
