@@ -5,6 +5,7 @@ Widget countArea() {
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
+  
 
   return Container(
     margin: const EdgeInsets.all(10),
