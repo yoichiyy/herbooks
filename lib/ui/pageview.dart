@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:counter/counter/home_page.dart';
-import '../counter/history_page.dart';
+import '../counter/new_history_page.dart';
 import '../task_list/task_list.dart';
 
 class PageViewClass extends StatelessWidget {
@@ -8,10 +8,10 @@ class PageViewClass extends StatelessWidget {
 
 //変数であった。final。中身が変わる。 pagesというメソッドにした（getter)。「Javaゲッター　dartゲッター」
   List<Widget> get pages => [
-    const TaskListPage(),
-    const MyHomePage(),
-    const HistoryPage(),
-  ];
+        const TaskListPage(),
+        const MyHomePage(),
+        const HistoryPage(),
+      ];
 
   @override
   Widget build(BuildContext context) {

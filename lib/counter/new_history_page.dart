@@ -20,6 +20,8 @@ class HistoryPage extends StatelessWidget {
           body: Consumer<HistoryModel>(
             builder: (context, model, child) {
               final historyData = model.historyList;
+              // final userData = model.userList;
+
               return ListView.builder(
                 itemCount: historyData.length,
                 itemBuilder: (context, index) {
@@ -28,6 +30,7 @@ class HistoryPage extends StatelessWidget {
                     child: ListTile(
                       leading: Text(historyData[index].dateString),
                       title: Text("${historyData[index].count.toString()}冊"),
+                      subtitle: Text(historyData[index].user.toString()),
                       trailing: const Icon(Icons.more_vert),
                       onTap: () async {
                         await Navigator.push(
@@ -52,17 +55,22 @@ class HistoryPage extends StatelessWidget {
 
 class HistoryModel extends ChangeNotifier {
   List<History> historyList = [];
+  List<History> userList = [];
 
   void reload() {
     notifyListeners();
   }
 
   Future<void> fetchHistory() async {
-    final docs =
-        await FirebaseFirestore.instance.collection('dailyCount').get();
+    final docs = await FirebaseFirestore.instance.collection('newCount').get();
     final readingHistory = docs.docs.map((doc) => History(doc)).toList();
-    readingHistory.sort((a, b) => b.date.compareTo(a.date));
+    readingHistory.sort((a, b) => b.id.compareTo(a.id));
     historyList = readingHistory;
+
+    // final users = await FirebaseFirestore.instance.collection('users').get();
+    // final readingUsers = users.docs.map((doc) => History(doc)).toList();
+    // userList = readingUsers;
+
     notifyListeners();
   }
 }
@@ -72,6 +80,8 @@ class History {
   int count = 0;
   String date = "";
   String dateString = "";
+  String user = "";
+  // String userid = "";
 
   // コンストラクタ = クラスのインスタンスを作成するメソッド
   // Hisotry(this.count, this.anotherParam);　位置引数。(positional)
@@ -80,8 +90,10 @@ class History {
   History(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     count = documentSnapshot['count'];
     date = documentSnapshot['date'];
-    dateString = documentSnapshot['date_string'];
+    dateString = documentSnapshot['time'];
+    user = documentSnapshot['user'];
     id = documentSnapshot.id;
+    // userid = documentSnapshot['name'];
   }
 
   // History(DocumentSnapshot doc) {

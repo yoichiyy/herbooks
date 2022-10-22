@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/counter/fab_button.dart';
 import 'package:counter/counter/homeCard.dart';
+import 'package:counter/counter/registration.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';
@@ -26,7 +27,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final totalCount = "total";
   final _controller =
       ConfettiController(duration: const Duration(milliseconds: 500));
-      
 
   void _confettiEvent() {
     setState(() {
@@ -71,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   width: 60,
                                   height: 60,
                                   child: FloatingActionButton(
+                                    heroTag: "hero1",
                                     child: const Icon(Icons.add),
                                     onPressed: () {
                                       HapticFeedback.mediumImpact(); // ココ！
@@ -199,6 +200,17 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
+          // ここから
+          floatingActionButton: FloatingActionButton(
+            heroTag: "hero2",
+            child: const Icon(Icons.person_add_alt),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UsersEdits()));
+            },
+          ),
+          // ここまで
+
           bottomNavigationBar: const BottomBar(currentIndex: 1),
         ),
       ),

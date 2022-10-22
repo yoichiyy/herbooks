@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../counter/history_page.dart';
+import '../counter/new_history_page.dart';
 
 class EditHistoryModel extends ChangeNotifier {
   final History history;
