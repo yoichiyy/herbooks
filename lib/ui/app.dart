@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../signin.dart';
 
-
 class MyApp extends StatelessWidget {
   // const MyApp({Key? key}) : super(key: key);
   const MyApp({super.key});
@@ -21,8 +20,8 @@ class MyApp extends StatelessWidget {
               return const SizedBox();
             }
             if (snapshot.hasData) {
-              // User が null でなない、つまりサインイン済みのホーム画面へ
-              return PageViewClass();
+              // 1.User が null でなないこと確認 →ホームへ
+              return const PageViewClass();
             }
             //widget→変わらないものとして定義したいところ＝const
 
