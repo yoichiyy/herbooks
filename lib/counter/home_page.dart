@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/counter/fab_button.dart';
-import 'package:counter/counter/homeCard.dart';
-import 'package:counter/counter/registration.dart';
+import 'package:counter/counter/home_card.dart';
+import 'package:counter/counter/user_Edits.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';

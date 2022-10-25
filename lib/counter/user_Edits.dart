@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../ui/pageview.dart';
+
 class UsersEdits extends StatefulWidget {
   const UsersEdits({Key? key}) : super(key: key);
 
@@ -28,7 +30,17 @@ class _UsersEditsState extends State<UsersEdits> {
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PageViewClass(),
+                )
+
+                // Navigator.of(context).pushReplacement(
+                //   MaterialPageRoute(builder: (context) {
+                //     return PageView();
+                // }),
+                );
           },
         ),
         centerTitle: true,
@@ -55,13 +67,21 @@ class _UsersEditsState extends State<UsersEdits> {
                         .doc(user.uid);
                     await doc.set(insertObj);
 
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          //次にID登録
-                          return const UsersEdits();
-                        }),
-                      );
-                    
+                    //新しいコード andremoveuntilが多分正しい
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PageViewClass(),
+                      ),
+                    );
+
+                    //元のコード
+                    // await Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(builder: (context) {
+                    //     return PageView();
+                    //   }),
+                    // );
+
                   } catch (e) {
                     print('-----insert error----');
                     print(e);
