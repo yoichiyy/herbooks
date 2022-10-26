@@ -1,3 +1,4 @@
+import 'package:counter/counter/user_Edits.dart';
 import 'package:counter/edit_history/edit_history.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,16 @@ class HistoryPage extends StatelessWidget {
               );
             },
           ),
+          // ここから
+          floatingActionButton: FloatingActionButton(
+            heroTag: "hero2",
+            child: const Icon(Icons.person_add_alt),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const UsersEdits()));
+            },
+          ),
+          // ここまで
         ),
       ),
     );
@@ -81,7 +92,6 @@ class History {
   String date = "";
   String dateString = "";
   String user = "";
-  // String userid = "";
 
   // コンストラクタ = クラスのインスタンスを作成するメソッド
   // Hisotry(this.count, this.anotherParam);　位置引数。(positional)
@@ -93,7 +103,6 @@ class History {
     dateString = documentSnapshot['time'];
     user = documentSnapshot['user'];
     id = documentSnapshot.id;
-    // userid = documentSnapshot['name'];
   }
 
   // History(DocumentSnapshot doc) {

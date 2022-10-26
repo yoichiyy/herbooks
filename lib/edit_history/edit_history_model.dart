@@ -24,22 +24,15 @@ class EditHistoryModel extends ChangeNotifier {
   }
 
   Future update() async {
-    //更新ボタンを押すとエラー
-    //bookNumControllerを、無理くりint?にcastしようとしているのが、多分だめと言われている。
-    //asを使ったキャストは、基本、しないほうがいい。
-
     bookNumForEditpage = int.parse(bookNumController.text);
 
-    //try catch
-
-    // .text
     await FirebaseFirestore.instance
-        .collection('dailyCount')
+        .collection('newCount')
         .doc(history.id)
         .update({
       'count': bookNumForEditpage,
     });
-    
+
     notifyListeners();
   }
 }

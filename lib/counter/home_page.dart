@@ -200,16 +200,6 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
-          // ここから
-          floatingActionButton: FloatingActionButton(
-            heroTag: "hero2",
-            child: const Icon(Icons.person_add_alt),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => UsersEdits()));
-            },
-          ),
-          // ここまで
 
           bottomNavigationBar: const BottomBar(currentIndex: 1),
         ),

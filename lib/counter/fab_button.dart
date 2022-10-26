@@ -14,7 +14,17 @@ class FabButton extends ChangeNotifier {
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<void> fabButtonFunction(booknum) async {
-    //日単位のカウンター登録
+    //userNameを取得するもっとスマートなやり方は？
+    //1.doc().field('name')的に、あと一歩いけないものか？
+    //2.クエリで取得するまでもない」と思うのだが、クエリを使うことはロボットにとってそんなに大きな手間ではないのか？
+    final snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final userName = snapshot.data()!['name'];
+    //     .then((DocumentSnapshot snapshot) {
+    //   snapshot.get('name');
+    // });
+
+    // 日単位のカウンター登録
     await FirebaseFirestore.instance
         .collection('newCount')
         .doc(dailyCount + uid)
@@ -25,20 +35,20 @@ class FabButton extends ChangeNotifier {
               {
                 FirebaseFirestore.instance
                     .collection('newCount')
-                    .doc("${DateTime.now()}")
+                    .doc(dailyCount + uid)
                     .update({"count": FieldValue.increment(booknum)})
               }
             else
               {
                 FirebaseFirestore.instance
                     .collection('newCount')
-                    .doc("${DateTime.now()}")
+                    .doc(dailyCount + uid)
                     .set(
                   {
                     "date": dailyCount,
                     "month": monthlyCount,
                     "count": booknum,
-                    "user": uid,
+                    "user": userName,
                     "time": time,
                   },
                 ),

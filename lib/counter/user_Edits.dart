@@ -14,8 +14,8 @@ class UsersEdits extends StatefulWidget {
 class _UsersEditsState extends State<UsersEdits> {
   final TextEditingController _textContName = TextEditingController();
   final TextEditingController _textContProf = TextEditingController();
-  String _editTextName = '';
-  String _editTextProf = '';
+  // String _editTextName = '';
+  // String _editTextProf = '';
 
   @override
   void initState() {
@@ -34,13 +34,7 @@ class _UsersEditsState extends State<UsersEdits> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const PageViewClass(),
-                )
-
-                // Navigator.of(context).pushReplacement(
-                //   MaterialPageRoute(builder: (context) {
-                //     return PageView();
-                // }),
-                );
+                ));
           },
         ),
         centerTitle: true,
@@ -83,7 +77,7 @@ class _UsersEditsState extends State<UsersEdits> {
                     // );
 
                   } catch (e) {
-                    print('-----insert error----');
+                    debugPrint('-----insert error----');
                     print(e);
                   }
                 },
@@ -122,11 +116,11 @@ class _UsersEditsState extends State<UsersEdits> {
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
-                              onChanged: (String? val) {
-                                if (val != null && val != '') {
-                                  _editTextName = val;
-                                }
-                              },
+                              // onChanged: (String? val) {
+                              //   if (val != null && val != '') {
+                              //     _editTextName = val;
+                              //   }
+                              // },
                             ),
                           )
                         ],
@@ -157,11 +151,11 @@ class _UsersEditsState extends State<UsersEdits> {
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
-                              onChanged: (String? val) {
-                                if (val != null && val != '') {
-                                  _editTextProf = val;
-                                }
-                              },
+                              // onChanged: (String? val) {
+                              //   if (val != null && val != '') {
+                              //     _editTextProf = val;
+                              //   }
+                              // },
                             ),
                           )
                         ],
