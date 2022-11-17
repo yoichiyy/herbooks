@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 
 // 月の冊数カウント
-Future<int> getCounterForMonth(String monthlyCount) async {
+Future<int> getCounterForMonth(String monthlyCount, String musume) async {
   final _store = FirebaseFirestore.instance;
   final monthData = await _store
       .collection('newCount')
+      .where('musume', isEqualTo: musume)
       .where('month', isEqualTo: monthlyCount)
       .get();
 
@@ -34,11 +35,12 @@ Future<int> getCounterForMonth(String monthlyCount) async {
 //oncleate　トリガー。来たら、それが作られるようなのつくる。「valueを１増やして」・・・functionを一つかまさないと成らぬ。難易度高い。
 
 // 日の冊数カウント
-Future<int> getCounterForDay(String dailyCount) async {
+Future<int> getCounterForDay(String dailyCount, String musume) async {
 //newCountにdoc検索を変えたバージョン
   final _store = FirebaseFirestore.instance;
   var dayData = await _store
       .collection('newCount')
+      .where('musume', isEqualTo: musume)
       .where('date', isEqualTo: dailyCount)
       .get();
 
@@ -56,11 +58,14 @@ Future<int> getCounterForDay(String dailyCount) async {
 }
 
 //　全冊数のカウント
-Future<int> getCounterForAll() async {
+Future<int> getCounterForAll(String musume) async {
 //新しい、newCountのコード
 //上のdailyのカウント取得との違いは、「最初にnewCountのすべて」を取得している。
   final _store = FirebaseFirestore.instance;
-  final allData = await _store.collection('newCount').get();
+  final allData = await _store
+      .collection('newCount')
+      .where('musume', isEqualTo: musume)
+      .get();
 
   List data = allData.docs;
   int sumAll = 0;
@@ -70,7 +75,6 @@ Future<int> getCounterForAll() async {
     sumAll += count;
   }
   return sumAll;
-
 }
 
 String getIdFromDate(DateTime date) {

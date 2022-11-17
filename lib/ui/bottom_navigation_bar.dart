@@ -1,6 +1,7 @@
-import 'package:counter/counter/new_history_page.dart';
+import 'package:counter/counter/history_page_haru.dart';
 import 'package:counter/counter/home_page.dart';
 import 'package:flutter/material.dart';
+import '../counter/history_page_yume.dart';
 import '../task_list/task_list.dart';
 
 class BottomBar extends StatelessWidget {
@@ -15,7 +16,7 @@ class BottomBar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.task),
-          label: "Tasks",
+          label: "Yume",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -23,13 +24,13 @@ class BottomBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.book),
-          label: "Books",
+          label: "Haru",
         ),
       ],
       onTap: (index) {
         if (index == 0) {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const TaskListPage()));
+              MaterialPageRoute(builder: (context) => const HistoryPageYume()));
         }
 
         if (index == 1) {

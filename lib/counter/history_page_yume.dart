@@ -3,10 +3,10 @@ import 'package:counter/edit_history/edit_history.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'history_model.dart';
 
-class HistoryPage extends StatelessWidget {
-  const HistoryPage({Key? key}) : super(key: key);
+class HistoryPageYume extends StatelessWidget {
+  const HistoryPageYume({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class HistoryPage extends StatelessWidget {
           ),
           // ここから
           floatingActionButton: FloatingActionButton(
-            heroTag: "hero2",
+            heroTag: "hero3",
             child: const Icon(Icons.person_add_alt),
             onPressed: () {
               Navigator.push(context,
@@ -64,51 +64,3 @@ class HistoryPage extends StatelessWidget {
   }
 }
 
-class HistoryModel extends ChangeNotifier {
-  List<History> historyList = [];
-  List<History> userList = [];
-
-  void reload() {
-    notifyListeners();
-  }
-
-  Future<void> fetchHistory() async {
-    final docs = await FirebaseFirestore.instance.collection('newCount').get();
-    final readingHistory = docs.docs.map((doc) => History(doc)).toList();
-    readingHistory.sort((a, b) => b.id.compareTo(a.id));
-    historyList = readingHistory;
-
-    // final users = await FirebaseFirestore.instance.collection('users').get();
-    // final readingUsers = users.docs.map((doc) => History(doc)).toList();
-    // userList = readingUsers;
-
-    notifyListeners();
-  }
-}
-
-class History {
-  String id = "";
-  int count = 0;
-  String date = "";
-  String dateString = "";
-  String user = "";
-
-  // コンストラクタ = クラスのインスタンスを作成するメソッド
-  // Hisotry(this.count, this.anotherParam);　位置引数。(positional)
-  // History({required this.count, required this.anotherParam});//名前付き引数 named argument
-
-  History(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
-    count = documentSnapshot['count'];
-    date = documentSnapshot['date'];
-    dateString = documentSnapshot['time'];
-    user = documentSnapshot['user'];
-    id = documentSnapshot.id;
-  }
-
-  // History(DocumentSnapshot doc) {
-  //   count = doc['count'];
-  //   date = doc['date'];
-  //   dateString = doc['date_string'];
-  //   id = doc.id;
-  // }
-}

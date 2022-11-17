@@ -1,7 +1,7 @@
 import 'package:counter/counter/count_model.dart';
 import 'package:flutter/material.dart';
 
-Widget countArea() {
+Widget countArea(String musume) {
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
@@ -15,7 +15,7 @@ Widget countArea() {
           child: Container(
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
-                future: getCounterForDay(dailyCount),
+                future: getCounterForDay(dailyCount, musume),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -32,7 +32,7 @@ Widget countArea() {
           child: Container(
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
-              future: getCounterForMonth(monthlyCount),
+              future: getCounterForMonth(monthlyCount, musume),
               builder: (context, snapshot) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -51,7 +51,7 @@ Widget countArea() {
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
                 // future: getCounterForDay(DateTime.now()),
-                future: getCounterForAll(),
+                future: getCounterForAll(musume),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -68,3 +68,4 @@ Widget countArea() {
     ),
   );
 }
+

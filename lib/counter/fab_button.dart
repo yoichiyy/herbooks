@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class FabButton extends ChangeNotifier {
   final int booknum = 0;
+  final String musume = "";
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
@@ -13,7 +14,7 @@ class FabButton extends ChangeNotifier {
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
-  Future<void> fabButtonFunction(booknum) async {
+  Future<void> fabButtonFunction(booknum, musume) async {
     //userNameを取得するもっとスマートなやり方は？
     //1.doc().field('name')的に、あと一歩いけないものか？
     //2.クエリで取得するまでもない」と思うのだが、クエリを使うことはロボットにとってそんなに大きな手間ではないのか？
@@ -27,7 +28,7 @@ class FabButton extends ChangeNotifier {
     // 日単位のカウンター登録
     await FirebaseFirestore.instance
         .collection('newCount')
-        .doc(dailyCount + uid)
+        .doc(dailyCount + uid + musume)
         .get()
         .then(
           (docSnapshot) => {
@@ -35,14 +36,14 @@ class FabButton extends ChangeNotifier {
               {
                 FirebaseFirestore.instance
                     .collection('newCount')
-                    .doc(dailyCount + uid)
+                    .doc(dailyCount + uid + musume)
                     .update({"count": FieldValue.increment(booknum)})
               }
             else
               {
                 FirebaseFirestore.instance
                     .collection('newCount')
-                    .doc(dailyCount + uid)
+                    .doc(dailyCount + uid + musume)
                     .set(
                   {
                     "date": dailyCount,
@@ -50,6 +51,7 @@ class FabButton extends ChangeNotifier {
                     "count": booknum,
                     "user": userName,
                     "time": time,
+                    "musume": musume,
                   },
                 ),
               },
