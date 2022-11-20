@@ -16,7 +16,7 @@ class BottomBar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.task),
-          label: "Yume",
+          label: "夢",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -24,7 +24,7 @@ class BottomBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.book),
-          label: "Haru",
+          label: "晴",
         ),
       ],
       onTap: (index) {

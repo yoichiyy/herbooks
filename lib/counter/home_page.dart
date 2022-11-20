@@ -22,18 +22,27 @@ class _MyHomePageState extends State<MyHomePage> {
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
   final totalCount = "total";
-  final _controller =
+  final _controllerHaru =
+      ConfettiController(duration: const Duration(milliseconds: 500));
+  final _controllerYume =
       ConfettiController(duration: const Duration(milliseconds: 500));
 
-  void _confettiEvent() {
+  void _confettiEventHaru() {
     setState(() {
-      _controller.play(); // ココ！
+      _controllerHaru.play(); // ココ！
+    });
+  }
+
+  void _confettiEventYume() {
+    setState(() {
+      _controllerYume.play(); // ココ！
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // controllerを破棄する
+    _controllerHaru.dispose(); // controllerを破棄する
+    _controllerYume.dispose(); // controllerを破棄する
     super.dispose();
   }
 
@@ -54,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     HomeCardWidget(
-                      title: "えほん",
+                      title: "はる",
                       color: Colors.red[100]!,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -73,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onPressed: () {
                                       HapticFeedback.mediumImpact(); // ココ！
                                       //void call back　または　function
-                                      _confettiEvent();
+                                      _confettiEventHaru();
                                       // _controller.play(); // ココ！
                                       debugPrint("confetti実行");
                                       model.fabButtonFunction(1, "haru");
@@ -81,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                                 ConfettiWidget(
-                                  confettiController: _controller,
+                                  confettiController: _controllerHaru,
                                   blastDirectionality:
                                       BlastDirectionality.explosive,
                                   blastDirection: pi / 2,
@@ -188,7 +197,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
                     //ゆめ
                     HomeCardWidget(
-                      title: "TODO",
+                      title: "ゆめ",
+                      //constの値になるかどうか、わからない  i.e.[150]とかだと、エラーが起こるだろう。
                       color: Colors.lightBlue[100]!,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -206,7 +216,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onPressed: () {
                                       HapticFeedback.mediumImpact(); // ココ！
                                       //void call back　または　function
-                                      _confettiEvent();
+                                      _confettiEventYume();
                                       // _controller.play(); // ココ！
                                       debugPrint("confetti実行");
                                       model.fabButtonFunction(1, "yume");
@@ -214,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                                 ConfettiWidget(
-                                  confettiController: _controller,
+                                  confettiController: _controllerYume,
                                   blastDirectionality:
                                       BlastDirectionality.explosive,
                                   blastDirection: pi / 2,
@@ -226,13 +236,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                       10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
                                   numberOfParticles: 7, // 1秒あたりの紙の枚数
                                   gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
-                                  // colors: const <Color>[
-                                  //   // 紙吹雪の色指定
-                                  //   Colors.red,
-                                  //   Colors.blue,
-                                  //   //最初Colorsでなく、Constants、となっていた。
-                                  //   Colors.green,
-                                  // ],
+                                  colors: const <Color>[
+                                    // 紙吹雪の色指定
+                                    Colors.red,
+                                    Colors.blue,
+                                    //最初Colorsでなく、Constants、となっていた。
+                                    Colors.green,
+                                  ],
                                 ),
                                 const SizedBox(
                                   width: 10,

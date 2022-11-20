@@ -3,7 +3,6 @@ import 'package:counter/edit_history/edit_history.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'history_model.dart';
 
 class HistoryPage extends StatelessWidget {

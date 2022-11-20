@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class HistoryModel extends ChangeNotifier {
   List<History> historyList = [];
+  List<History> historyListYume = [];
   List<History> userList = [];
 
   void reload() {
@@ -10,10 +11,22 @@ class HistoryModel extends ChangeNotifier {
   }
 
   Future<void> fetchHistory() async {
-    final docs = await FirebaseFirestore.instance.collection('newCount').get();
+    final docs = await FirebaseFirestore.instance
+        .collection('newCount')
+        .where('musume', isEqualTo: "haru")
+        .get();
     final readingHistory = docs.docs.map((doc) => History(doc)).toList();
-    readingHistory.sort((a, b) => b.id.compareTo(a.id));
+    readingHistory.sort((a, b) => b.date.compareTo(a.date));
     historyList = readingHistory;
+
+    final docsYume = await FirebaseFirestore.instance
+        .collection('newCount')
+        .where('musume', isEqualTo: "yume")
+        .get();
+    final readingHistoryYume =
+        docsYume.docs.map((doc) => History(doc)).toList();
+    readingHistoryYume.sort((a, b) => b.date.compareTo(a.date));
+    historyListYume = readingHistoryYume;
 
     // final users = await FirebaseFirestore.instance.collection('users').get();
     // final readingUsers = users.docs.map((doc) => History(doc)).toList();

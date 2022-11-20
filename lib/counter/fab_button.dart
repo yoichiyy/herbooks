@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 class FabButton extends ChangeNotifier {
   final int booknum = 0;
   final String musume = "";
+  //二桁必須の方法 padLeftを使いました。
   final dailyCount =
-      "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
   final totalCount = "total";
   final time =
