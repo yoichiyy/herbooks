@@ -15,7 +15,7 @@ class BottomBar extends StatelessWidget {
       currentIndex: currentIndex,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.task),
+          icon: Icon(Icons.baby_changing_station_rounded),
           label: "夢",
         ),
         BottomNavigationBarItem(
@@ -23,8 +23,12 @@ class BottomBar extends StatelessWidget {
           label: "Home",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.book),
+          icon: Icon(Icons.android),
           label: "晴",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.cruelty_free),
+          label: "Task",
         ),
       ],
       onTap: (index) {
@@ -41,6 +45,10 @@ class BottomBar extends StatelessWidget {
         if (index == 2) {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const HistoryPage()));
+        }
+        if (index == 3) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const TaskListPage()));
         }
       },
     );

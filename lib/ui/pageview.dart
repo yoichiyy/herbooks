@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:counter/counter/home_page.dart';
 import '../counter/history_page_haru.dart';
 import '../counter/history_page_yume.dart';
+import '../task_list/task_list.dart';
 
 class PageViewClass extends StatelessWidget {
   const PageViewClass({super.key});
@@ -11,6 +12,7 @@ class PageViewClass extends StatelessWidget {
         const HistoryPageYume(),
         const MyHomePage(),
         const HistoryPage(),
+        const TaskListPage(),
       ];
 
   @override
@@ -28,6 +30,9 @@ class PageViewClass extends StatelessWidget {
         ),
         Center(
           child: HistoryPage(),
+        ),
+        Center(
+          child: TaskListPage(),
         ),
       ],
     );
