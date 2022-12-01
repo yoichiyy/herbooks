@@ -85,7 +85,7 @@ class _TaskListPageState extends State<TaskListPage> {
           // ここから
           floatingActionButton: FloatingActionButton(
             heroTag: "hero2",
-            child: const Icon(Icons.person_add_alt),
+            child: const Icon(Icons.egg_alt),
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const TaskCard()));
