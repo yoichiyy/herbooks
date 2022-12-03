@@ -28,7 +28,7 @@ dependencies:
   toast: ^0.3.0
   sound_mode: ^2.0.2
   vibration: ^1.7.6
-
+  percent_indicator: ^4.2.2
 
   
 

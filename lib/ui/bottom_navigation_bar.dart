@@ -12,7 +12,10 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: Colors.grey[400],
       currentIndex: currentIndex,
+      type: BottomNavigationBarType.fixed, //4つ以上なら、サイズが大きすぎるので。横幅収まるように調整する。
+
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.baby_changing_station_rounded),

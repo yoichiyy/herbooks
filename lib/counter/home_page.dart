@@ -5,6 +5,7 @@ import 'package:counter/counter/home_card.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
@@ -62,6 +63,53 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
+                        width: 140.0,
+                        lineHeight: 14.0,
+                        percent: 0.5,
+                        center: const Text(
+                          "50.0%",
+                          style: TextStyle(fontSize: 12.0),
+                        ),
+                        trailing: const Icon(Icons.mood),
+                        barRadius: const Radius.circular(16),
+                        backgroundColor: Colors.grey,
+                        progressColor: Colors.blue,
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
+                        width: 170.0,
+                        animation: true,
+                        animationDuration: 1000,
+                        lineHeight: 20.0,
+                        leading: const Text("左"),
+                        trailing: const Text("右"),
+                        percent: 0.2,
+                        center: const Text("20.0%"),
+                        barRadius: const Radius.circular(16),
+                        progressColor: Colors.red,
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
+                        width: MediaQuery.of(context).size.width - 50,
+                        animation: true,
+                        lineHeight: 20.0,
+                        animationDuration: 2000,
+                        percent: 0.9,
+                        center: const Text("90.0%"),
+                        barRadius: const Radius.circular(16),
+                        progressColor: Colors.greenAccent,
+                      ),
+                    ),
+
                     HomeCardWidget(
                       title: "はる",
                       color: Colors.red[100]!,
