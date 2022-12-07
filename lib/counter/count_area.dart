@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 
 Widget countArea(String musume) {
   final dailyCount =
-      "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
-  
 
   return Container(
     margin: const EdgeInsets.all(10),
@@ -68,4 +67,3 @@ Widget countArea(String musume) {
     ),
   );
 }
-

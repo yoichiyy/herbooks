@@ -2,7 +2,7 @@ import 'package:counter/ui/pageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'counter/user_Edits.dart';
+import 'ui/user_Edits.dart';
 
 class SigninPage extends StatefulWidget {
   // const LoginPage({Key? key}) : super(key: key);

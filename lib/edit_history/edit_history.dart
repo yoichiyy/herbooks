@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../counter/history_model.dart';
-import '../counter/history_page_haru.dart';
+import '../counter_history/history_model.dart';
 import 'edit_history_model.dart';
 
 class EditHistoryPage extends StatelessWidget {

@@ -99,3 +99,60 @@ Future<void> addBook(DateTime dueDate, String taskName) async {
     'author': dueDate,
   });
 }
+
+// 家計の方
+
+Future<int> getKakeiForDay(String dailyCount, String musume) async {
+  final _store = FirebaseFirestore.instance;
+  var dayData = await _store
+      .collection('kakei')
+      // .where('musume', isEqualTo: musume)
+      .where('date', isEqualTo: dailyCount)
+      .get();
+
+  List data = dayData.docs;
+  int sumDay = 0;
+
+  for (int i = 0; i < data.length; i++) {
+    final count = (data[i].data()['amount']) as int;
+    sumDay += count;
+  }
+  return sumDay;
+}
+
+// 家計の方
+Future<int> getKakeiForMonth(String monthlyCount, String musume) async {
+  final _store = FirebaseFirestore.instance;
+  final monthData = await _store
+      .collection('kakei')
+      // .where('musume', isEqualTo: musume)
+      .where('month', isEqualTo: monthlyCount)
+      .get();
+
+  List data = monthData.docs;
+  int sumMonth = 0;
+
+  //複数のDOCをここから合計する
+  for (int i = 0; i < data.length; i++) {
+    final count = (data[i].data()['amount']) as int;
+    sumMonth += count;
+  }
+  return sumMonth;
+}
+
+// 家計の方
+Future<int> getKakeiForAll(String oya) async {
+//新しい、newCountのコード
+//上のdailyのカウント取得との違いは、「最初にnewCountのすべて」を取得している。
+  final _store = FirebaseFirestore.instance;
+  final allData = await _store.collection('kakei').get();
+
+  List data = allData.docs;
+  int sumAll = 0;
+
+  for (int i = 0; i < data.length; i++) {
+    final count = (data[i].data()['amount']) as int;
+    sumAll += count;
+  }
+  return sumAll;
+}

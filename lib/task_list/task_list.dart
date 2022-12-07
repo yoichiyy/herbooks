@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import '../edit_task/edit_task.dart';
-import '../edit_task/task_edit_page.dart';
+import '../edit_task/create_task.dart';
 import 'task_model.dart';
 import 'package:provider/provider.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
@@ -30,56 +31,113 @@ class _TaskListPageState extends State<TaskListPage> {
           return taskModel; //かえす。（createなので）
         },
         child: Scaffold(
-          bottomNavigationBar: BottomBar(currentIndex: 0),
+          bottomNavigationBar: const BottomBar(currentIndex: 3),
           appBar: AppBar(
-            title: Text('やること'),
+            title: const Text('やること'),
           ),
           body: Consumer<TaskModel>(
             builder: (context, model, child) {
               final todoList = model.todoListFromModel;
 
-              return ListView.builder(
-                itemCount: todoList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final todoIndex = todoList[index];
-                  return Dismissible(
-                    key: ValueKey(todoIndex),
-                    child: InkWell(
-                      onTap: () async {
-                        //ここでString title = ...とやっていることが理解できぬ。この
-                        //title変数を、次のeditTaskページに渡しているようにも見えない。
-                        // final String? title =
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditTaskPage(todoIndex),
+              return Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: LinearPercentIndicator(
+                    width: 140.0,
+                    lineHeight: 14.0,
+                    percent: 0.5,
+                    center: const Text(
+                      "50.0%",
+                      style: TextStyle(fontSize: 12.0),
+                    ),
+                    trailing: const Icon(Icons.mood),
+                    barRadius: const Radius.circular(16),
+                    backgroundColor: Colors.grey,
+                    progressColor: Colors.blue,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: LinearPercentIndicator(
+                    width: 170.0,
+                    animation: true,
+                    animationDuration: 1000,
+                    lineHeight: 20.0,
+                    leading: const Text("左"),
+                    trailing: const Text("右"),
+                    percent: 0.2,
+                    center: const Text("20.0%"),
+                    barRadius: const Radius.circular(16),
+                    progressColor: Colors.red,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: LinearPercentIndicator(
+                    width: MediaQuery.of(context).size.width - 50,
+                    animation: true,
+                    lineHeight: 20.0,
+                    animationDuration: 2000,
+                    percent: 0.9,
+                    center: const Text("90.0%"),
+                    barRadius: const Radius.circular(16),
+                    progressColor: Colors.greenAccent,
+                  ),
+                ),
+                ListView.builder(
+                  itemCount: todoList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final todoIndex = todoList[index];
+                    return Dismissible(
+                      key: ValueKey(todoIndex),
+                      child: InkWell(
+                        onTap: () async {
+                          //ここでString title = ...とやっていることが理解できぬ。この
+                          //title変数を、次のeditTaskページに渡しているようにも見えない。
+                          // final String? title =
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditTaskPage(todoIndex),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          child: ListTile(
+                            title: Text(
+                                '${todoIndex.taskNameOfTodoClass}　${todoIndex.createdAt?.month}/${todoIndex.createdAt?.day}  ${todoIndex.createdAt?.hour}時'),
+                            // ${model.todo.createdAt?.month}/${model.todo.createdAt?.day}  ${model.todo.createdAt?.hour}時'),
                           ),
-                        );
-                      },
-                      child: Card(
-                        child: ListTile(
-                          title: Text(
-                              '${todoIndex.taskNameOfTodoClass}　${todoIndex.createdAt?.month}/${todoIndex.createdAt?.day}  ${todoIndex.createdAt?.hour}時'),
-                          // ${model.todo.createdAt?.month}/${model.todo.createdAt?.day}  ${model.todo.createdAt?.hour}時'),
                         ),
                       ),
-                    ),
-                    background: Container(color: Colors.red),
-                    onDismissed: (direction) {
-                      setState(
-                        () {
-                          //removeAtと、Firebaseのdelete両方をやる必要あるのかな？後者だけで良い感じも。→試してみる。
-                          todoList.removeAt(index);
-                          FirebaseFirestore.instance
-                              .collection('todoList')
-                              .doc(todoIndex.id)
-                              .delete(); //そもそもこれは、doc.idがないので、おそらく動かぬ。
-                        },
-                      );
-                    },
-                  );
-                },
-              );
+                      background: Container(
+                          color: const Color.fromRGBO(244, 67, 54, 1)),
+                      onDismissed: (direction) {
+// //dismissを更新中
+
+//         if (direction == DismissDirection.startToEnd) {
+//           widget.t.updateTaskStatusAndPlaySound(1);
+//         } else if (direction == DismissDirection.endToStart) {
+//           widget.t.updateTaskStatusAndPlaySound(3);
+//         } else {
+//          debugPrint("Nothing");
+//         }
+
+                        setState(
+                          () {
+                            //removeAtと、Firebaseのdelete両方をやる必要あるのかな？後者だけで良い感じも。→試してみる。
+                            todoList.removeAt(index);
+                            FirebaseFirestore.instance
+                                .collection('todoList')
+                                .doc(todoIndex.id)
+                                .delete(); //そもそもこれは、doc.idがないので、おそらく動かぬ。
+                          },
+                        );
+                      },
+                    );
+                  },
+                )
+              ]);
             },
           ),
           // ここから

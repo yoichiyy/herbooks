@@ -7,6 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+//flutte fire configure 
+//google service json ファイル 配置
+
   //多分hive使っていた時のファイル保管場所呼び出し
   // final directory = await getApplicationDocumentsDirectory();
   runApp(const MyApp());

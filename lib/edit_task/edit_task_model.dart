@@ -33,6 +33,7 @@ class EditTaskModel extends ChangeNotifier {
         .update({
       'title': taskNameForEditpage,
       'createdAt': todo.createdAt,
+      // 'taskStatus': ,
     });
   }
 }

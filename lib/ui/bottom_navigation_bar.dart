@@ -1,7 +1,7 @@
-import 'package:counter/counter/history_page_haru.dart';
+import 'package:counter/counter_history/history_page_haru.dart';
 import 'package:counter/counter/home_page.dart';
 import 'package:flutter/material.dart';
-import '../counter/history_page_yume.dart';
+import '../counter_history/history_page_yume.dart';
 import '../task_list/task_list.dart';
 
 class BottomBar extends StatelessWidget {

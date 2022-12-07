@@ -1,14 +1,15 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counter/counter/fab_button.dart';
+import 'package:counter/counter/book_num_button.dart';
 import 'package:counter/counter/home_card.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
+
+import 'kakei_count_area.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -44,72 +45,151 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     _controllerHaru.dispose(); // controllerを破棄する
     _controllerYume.dispose(); // controllerを破棄する
+    _controller.dispose();
     super.dispose();
   }
+
+  final TextEditingController _controller = TextEditingController();
+
+  DateTime _pickedDate = DateTime.now();
+  String _category = "";
+
+  final snackBar = const SnackBar(
+    content: Text('登録しました'),
+  );
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ChangeNotifierProvider<FabButton>(
-        create: (_) => FabButton(),
+      home: ChangeNotifierProvider<BookNumButton>(
+        create: (_) => BookNumButton(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: const Text("haruEhon"),
+            title: const Text("Ehon"),
           ),
-          body: Consumer<FabButton>(
+          body: Consumer<BookNumButton>(
             builder: (context, model, child) {
               return SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: LinearPercentIndicator(
-                        width: 140.0,
-                        lineHeight: 14.0,
-                        percent: 0.5,
-                        center: const Text(
-                          "50.0%",
-                          style: TextStyle(fontSize: 12.0),
-                        ),
-                        trailing: const Icon(Icons.mood),
-                        barRadius: const Radius.circular(16),
-                        backgroundColor: Colors.grey,
-                        progressColor: Colors.blue,
+                    HomeCardWidget(
+                      title: "おこづかい",
+                      color: Colors.green[100]!,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          kakeiCountArea("kakei"),
+                          Center(
+                            //Button_area
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: _controller,
+                                  decoration:
+                                      const InputDecoration(hintText: "金額"),
+                                ),
+                                const SizedBox(
+                                  width: double.infinity,
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() => _category = "消費");
+                                      },
+                                      child: const Text("消費 ♧"),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() => _category = "浪費");
+                                      },
+                                      child: const Text("浪費 ♠"),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() => _category = "投資");
+                                      },
+                                      child: const Text("投資 !"),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() => _category = "空費");
+                                      },
+                                      child: const Text("空費 ♪"),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                  height: 10,
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          //登録ボタン
+                          MaterialButton(
+                            color: Colors.lightBlue.shade900,
+                            onPressed: () async {
+                              if (_controller.text.isEmpty) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Oops"),
+                                      content: const Text("ちゃんと書きなさい"),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('OK'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                return;
+                              } //if
+                              await model.kakeiCount(_controller, _category);
+                              _controller.clear();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            },
+                            child: const Text(
+                              "登録",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                            height: 10,
+                          ),
+                        ],
                       ),
                     ),
 
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: LinearPercentIndicator(
-                        width: 170.0,
-                        animation: true,
-                        animationDuration: 1000,
-                        lineHeight: 20.0,
-                        leading: const Text("左"),
-                        trailing: const Text("右"),
-                        percent: 0.2,
-                        center: const Text("20.0%"),
-                        barRadius: const Radius.circular(16),
-                        progressColor: Colors.red,
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width - 50,
-                        animation: true,
-                        lineHeight: 20.0,
-                        animationDuration: 2000,
-                        percent: 0.9,
-                        center: const Text("90.0%"),
-                        barRadius: const Radius.circular(16),
-                        progressColor: Colors.greenAccent,
-                      ),
-                    ),
-
+//はる
                     HomeCardWidget(
                       title: "はる",
                       color: Colors.red[100]!,
@@ -133,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       _confettiEventHaru();
                                       // _controller.play(); // ココ！
                                       debugPrint("confetti実行");
-                                      model.fabButtonFunction(1, "haru");
+                                      model.bookNumCount(1, "haru");
                                     },
                                   ),
                                 ),
@@ -180,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.fabButtonFunction(3, "haru");
+                                          model.bookNumCount(3, "haru");
                                         },
                                       ),
                                     ),
@@ -203,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.fabButtonFunction(5, "haru");
+                                          model.bookNumCount(5, "haru");
                                         },
                                       ),
                                     ),
@@ -226,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact();
-                                          model.fabButtonFunction(-1, "haru");
+                                          model.bookNumCount(-1, "haru");
                                         },
                                       ),
                                     ),
@@ -267,7 +347,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       _confettiEventYume();
                                       // _controller.play(); // ココ！
                                       debugPrint("confetti実行");
-                                      model.fabButtonFunction(1, "yume");
+                                      model.bookNumCount(1, "yume");
                                     },
                                   ),
                                 ),
@@ -314,7 +394,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.fabButtonFunction(3, "yume");
+                                          model.bookNumCount(3, "yume");
                                         },
                                       ),
                                     ),
@@ -337,7 +417,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.fabButtonFunction(5, "yume");
+                                          model.bookNumCount(5, "yume");
                                         },
                                       ),
                                     ),
@@ -360,7 +440,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact();
-                                          model.fabButtonFunction(-1, "yume");
+                                          model.bookNumCount(-1, "yume");
                                         },
                                       ),
                                     ),
