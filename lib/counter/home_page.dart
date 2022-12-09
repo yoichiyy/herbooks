@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counter/counter/book_num_button.dart';
+import 'package:counter/counter/num_count_model.dart';
 import 'package:counter/counter/home_card.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +28,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ConfettiController(duration: const Duration(milliseconds: 500));
   final _controllerYume =
       ConfettiController(duration: const Duration(milliseconds: 500));
+  DateTime _pickedDate = DateTime.now();
+  String category = "";
 
   void _confettiEventHaru() {
     setState(() {
@@ -45,14 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     _controllerHaru.dispose(); // controllerを破棄する
     _controllerYume.dispose(); // controllerを破棄する
-    _controller.dispose();
     super.dispose();
   }
-
-  final TextEditingController _controller = TextEditingController();
-
-  DateTime _pickedDate = DateTime.now();
-  String _category = "";
 
   final snackBar = const SnackBar(
     content: Text('登録しました'),
@@ -61,14 +57,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ChangeNotifierProvider<BookNumButton>(
-        create: (_) => BookNumButton(),
+      home: ChangeNotifierProvider<NumCountModel>(
+        create: (_) => NumCountModel(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text("Ehon"),
           ),
-          body: Consumer<BookNumButton>(
+          body: Consumer<NumCountModel>(
             builder: (context, model, child) {
               return SingleChildScrollView(
                 child: Column(
@@ -87,9 +83,22 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: [
                                 TextFormField(
                                   keyboardType: TextInputType.number,
-                                  controller: _controller,
+                                  controller: model.kakeiController,
+                                  // inputFormatters: <TextInputFormatter>[],
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration:
                                       const InputDecoration(hintText: "金額"),
+                                ),
+                                const SizedBox(
+                                  width: double.infinity,
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller: model.kakeiNoteController,
+                                  decoration:
+                                      const InputDecoration(hintText: "用途"),
                                 ),
                                 const SizedBox(
                                   width: double.infinity,
@@ -101,13 +110,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => _category = "消費");
+                                        setState(() => category = "消費");
                                       },
                                       child: const Text("消費 ♧"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => _category = "浪費");
+                                        setState(() => category = "浪費");
                                       },
                                       child: const Text("浪費 ♠"),
                                     ),
@@ -123,13 +132,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => _category = "投資");
+                                        setState(() => category = "投資");
                                       },
                                       child: const Text("投資 !"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => _category = "空費");
+                                        setState(() => category = "空費");
                                       },
                                       child: const Text("空費 ♪"),
                                     ),
@@ -147,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           MaterialButton(
                             color: Colors.lightBlue.shade900,
                             onPressed: () async {
-                              if (_controller.text.isEmpty) {
+                              if (model.kakeiController.text.isEmpty) {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
@@ -167,8 +176,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 );
                                 return;
                               } //if
-                              await model.kakeiCount(_controller, _category);
-                              _controller.clear();
+                              await model.kakeiRegister(category);
+                              model.kakeiController.clear();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
                             },
@@ -213,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       _confettiEventHaru();
                                       // _controller.play(); // ココ！
                                       debugPrint("confetti実行");
-                                      model.bookNumCount(1, "haru");
+                                      model.bookNumRegister(1, "haru");
                                     },
                                   ),
                                 ),
@@ -260,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumCount(3, "haru");
+                                          model.bookNumRegister(3, "haru");
                                         },
                                       ),
                                     ),
@@ -283,7 +292,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumCount(5, "haru");
+                                          model.bookNumRegister(5, "haru");
                                         },
                                       ),
                                     ),
@@ -306,7 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact();
-                                          model.bookNumCount(-1, "haru");
+                                          model.bookNumRegister(-1, "haru");
                                         },
                                       ),
                                     ),
@@ -347,7 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       _confettiEventYume();
                                       // _controller.play(); // ココ！
                                       debugPrint("confetti実行");
-                                      model.bookNumCount(1, "yume");
+                                      model.bookNumRegister(1, "yume");
                                     },
                                   ),
                                 ),
@@ -394,7 +403,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumCount(3, "yume");
+                                          model.bookNumRegister(3, "yume");
                                         },
                                       ),
                                     ),
@@ -417,7 +426,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumCount(5, "yume");
+                                          model.bookNumRegister(5, "yume");
                                         },
                                       ),
                                     ),
@@ -440,7 +449,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         onPressed: () async {
                                           HapticFeedback.mediumImpact();
-                                          model.bookNumCount(-1, "yume");
+                                          model.bookNumRegister(-1, "yume");
                                         },
                                       ),
                                     ),

@@ -1,4 +1,4 @@
-import 'package:counter/counter/count_model.dart';
+import 'package:counter/counter/num_read_model.dart';
 import 'package:flutter/material.dart';
 
 Widget countArea(String musume) {
