@@ -7,6 +7,7 @@ class EditHistoryModel extends ChangeNotifier {
   final bookNumController = TextEditingController();
   final bookDateController = TextEditingController();
   int? bookNumForEditpage;
+  String? bookDateForEditpage;
 
   EditHistoryModel(this.history) {
     //テキストフィールドに、該当データを表示させる
@@ -21,11 +22,12 @@ class EditHistoryModel extends ChangeNotifier {
 
   Future update() async {
     bookNumForEditpage = int.parse(bookNumController.text);
-
+    bookDateForEditpage = bookDateController.text;
     await FirebaseFirestore.instance
         .collection('newCount')
         .doc(history.id)
         .update({
+      'date': bookDateForEditpage,
       'count': bookNumForEditpage,
     });
 

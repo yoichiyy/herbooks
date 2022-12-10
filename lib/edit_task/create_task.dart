@@ -194,6 +194,7 @@ class _TaskCardState extends State<TaskCard> {
                   });
                   _controller.clear();
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Navigator.of(context).pop();
                 },
                 child: const Text(
                   "登録",

@@ -77,9 +77,9 @@ Future<int> getCounterForAll(String musume) async {
   return sumAll;
 }
 
-String getIdFromDate(DateTime date) {
-  return "${date.day}-${date.month}-${date.year}";
-}
+// String getIdFromDate(DateTime date) {
+//   return "${date.day}-${date.month}-${date.year}";
+// }
 
 DateTime getDateFromId(String id) {
   final getListOfNumbers = id.split("-").reversed.toList();
@@ -87,26 +87,15 @@ DateTime getDateFromId(String id) {
       int.parse(getListOfNumbers[1]), int.parse(getListOfNumbers[2]));
 }
 
-//作り直し。ifを外す
-Future<void> addBook(DateTime dueDate, String taskName) async {
-  if (taskName == "") {
-    throw 'タイトルが入力されていません';
-  }
 
-  // firestoreに追加
-  await FirebaseFirestore.instance.collection('books').add({
-    'title': taskName,
-    'author': dueDate,
-  });
-}
 
 // 家計の方
+
 
 Future<int> getKakeiForDay(String dailyCount, String musume) async {
   final _store = FirebaseFirestore.instance;
   var dayData = await _store
       .collection('kakei')
-      // .where('musume', isEqualTo: musume)
       .where('date', isEqualTo: dailyCount)
       .get();
 
@@ -125,7 +114,6 @@ Future<int> getKakeiForMonth(String monthlyCount, String musume) async {
   final _store = FirebaseFirestore.instance;
   final monthData = await _store
       .collection('kakei')
-      // .where('musume', isEqualTo: musume)
       .where('month', isEqualTo: monthlyCount)
       .get();
 

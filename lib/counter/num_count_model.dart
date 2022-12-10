@@ -37,6 +37,8 @@ class NumCountModel extends ChangeNotifier {
   }
 
 //絵本の方
+
+
   Future<void> bookNumRegister(booknum, musume) async {
     //userNameを取得するもっとスマートなやり方は？
     //1.doc().field('name')的に、あと一歩いけないものか？

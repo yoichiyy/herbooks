@@ -45,14 +45,14 @@ class _TaskListPageState extends State<TaskListPage> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: LinearPercentIndicator(
-                      width: 140.0,
+                      width: MediaQuery.of(context).size.width - 100,
                       lineHeight: 14.0,
                       percent: 0.5,
                       center: const Text(
                         "50.0%",
                         style: TextStyle(fontSize: 12.0),
                       ),
-                      trailing: const Icon(Icons.mood),
+                      leading: const Icon(Icons.watch),
                       barRadius: const Radius.circular(16),
                       backgroundColor: Colors.grey,
                       progressColor: Colors.blue,
@@ -61,12 +61,12 @@ class _TaskListPageState extends State<TaskListPage> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: LinearPercentIndicator(
-                      width: 170.0,
+                      width: MediaQuery.of(context).size.width - 100,
                       animation: true,
                       animationDuration: 1000,
                       lineHeight: 20.0,
-                      leading: const Text("左"),
-                      trailing: const Text("右"),
+                      leading: const Icon(Icons.local_hospital_rounded),
+                      // trailing: const Text("右"),
                       percent: 0.2,
                       center: const Text("20.0%"),
                       barRadius: const Radius.circular(16),
@@ -76,10 +76,11 @@ class _TaskListPageState extends State<TaskListPage> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width - 50,
+                      width: MediaQuery.of(context).size.width - 100,
                       animation: true,
                       lineHeight: 20.0,
                       animationDuration: 2000,
+                      leading: const Icon(Icons.sunny),
                       percent: 0.9,
                       center: const Text("90.0%"),
                       barRadius: const Radius.circular(16),
