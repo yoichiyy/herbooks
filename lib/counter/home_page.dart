@@ -167,7 +167,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         TextButton(
                                           child: const Text('OK'),
                                           onPressed: () {
-                                            Navigator.of(context).pop();
+                                            // Navigator.of(context).pop();
+                                            FocusScope.of(context).unfocus();
                                           },
                                         ),
                                       ],

@@ -11,10 +11,8 @@ class EditHistoryModel extends ChangeNotifier {
   EditHistoryModel(this.history) {
     //テキストフィールドに、該当データを表示させる
     bookNumController.text = history.count.toString();
-    bookDateController.text = history.dateString.toString();
+    bookDateController.text = history.date;
   }
-
-
 
   bool isUpdatedBookNum() {
     return bookNumForEditpage != null;

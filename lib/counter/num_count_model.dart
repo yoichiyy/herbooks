@@ -4,15 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NumCountModel extends ChangeNotifier {
-  final int booknum = 0;
-  final String musume = "";
+  final booknum = 0;
+  final musume = "";
   //二桁必須の方法 padLeftを使いました。
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
   final time =
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
-  String uid = FirebaseAuth.instance.currentUser!.uid;
+  final uid = FirebaseAuth.instance.currentUser!.uid;
   final kakeiController = TextEditingController();
   final kakeiNoteController = TextEditingController();
 
