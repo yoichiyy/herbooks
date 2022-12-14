@@ -5,10 +5,12 @@ import 'package:counter/counter/home_card.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/count_area.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
 
+import '../settings.dart';
 import 'kakei_count_area.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -63,6 +65,23 @@ class _MyHomePageState extends State<MyHomePage> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text("Ehon"),
+            actions: [
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 10.0),
+                  child: OutlinedButton(
+                    child:
+                        const Text('設定', style: TextStyle(color: Colors.white)),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChallengeSetting(),
+                        ),
+                      );
+                    },
+                  ))
+            ],
           ),
           body: Consumer<NumCountModel>(
             builder: (context, model, child) {
@@ -70,6 +89,53 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+//グラフ部分
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
+                        width: MediaQuery.of(context).size.width - 100,
+                        lineHeight: 14.0,
+                        percent: 0.5,
+                        center: const Text(
+                          "50.0%",
+                          style: TextStyle(fontSize: 12.0),
+                        ),
+                        leading: const Icon(Icons.watch),
+                        barRadius: const Radius.circular(16),
+                        backgroundColor: Colors.grey,
+                        progressColor: Colors.blue,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
+                        width: MediaQuery.of(context).size.width - 100,
+                        animation: true,
+                        animationDuration: 1000,
+                        lineHeight: 20.0,
+                        leading: const Icon(Icons.local_hospital_rounded),
+                        // trailing: const Text("右"),
+                        percent: 0.2,
+                        center: const Text("20.0%"),
+                        barRadius: const Radius.circular(16),
+                        progressColor: Colors.red,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: LinearPercentIndicator(
+                        width: MediaQuery.of(context).size.width - 100,
+                        animation: true,
+                        lineHeight: 20.0,
+                        animationDuration: 2000,
+                        leading: const Icon(Icons.sunny),
+                        percent: 0.9,
+                        center: const Text("90.0%"),
+                        barRadius: const Radius.circular(16),
+                        progressColor: Colors.greenAccent,
+                      ),
+                    ),
+//かけい部分
                     HomeCardWidget(
                       title: "おこづかい",
                       color: Colors.green[100]!,
@@ -156,6 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           MaterialButton(
                             color: Colors.lightBlue.shade900,
                             onPressed: () async {
+                              FocusScope.of(context).unfocus();
                               if (model.kakeiController.text.isEmpty) {
                                 showDialog(
                                   context: context,
@@ -477,5 +544,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   } //widget build
 } //class
-
-

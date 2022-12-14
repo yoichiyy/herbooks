@@ -1,4 +1,4 @@
-import 'package:counter/ui/user_Edits.dart';
+import 'package:counter/user_Edits.dart';
 import 'package:counter/edit_history/edit_history.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';

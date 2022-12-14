@@ -2,20 +2,32 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'pageview.dart';
+import 'counter/home_page.dart';
 
-class UsersEdits extends StatefulWidget {
-  const UsersEdits({Key? key}) : super(key: key);
+class ChallengeSetting extends StatefulWidget {
+  const ChallengeSetting({Key? key}) : super(key: key);
 
   @override
-  State<UsersEdits> createState() => _UsersEditsState();
+  State<ChallengeSetting> createState() => _ChallengeSetting();
 }
 
-class _UsersEditsState extends State<UsersEdits> {
-  final TextEditingController _textContName = TextEditingController();
-  final TextEditingController _textContProf = TextEditingController();
-  // String _editTextName = '';
-  // String _editTextProf = '';
+class _ChallengeSetting extends State<ChallengeSetting> {
+  final challengePeriod = 0;
+  final sassuToRead = 0;
+  final goalSassuTotal = 0;
+  final nowTotalSassu = 0;
+  final remainSassuToRead = 0;
+  final startDate = "";
+  final endDate = "";
+
+  //こういう日付の計算はどうするんだっけ
+  // final challengePeriodRemaining = startDate - endDate;
+
+  //冊数、期間、開始日
+  final TextEditingController _goalSassuController = TextEditingController();
+  final TextEditingController _challengePeriodController =
+      TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
 
   @override
   void initState() {
@@ -33,12 +45,12 @@ class _UsersEditsState extends State<UsersEdits> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PageViewClass(),
+                  builder: (context) => const MyHomePage(),
                 ));
           },
         ),
         centerTitle: true,
-        title: const Text('ユーザー登録'),
+        title: const Text('目標設定'),
         actions: [
           Padding(
               padding:
@@ -49,15 +61,13 @@ class _UsersEditsState extends State<UsersEdits> {
                   User? user = FirebaseAuth.instance.currentUser;
                   Map<String, dynamic> insertObj = {
                     'id': user!.uid,
-                    'name': _textContName.text,
-                    'note': _textContProf.text,
-                    'vaild': true,
-                    'created_at': FieldValue.serverTimestamp(),
-                    'modified_at': FieldValue.serverTimestamp()
+                    'sassu': _goalSassuController.text,
+                    'period': _challengePeriodController.text,
+                    'start_date': _startDateController,
                   };
                   try {
                     var doc = FirebaseFirestore.instance
-                        .collection('users')
+                        .collection('goals')
                         .doc(user.uid);
                     await doc.set(insertObj);
 
@@ -65,17 +75,9 @@ class _UsersEditsState extends State<UsersEdits> {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PageViewClass(),
+                        builder: (context) => const MyHomePage(),
                       ),
                     );
-
-                    //元のコード
-                    // await Navigator.of(context).pushReplacement(
-                    //   MaterialPageRoute(builder: (context) {
-                    //     return PageView();
-                    //   }),
-                    // );
-
                   } catch (e) {
                     debugPrint('-----insert error----');
                     print(e);
@@ -92,6 +94,7 @@ class _UsersEditsState extends State<UsersEdits> {
                 padding: EdgeInsets.only(bottom: bottomSpace),
                 child: Column(
                   children: [
+//テキストフィールドのコンテナ1
                     Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 15.0, horizontal: 10.0),
@@ -106,12 +109,12 @@ class _UsersEditsState extends State<UsersEdits> {
                           const Padding(
                             padding: EdgeInsets.only(
                                 top: 10.0, bottom: 10.0, right: 40.0),
-                            child: Text('ユーザーID'),
+                            child: Text('読む絵本の数'),
                           ),
                           Flexible(
                             child: TextField(
                               autofocus: false,
-                              controller: _textContName,
+                              controller: _goalSassuController,
                               maxLines: 1,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
@@ -126,6 +129,7 @@ class _UsersEditsState extends State<UsersEdits> {
                         ],
                       ),
                     ),
+//テキストフィールドのコンテナ2
                     Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 15.0, horizontal: 10.0),
@@ -140,22 +144,48 @@ class _UsersEditsState extends State<UsersEdits> {
                           const Padding(
                             padding: EdgeInsets.only(
                                 top: 10.0, bottom: 10.0, right: 40.0),
-                            child: Text('自己紹介（必須ではない）'),
+                            child: Text('実施期間'),
                           ),
                           Flexible(
                             child: TextField(
                               autofocus: false,
-                              controller: _textContProf,
+                              controller: _startDateController,
                               maxLines: 2,
                               minLines: 1,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
-                              // onChanged: (String? val) {
-                              //   if (val != null && val != '') {
-                              //     _editTextProf = val;
-                              //   }
-                              // },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    //テキストフィールドのコンテナ2
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 10.0),
+                      decoration: const BoxDecoration(
+                          border: Border(
+                              bottom:
+                                  BorderSide(width: 1.0, color: Colors.grey))),
+                      child: Row(
+                        // 自己紹介
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          const Padding(
+                            padding: EdgeInsets.only(
+                                top: 10.0, bottom: 10.0, right: 40.0),
+                            child: Text('開始日'),
+                          ),
+                          Flexible(
+                            child: TextField(
+                              autofocus: false,
+                              controller: _startDateController,
+                              maxLines: 2,
+                              minLines: 1,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                              ),
                             ),
                           )
                         ],
