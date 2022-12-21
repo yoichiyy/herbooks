@@ -17,76 +17,78 @@ class EditHistoryPage extends StatelessWidget {
           title: const Text('履歴を編集'),
         ),
         body: Center(
-          child: Consumer<EditHistoryModel>(builder: (_, model, __) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
+          child: Consumer<EditHistoryModel>(
+            builder: (_, model, __) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
 //現在の、日付を表示するだけのやつ
-                  Text(
-                    model.history.dateString,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                    Text(
+                      model.history.dateString,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
 
 //日付編集できるやつ：datetimepicker はりつけ
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: model.bookDateController,
-                    decoration: const InputDecoration(
-                      hintText: '読んだ数',
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      controller: model.bookDateController,
+                      decoration: const InputDecoration(
+                        hintText: '読んだ数',
+                      ),
+                      // onChanged: (text) {
+                      //   model.setCountHistory(text);
+                      // },
                     ),
-                    // onChanged: (text) {
-                    //   model.setCountHistory(text);
-                    // },
-                  ),
 
-                  const SizedBox(
-                    height: 8,
-                  ),
-
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    controller: model.bookNumController,
-                    decoration: const InputDecoration(
-                      hintText: '読んだ数',
+                    const SizedBox(
+                      height: 8,
                     ),
-                    // onChanged: (text) {
-                    //   model.setCountHistory(text);
-                    // },
-                  ),
 
-                  const SizedBox(
-                    height: 16,
-                  ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      controller: model.bookNumController,
+                      decoration: const InputDecoration(
+                        hintText: '読んだ数',
+                      ),
+                      // onChanged: (text) {
+                      //   model.setCountHistory(text);
+                      // },
+                    ),
 
-                  ElevatedButton(
-                    child: const Text('更新'),
-                    onPressed:
-                        // model.isUpdatedBookNum()  ?
-                        () async {
-                      // 追加の処理
-                      try {
-                        await model.update();
-                        Navigator.of(context).pop(model.bookNumForEditpage);
-                      } catch (e) {
-                        final snackBar = SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(e.toString()),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    // : null,
-                  ),
-                ],
-              ),
-            );
-          }),
+                    const SizedBox(
+                      height: 16,
+                    ),
+
+                    ElevatedButton(
+                      child: const Text('更新'),
+                      onPressed:
+                          // model.isUpdatedBookNum()  ?
+                          () async {
+                        // 追加の処理
+                        try {
+                          await model.update();
+                          Navigator.of(context).pop(model.bookNumForEditpage);
+                        } catch (e) {
+                          final snackBar = SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(e.toString()),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      // : null,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

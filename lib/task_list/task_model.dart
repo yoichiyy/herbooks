@@ -48,18 +48,3 @@ class TaskModel extends ChangeNotifier {
 
 }
 
-class AddBookModel extends ChangeNotifier {
-  String? taskName;
-  String? dueDate;
-
-  Future addBook() async {
-    if (taskName == null || taskName == "") {
-      throw 'タスク名が入力されていません';
-    }
-    // firestoreに追加
-    await FirebaseFirestore.instance.collection('books').add({
-      'title': taskName,
-      'author': dueDate,
-    });
-  }
-}

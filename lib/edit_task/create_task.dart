@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../task_list/task_list.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({Key? key}) : super(key: key);
@@ -31,6 +32,16 @@ class _TaskCardState extends State<TaskCard> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Task"),
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TaskListPage(),
+                  ));
+            },
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -79,13 +90,6 @@ class _TaskCardState extends State<TaskCard> {
                         ),
                         ElevatedButton(
                           child: const Text("日付指定"),
-                          // style: ElevatedButton.styleFrom(
-                          //   primary: Colors.grey[400],
-                          //   onPrimary: Colors.black,
-                          //   textStyle: const TextStyle(
-                          //     fontSize: 10,
-                          //   ),
-                          // ),
                           onPressed: () async {
                             final _result = await showDatePicker(
                               context: context,
@@ -101,7 +105,7 @@ class _TaskCardState extends State<TaskCard> {
                               _pickedDate = _result;
                             }
 
-                            // setState(() {});
+                            setState(() {});
                           },
                         ),
                       ],
@@ -139,7 +143,6 @@ class _TaskCardState extends State<TaskCard> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            HapticFeedback.mediumImpact();
                             setState(() => _pickedDate = DateTime(
                                   _pickedDate.year,
                                   _pickedDate.month,

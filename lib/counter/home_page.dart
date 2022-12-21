@@ -1,16 +1,16 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counter/counter/num_count_model.dart';
+import 'package:counter/Util/date_time.dart';
+import 'package:counter/counter/num_count.dart';
 import 'package:counter/counter/home_card.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:counter/counter/count_area.dart';
+import 'package:counter/counter/book_count_area.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
-
-import '../settings.dart';
+import '../ui/goal_setting_page.dart';
 import 'kakei_count_area.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ConfettiController(duration: const Duration(milliseconds: 500));
   final _controllerYume =
       ConfettiController(duration: const Duration(milliseconds: 500));
-  DateTime _pickedDate = DateTime.now();
+  // DateTime _pickedDate = DateTime.now();
   String category = "";
 
   void _confettiEventHaru() {
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: ChangeNotifierProvider<NumCountModel>(
-        create: (_) => NumCountModel(),
+        create: (_) => NumCountModel()..getGraphData(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ChallengeSetting(),
+                          builder: (context) => const GoalSetting(),
                         ),
                       );
                     },
@@ -90,37 +90,41 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
 //グラフ部分
+//グラフ１：青
+                    // Padding(
+                    //   padding: const EdgeInsets.all(15.0),
+                    //   child: LinearPercentIndicator(
+                    //     width: MediaQuery.of(context).size.width - 100,
+                    //     lineHeight: 14.0,
+                    //     percent: 0.5,
+                    //     center: const Text(
+                    //       "50.0%",
+                    //       style: TextStyle(fontSize: 12.0),
+                    //     ),
+                    //     leading: const Icon(Icons.watch),
+                    //     barRadius: const Radius.circular(16),
+                    //     backgroundColor: Colors.grey,
+                    //     progressColor: Colors.blue,
+                    //   ),
+                    //
+//グラフ2：赤
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width - 100,
-                        lineHeight: 14.0,
-                        percent: 0.5,
-                        center: const Text(
-                          "50.0%",
-                          style: TextStyle(fontSize: 12.0),
-                        ),
-                        leading: const Icon(Icons.watch),
-                        barRadius: const Radius.circular(16),
-                        backgroundColor: Colors.grey,
-                        progressColor: Colors.blue,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width - 100,
+                        width: MediaQuery.of(context).size.width - 150,
                         animation: true,
                         animationDuration: 1000,
                         lineHeight: 20.0,
-                        leading: const Icon(Icons.local_hospital_rounded),
-                        // trailing: const Text("右"),
-                        percent: 0.2,
-                        center: const Text("20.0%"),
+                        leading: Text(model.graphStartDay),
+                        trailing: Text(model.graphGoalDay),
+                        percent: model.remainPeriodPercent,
+                        center: Text(model.remainPeriodPercent.toString()),
                         barRadius: const Radius.circular(16),
                         progressColor: Colors.red,
                       ),
                     ),
+
+                    //冊数progress
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: LinearPercentIndicator(
@@ -150,7 +154,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 TextFormField(
                                   keyboardType: TextInputType.number,
                                   controller: model.kakeiController,
-                                  // inputFormatters: <TextInputFormatter>[],
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly
                                   ],
@@ -176,15 +179,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => category = "消費");
+                                        setState(() => category = "食費");
                                       },
-                                      child: const Text("消費 ♧"),
+                                      child: const Text("食費"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => category = "浪費");
+                                        setState(() => category = "ゆめはる");
                                       },
-                                      child: const Text("浪費 ♠"),
+                                      child: const Text("ゆめはる"),
                                     ),
                                   ],
                                 ),
@@ -198,15 +201,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => category = "投資");
+                                        setState(() => category = "学習");
                                       },
-                                      child: const Text("投資 !"),
+                                      child: const Text("学習"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        setState(() => category = "空費");
+                                        setState(() => category = "その他");
                                       },
-                                      child: const Text("空費 ♪"),
+                                      child: const Text("その他"),
                                     ),
                                   ],
                                 ),
@@ -273,7 +276,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          countArea("haru"),
+                          bookCountArea("haru"),
                           Center(
                             //Button_area
                             child: Column(
@@ -319,80 +322,80 @@ class _MyHomePageState extends State<MyHomePage> {
                                   width: 10,
                                   height: 20,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: ElevatedButton(
-                                        child: const Text("3"),
-                                        style: ElevatedButton.styleFrom(
-                                          //backgroundColor,foregroundColor
-                                          backgroundColor: Colors.grey[300],
-                                          foregroundColor: Colors.purple,
-                                          textStyle: const TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumRegister(3, "haru");
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 60,
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: ElevatedButton(
-                                        child: const Text("5"),
-                                        style: ElevatedButton.styleFrom(
-                                          //backgroundColor,foregroundColor
-                                          backgroundColor: Colors.grey[300],
-                                          foregroundColor: Colors.purple,
-                                          textStyle: const TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumRegister(5, "haru");
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 60,
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: ElevatedButton(
-                                        child: const Text("-1"),
-                                        style: ElevatedButton.styleFrom(
-                                          //backgroundColor,foregroundColor
-                                          backgroundColor: Colors.grey[300],
-                                          foregroundColor: Colors.purple,
-                                          textStyle: const TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          HapticFeedback.mediumImpact();
-                                          model.bookNumRegister(-1, "haru");
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: double.infinity,
-                                  height: 20,
-                                ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     SizedBox(
+                                //       width: 60,
+                                //       height: 60,
+                                //       child: ElevatedButton(
+                                //         child: const Text("3"),
+                                //         style: ElevatedButton.styleFrom(
+                                //           //backgroundColor,foregroundColor
+                                //           backgroundColor: Colors.grey[300],
+                                //           foregroundColor: Colors.purple,
+                                //           textStyle: const TextStyle(
+                                //             fontSize: 20,
+                                //           ),
+                                //         ),
+                                //         onPressed: () async {
+                                //           HapticFeedback.mediumImpact(); // ココ！
+                                //           model.bookNumRegister(3, "haru");
+                                //         },
+                                //       ),
+                                //     ),
+                                //     const SizedBox(
+                                //       width: 30,
+                                //       height: 60,
+                                //     ),
+                                //     SizedBox(
+                                //       width: 60,
+                                //       height: 60,
+                                //       child: ElevatedButton(
+                                //         child: const Text("5"),
+                                //         style: ElevatedButton.styleFrom(
+                                //           //backgroundColor,foregroundColor
+                                //           backgroundColor: Colors.grey[300],
+                                //           foregroundColor: Colors.purple,
+                                //           textStyle: const TextStyle(
+                                //             fontSize: 20,
+                                //           ),
+                                //         ),
+                                //         onPressed: () async {
+                                //           HapticFeedback.mediumImpact(); // ココ！
+                                //           model.bookNumRegister(5, "haru");
+                                //         },
+                                //       ),
+                                //     ),
+                                //     const SizedBox(
+                                //       width: 30,
+                                //       height: 60,
+                                //     ),
+                                //     SizedBox(
+                                //       width: 60,
+                                //       height: 60,
+                                //       child: ElevatedButton(
+                                //         child: const Text("-1"),
+                                //         style: ElevatedButton.styleFrom(
+                                //           //backgroundColor,foregroundColor
+                                //           backgroundColor: Colors.grey[300],
+                                //           foregroundColor: Colors.purple,
+                                //           textStyle: const TextStyle(
+                                //             fontSize: 20,
+                                //           ),
+                                //         ),
+                                //         onPressed: () async {
+                                //           HapticFeedback.mediumImpact();
+                                //           model.bookNumRegister(-1, "haru");
+                                //         },
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
+                                // const SizedBox(
+                                //   width: double.infinity,
+                                //   height: 20,
+                                // ),
                               ], //children
                             ),
                           ),
@@ -408,7 +411,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          countArea("yume"),
+                          bookCountArea("yume"),
                           Center(
                             child: Column(
                               children: [
@@ -453,76 +456,76 @@ class _MyHomePageState extends State<MyHomePage> {
                                   width: 10,
                                   height: 20,
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: ElevatedButton(
-                                        child: const Text("3"),
-                                        style: ElevatedButton.styleFrom(
-                                          //backgroundColor,foregroundColor
-                                          backgroundColor: Colors.grey[300],
-                                          foregroundColor: Colors.purple,
-                                          textStyle: const TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumRegister(3, "yume");
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 60,
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: ElevatedButton(
-                                        child: const Text("5"),
-                                        style: ElevatedButton.styleFrom(
-                                          //backgroundColor,foregroundColor
-                                          backgroundColor: Colors.grey[300],
-                                          foregroundColor: Colors.purple,
-                                          textStyle: const TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          HapticFeedback.mediumImpact(); // ココ！
-                                          model.bookNumRegister(5, "yume");
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 60,
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 60,
-                                      child: ElevatedButton(
-                                        child: const Text("-1"),
-                                        style: ElevatedButton.styleFrom(
-                                          //backgroundColor,foregroundColor
-                                          backgroundColor: Colors.grey[300],
-                                          foregroundColor: Colors.purple,
-                                          textStyle: const TextStyle(
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          HapticFeedback.mediumImpact();
-                                          model.bookNumRegister(-1, "yume");
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.center,
+                                //   children: [
+                                //     SizedBox(
+                                //       width: 60,
+                                //       height: 60,
+                                //       child: ElevatedButton(
+                                //         child: const Text("3"),
+                                //         style: ElevatedButton.styleFrom(
+                                //           //backgroundColor,foregroundColor
+                                //           backgroundColor: Colors.grey[300],
+                                //           foregroundColor: Colors.purple,
+                                //           textStyle: const TextStyle(
+                                //             fontSize: 20,
+                                //           ),
+                                //         ),
+                                //         onPressed: () async {
+                                //           HapticFeedback.mediumImpact(); // ココ！
+                                //           model.bookNumRegister(3, "yume");
+                                //         },
+                                //       ),
+                                //     ),
+                                //     const SizedBox(
+                                //       width: 30,
+                                //       height: 60,
+                                //     ),
+                                //     SizedBox(
+                                //       width: 60,
+                                //       height: 60,
+                                //       child: ElevatedButton(
+                                //         child: const Text("5"),
+                                //         style: ElevatedButton.styleFrom(
+                                //           //backgroundColor,foregroundColor
+                                //           backgroundColor: Colors.grey[300],
+                                //           foregroundColor: Colors.purple,
+                                //           textStyle: const TextStyle(
+                                //             fontSize: 20,
+                                //           ),
+                                //         ),
+                                //         onPressed: () async {
+                                //           HapticFeedback.mediumImpact(); // ココ！
+                                //           model.bookNumRegister(5, "yume");
+                                //         },
+                                //       ),
+                                //     ),
+                                //     const SizedBox(
+                                //       width: 30,
+                                //       height: 60,
+                                //     ),
+                                //     SizedBox(
+                                //       width: 60,
+                                //       height: 60,
+                                //       child: ElevatedButton(
+                                //         child: const Text("-1"),
+                                //         style: ElevatedButton.styleFrom(
+                                //           //backgroundColor,foregroundColor
+                                //           backgroundColor: Colors.grey[300],
+                                //           foregroundColor: Colors.purple,
+                                //           textStyle: const TextStyle(
+                                //             fontSize: 20,
+                                //           ),
+                                //         ),
+                                //         onPressed: () async {
+                                //           HapticFeedback.mediumImpact();
+                                //           model.bookNumRegister(-1, "yume");
+                                //         },
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                                 const SizedBox(
                                   width: double.infinity,
                                   height: 20,

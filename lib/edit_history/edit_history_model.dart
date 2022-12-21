@@ -20,7 +20,7 @@ class EditHistoryModel extends ChangeNotifier {
     // ||history.count != null;
   }
 
-  Future update() async {
+  Future<void> update() async {
     bookNumForEditpage = int.parse(bookNumController.text);
     bookDateForEditpage = bookDateController.text;
     await FirebaseFirestore.instance

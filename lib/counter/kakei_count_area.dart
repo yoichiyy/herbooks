@@ -1,4 +1,5 @@
-import 'package:counter/counter/num_read_model.dart';
+import 'package:counter/counter/num_count.dart';
+import 'package:counter/counter/num_functions.dart';
 import 'package:flutter/material.dart';
 
 Widget kakeiCountArea(String oya) {

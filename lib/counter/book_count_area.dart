@@ -1,7 +1,8 @@
-import 'package:counter/counter/num_read_model.dart';
+import 'package:counter/counter/num_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-Widget countArea(String musume) {
+Widget bookCountArea(String musume) {
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
@@ -50,7 +51,7 @@ Widget countArea(String musume) {
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
                 // future: getCounterForDay(DateTime.now()),
-                future: getCounterForAll(musume),
+                future: fetchReadCountAll(musume),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),

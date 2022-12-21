@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:flutter/foundation.dart';
+import 'package:counter/Util/date_time.dart';
 
 // 月の冊数カウント
 Future<int> getCounterForMonth(String monthlyCount, String musume) async {
@@ -58,9 +58,7 @@ Future<int> getCounterForDay(String dailyCount, String musume) async {
 }
 
 //　全冊数のカウント
-Future<int> getCounterForAll(String musume) async {
-//新しい、newCountのコード
-//上のdailyのカウント取得との違いは、「最初にnewCountのすべて」を取得している。
+Future<int> fetchReadCountAll(String musume) async {
   final _store = FirebaseFirestore.instance;
   final allData = await _store
       .collection('newCount')
@@ -77,20 +75,13 @@ Future<int> getCounterForAll(String musume) async {
   return sumAll;
 }
 
-// String getIdFromDate(DateTime date) {
-//   return "${date.day}-${date.month}-${date.year}";
-// }
-
 DateTime getDateFromId(String id) {
   final getListOfNumbers = id.split("-").reversed.toList();
   return DateTime(int.parse(getListOfNumbers[0]),
       int.parse(getListOfNumbers[1]), int.parse(getListOfNumbers[2]));
 }
 
-
-
 // 家計の方
-
 
 Future<int> getKakeiForDay(String dailyCount, String musume) async {
   final _store = FirebaseFirestore.instance;
@@ -144,3 +135,5 @@ Future<int> getKakeiForAll(String oya) async {
   }
   return sumAll;
 }
+
+
