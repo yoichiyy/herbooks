@@ -18,8 +18,13 @@ class NumCountModel extends ChangeNotifier {
   String graphStartDay = "";
   String graphGoalDay = ""; //変更されうるよ、という状態
   double remainPeriodPercent = 0;
+  int remainSassuToRead = 0;
+  int sumDouble = 0;
+  double remainPercentToRead = 0;
+  int goalSassu = 0;
+  int totalSassuToRead = 0;
 
-  Future<void> getGraphData() async {
+  Future<Map> getGraphData() async {
     final _store = FirebaseFirestore.instance;
     final allData = await _store.collection('goals').get();
 
@@ -33,27 +38,27 @@ class NumCountModel extends ChangeNotifier {
         "${goalDate.month}${goalDate.day}(${goalDate.japaneseWeekday})";
     int challengePeriod = goalDate.difference(startDate).inDays;
     int remainDay = goalDate.difference(DateTime.now()).inDays;
-    double remainPeriodPercent =
-        ((remainDay / challengePeriod) * 100).round() / 10;
+    int remainPeriodPercent = ((remainDay / challengePeriod) * 100).round();
 
     //今と、冊数。残りと、ゴール
 //今のトータル
-    int startSassu = allData.docs[0].data()['start_sassu'];
-    int goalSassu = allData.docs[0].data()['goal_sassu'];
-    int totalSassuToRead = goalSassu - startSassu;
+    // int startSassu = allData.docs[0].data()['start_sassu'];
+    // int totalSassuToRead = goalSassu - startSassu;
     //問題箇所
-    Future<int> sumDouble = fetchSumDouble();
-    Future<int> remainSassuToRead = await goalSassu - sumDouble;
+    int sumDouble = await fetchSumDouble();
+    int goalSassu = await allData.docs[0].data()['goal_sassu_sum'];
+    int totalSassuToRead = await allData.docs[0].data()['goal_sassu_toRead'];
 
+    int remainSassuToRead = goalSassu - sumDouble;
+    int remainPercentToRead =
+        ((remainSassuToRead / totalSassuToRead) * 100).round();
 
     notifyListeners();
 
-    // return {
-    //   remainPercent: remainPercent,
-    //   remainSassuToRead: remainSassuToRead,
-    //   sumDouble: sumDouble,
-    //   graphStartDay: graphStartDay,
-    // };
+    return {
+      remainPercentToRead: remainPercentToRead,
+      remainPeriodPercent: remainPeriodPercent,
+    };
   }
 
   Future<int> fetchSumDouble() async {
