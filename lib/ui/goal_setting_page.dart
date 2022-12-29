@@ -85,12 +85,12 @@ class _GoalSetting extends State<GoalSetting> {
                                   autofocus: true,
                                   controller: _sassuToReadController,
                                   textInputAction: TextInputAction.next,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
+                                  // inputFormatters: [
+                                  //   FilteringTextInputFormatter.digitsOnly
+                                  // ],
+                                  // decoration: const InputDecoration(
+                                  //   border: InputBorder.none,
+                                  // ),
                                 ),
                               )
                             ],
@@ -169,28 +169,31 @@ class _GoalSetting extends State<GoalSetting> {
                             //関連数値を計算して確定
                             //冊数
                             int nowTotalSassu = await model.fetchSumDouble();
-                            int goalTotalSassu = nowTotalSassu +
-                                int.parse(_sassuToReadController.toString());
+                            debugPrint(_sassuToReadController.text);
+                            int goalSassuToRead =
+                                int.parse(_sassuToReadController.text);
+                            int goalSassuSum = nowTotalSassu + goalSassuToRead;
                             // int remainSassuToRead =
                             //     goalTotalSassu - nowTotalSassu;
                             //期間
                             DateTime goalDate = _startDateController.add(
                                 Duration(
-                                    days: int.parse(_challengePeriodController
-                                        .toString())));
+                                    days: int.parse(
+                                        _challengePeriodController.text)));
 
-                            // User? user = FirebaseAuth.instance.currentUser;
+                            User? user = FirebaseAuth.instance.currentUser;
                             Map<String, dynamic> insertObj = {
                               // 'id': user!.uid,
-                              'start_sassu': nowTotalSassu,
-                              'goal_sassu': goalTotalSassu,
+                              'goal_sassu_toRead': goalSassuToRead,
+                              'goal_sassu_sum': goalSassuSum,
                               'goal_date': goalDate,
                               'start_date': _startDateController,
+                              'user': user,
                             };
                             var doc = FirebaseFirestore.instance
                                 .collection('goals')
-                                .doc(_startDateController.toString());
-                            await doc.set(insertObj);
+                                .doc("goal");
+                            await doc.update(insertObj);
 
                             //新しいコード andremoveuntilが多分正しい
                             await Navigator.push(

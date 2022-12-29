@@ -32,6 +32,58 @@ class _MyHomePageState extends State<MyHomePage> {
       ConfettiController(duration: const Duration(milliseconds: 500));
   // DateTime _pickedDate = DateTime.now();
   String category = "";
+  final List<IconData> categoryIconList = [
+    Icons.dining,
+    Icons.coffee,
+    Icons.fastfood,
+    Icons.directions_run,
+    Icons.local_hospital,
+    Icons.sports_kabaddi,
+    Icons.currency_rupee,
+    Icons.menu_book,
+    Icons.local_fire_department,
+    Icons.train,
+    Icons.pest_control_rodent,
+    Icons.bedtime,
+    Icons.cottage,
+    Icons.electric_bolt,
+    Icons.android,
+  ];
+
+//この２つをenumに統合
+  final List<String> categoryList = [
+    "食事",
+    "嗜好品",
+    "外食",
+    "健康",
+    "医療",
+    "衣服",
+    "投資",
+    "本",
+    "GIVE",
+    "交通",
+    "日用品",
+    "その他",
+    "家",
+    "水光熱",
+    "子ども",
+  ];
+
+  int castId = 0;
+  final List<int> checkedList = [];
+
+  void _checked(int index) {
+    setState(() {
+      checkedList.clear();
+      checkedList.add(index);
+    });
+  }
+
+  void _unchecked(int index) {
+    setState(() {
+      checkedList.remove(index);
+    });
+  }
 
   void _confettiEventHaru() {
     setState(() {
@@ -116,9 +168,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         animationDuration: 1000,
                         lineHeight: 20.0,
                         leading: Text(model.graphStartDay),
+                        center: Text("あと${model.remainDay.toString()}日"),
                         trailing: Text(model.graphGoalDay),
                         percent: model.remainPeriodPercent,
-                        center: Text(model.remainPeriodPercent.toString()),
                         barRadius: const Radius.circular(16),
                         progressColor: Colors.red,
                       ),
@@ -133,9 +185,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         lineHeight: 20.0,
                         animationDuration: 2000,
                         leading: Text(model.sumDouble.toString()),
+                        center:
+                            Text("あと${model.remainSassuToRead.toString()}冊"),
                         trailing: Text(model.goalSassu.toString()),
                         percent: model.remainPercentToRead,
-                        center: Text(model.remainSassuToRead.toString()),
                         barRadius: const Radius.circular(16),
                         progressColor: Colors.greenAccent,
                       ),
@@ -166,54 +219,89 @@ class _MyHomePageState extends State<MyHomePage> {
                                   height: 20,
                                 ),
                                 TextFormField(
-                                  controller: model.kakeiNoteController,
+                                  controller: model.kakeiCategoryController,
                                   decoration:
-                                      const InputDecoration(hintText: "用途"),
+                                      const InputDecoration(hintText: "メモ"),
                                 ),
                                 const SizedBox(
                                   width: double.infinity,
                                   height: 20,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() => category = "食費");
+
+                                //GridView カテゴリー選択
+                                GridView.builder(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 4),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 4, //カラム数
+                                    mainAxisSpacing: 4,
+                                    crossAxisSpacing: 4,
+                                    childAspectRatio: 1.7,
+                                  ),
+                                  itemCount: 12, //要素数
+
+                                  itemBuilder: (context, index) {
+                                    final bool checked =
+                                        checkedList.contains(index);
+                                    return InkWell(
+                                      child: checked == false
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black26),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Text(
+                                                categoryList[index],
+                                                style: const TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 20),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              // Icon(categoryList[index], size: 50),
+                                            )
+                                          : Container(
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: Colors.yellow[200],
+                                                border: Border.all(),
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child:
+                                                  // Text(
+                                                  //   categoryList[index],
+                                                  //   style: const TextStyle(
+                                                  //       fontWeight: FontWeight.bold,
+                                                  //       fontSize: 24),
+                                                  //   textAlign: TextAlign.center,
+                                                  // ),
+                                                  Icon(
+                                                categoryIconList[index],
+                                                size: 50,
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                      onTap: () {
+                                        castId = index;
+                                        if (checked) {
+                                          _unchecked(index);
+                                          category = "";
+                                        } else {
+                                          _checked(index);
+                                          setState(() =>
+                                              category = categoryList[index]);
+                                        }
                                       },
-                                      child: const Text("食費"),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() => category = "ゆめはる");
-                                      },
-                                      child: const Text("ゆめはる"),
-                                    ),
-                                  ],
+                                    );
+                                  },
+
+                                  shrinkWrap: true,
                                 ),
-                                const SizedBox(
-                                  width: 10,
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() => category = "学習");
-                                      },
-                                      child: const Text("学習"),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() => category = "その他");
-                                      },
-                                      child: const Text("その他"),
-                                    ),
-                                  ],
-                                ),
+
                                 const SizedBox(
                                   width: 10,
                                   height: 10,
@@ -227,7 +315,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.lightBlue.shade900,
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
-                              if (model.kakeiController.text.isEmpty) {
+                              if (model.kakeiController.text.isEmpty ||
+                                  category.isEmpty) {
                                 showDialog(
                                   context: context,
                                   builder: (context) {

@@ -12,53 +12,57 @@ class NumCountModel extends ChangeNotifier {
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
   final time =
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
-  final uid = FirebaseAuth.instance.currentUser!.uid;
+  User? user = FirebaseAuth.instance.currentUser;
   final kakeiController = TextEditingController();
-  final kakeiNoteController = TextEditingController();
+  final kakeiCategoryController = TextEditingController();
   String graphStartDay = "";
   String graphGoalDay = ""; //変更されうるよ、という状態
   double remainPeriodPercent = 0;
+  int remainDay = 0;
   int remainSassuToRead = 0;
   int sumDouble = 0;
   double remainPercentToRead = 0;
   int goalSassu = 0;
   int totalSassuToRead = 0;
 
-  Future<Map> getGraphData() async {
+  Future<void> getGraphData() async {
     final _store = FirebaseFirestore.instance;
-    final allData = await _store.collection('goals').get();
+    final allData =
+        await _store.collection('goals').where('user', isEqualTo: user).get();
 
     //日付。「今日。ゴールの。残り期間。」
     DateTime startDate = allData.docs[0].data()['start_date'].toDate();
     graphStartDay =
-        "${startDate.month}${startDate.day}(${startDate.japaneseWeekday})";
+        "${startDate.month}/${startDate.day}(${startDate.japaneseWeekday})";
 
     DateTime goalDate = allData.docs[0].data()['goal_date'].toDate();
     graphGoalDay =
-        "${goalDate.month}${goalDate.day}(${goalDate.japaneseWeekday})";
+        "${goalDate.month}/${goalDate.day}(${goalDate.japaneseWeekday})";
     int challengePeriod = goalDate.difference(startDate).inDays;
-    int remainDay = goalDate.difference(DateTime.now()).inDays;
-    int remainPeriodPercent = ((remainDay / challengePeriod) * 100).round();
+    remainDay = goalDate.difference(DateTime.now()).inDays + 1;
+    remainPeriodPercent =
+        1 - ((remainDay / challengePeriod) * 100).round() / 100;
 
     //今と、冊数。残りと、ゴール
 //今のトータル
     // int startSassu = allData.docs[0].data()['start_sassu'];
     // int totalSassuToRead = goalSassu - startSassu;
     //問題箇所
-    int sumDouble = await fetchSumDouble();
-    int goalSassu = await allData.docs[0].data()['goal_sassu_sum'];
-    int totalSassuToRead = await allData.docs[0].data()['goal_sassu_toRead'];
+    sumDouble = await fetchSumDouble();
+    //方の定義かかない→かくから、ローカルになってしまう。ローカルならfinal。
+    goalSassu = await allData.docs[0].data()['goal_sassu_sum'];
+    totalSassuToRead = await allData.docs[0].data()['goal_sassu_toRead'];
 
-    int remainSassuToRead = goalSassu - sumDouble;
-    int remainPercentToRead =
-        ((remainSassuToRead / totalSassuToRead) * 100).round();
+    remainSassuToRead = goalSassu - sumDouble;
+    remainPercentToRead =
+        1 - (((remainSassuToRead / totalSassuToRead) * 100).round() / 100);
 
     notifyListeners();
 
-    return {
-      remainPercentToRead: remainPercentToRead,
-      remainPeriodPercent: remainPeriodPercent,
-    };
+    // return {
+    //   remainPercentToRead: remainPercentToRead,
+    //   remainPeriodPercent: remainPeriodPercent,
+    // };
   }
 
   Future<int> fetchSumDouble() async {
@@ -203,12 +207,15 @@ class NumCountModel extends ChangeNotifier {
   //家計の方
   Future<void> kakeiRegister(category) async {
     int? amount = int.parse(kakeiController.text);
-    String? note = kakeiNoteController.text;
+    String? note = kakeiCategoryController.text;
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final userName = snapshot.data()!['name'];
 
-    await FirebaseFirestore.instance.collection('kakei').doc().set({
+    await FirebaseFirestore.instance
+        .collection('kakei')
+        .doc(dailyCount + userName)
+        .set({
       'amount': amount,
       "date": dailyCount,
       "month": monthlyCount,
