@@ -24,7 +24,8 @@ class _MyHomePageState extends State<MyHomePage> {
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
-  final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
+  final monthlyCount =
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}";
   final totalCount = "total";
   final _controllerHaru =
       ConfettiController(duration: const Duration(milliseconds: 500));

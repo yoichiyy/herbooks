@@ -1,5 +1,4 @@
 import 'package:counter/counter/num_count.dart';
-import 'package:counter/counter/num_functions.dart';
 import 'package:flutter/material.dart';
 
 Widget kakeiCountArea(String oya) {
@@ -15,7 +14,7 @@ Widget kakeiCountArea(String oya) {
           child: Container(
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
-                future: getKakeiForDay(dailyCount, oya),
+                future: NumCountModel().getKakeiForDay(dailyCount, oya),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -32,7 +31,7 @@ Widget kakeiCountArea(String oya) {
           child: Container(
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
-              future: getKakeiForMonth(monthlyCount, oya),
+              future: NumCountModel().getKakeiForMonth(monthlyCount, oya),
               builder: (context, snapshot) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -51,7 +50,7 @@ Widget kakeiCountArea(String oya) {
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
                 // future: getCounterForDay(DateTime.now()),
-                future: getKakeiForAll(oya),
+                future: NumCountModel().getKakeiForAll(oya),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),

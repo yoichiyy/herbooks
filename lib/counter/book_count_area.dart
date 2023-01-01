@@ -1,11 +1,12 @@
-import 'package:counter/counter/num_functions.dart';
+import 'package:counter/counter/num_count.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 Widget bookCountArea(String musume) {
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
-  final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
+  final monthlyCount =
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}";
 
   return Container(
     margin: const EdgeInsets.all(10),
@@ -15,7 +16,7 @@ Widget bookCountArea(String musume) {
           child: Container(
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
-                future: getCounterForDay(dailyCount, musume),
+                future: NumCountModel().getCounterForDay(dailyCount, musume),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -32,7 +33,7 @@ Widget bookCountArea(String musume) {
           child: Container(
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
-              future: getCounterForMonth(monthlyCount, musume),
+              future: NumCountModel().getCounterForMonth(monthlyCount, musume),
               builder: (context, snapshot) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -51,7 +52,7 @@ Widget bookCountArea(String musume) {
             margin: const EdgeInsets.all(4),
             child: FutureBuilder<int>(
                 // future: getCounterForDay(DateTime.now()),
-                future: fetchReadCountAll(musume),
+                future: NumCountModel().fetchReadCountAll(musume),
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
