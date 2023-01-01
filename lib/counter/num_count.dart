@@ -12,7 +12,9 @@ class NumCountModel extends ChangeNotifier {
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
   final time =
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
-  User? user = FirebaseAuth.instance.currentUser;
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+  // User? user = FirebaseAuth.instance.currentUser;
+
   final kakeiController = TextEditingController();
   final kakeiCategoryController = TextEditingController();
   String graphStartDay = "";
@@ -27,8 +29,8 @@ class NumCountModel extends ChangeNotifier {
 
   Future<void> getGraphData() async {
     final _store = FirebaseFirestore.instance;
-    final allData =
-        await _store.collection('goals').where('user', isEqualTo: user).get();
+    final allData = await _store.collection('goals').get();
+    // where('user', isEqualTo: user).
 
     //日付。「今日。ゴールの。残り期間。」
     DateTime startDate = allData.docs[0].data()['start_date'].toDate();
