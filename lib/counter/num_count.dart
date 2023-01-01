@@ -9,7 +9,8 @@ class NumCountModel extends ChangeNotifier {
   //二桁必須の方法 padLeftを使いました。
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
-  final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
+  final monthlyCount =
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}";
   final time =
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
   final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -27,28 +28,18 @@ class NumCountModel extends ChangeNotifier {
   Future<Map> getGraphData() async {
     final _store = FirebaseFirestore.instance;
     final allData = await _store.collection('goals').get();
-
-    //日付。「今日。ゴールの。残り期間。」
     DateTime startDate = allData.docs[0].data()['start_date'].toDate();
     graphStartDay =
         "${startDate.month}${startDate.day}(${startDate.japaneseWeekday})";
-
     DateTime goalDate = allData.docs[0].data()['goal_date'].toDate();
     graphGoalDay =
         "${goalDate.month}${goalDate.day}(${goalDate.japaneseWeekday})";
     int challengePeriod = goalDate.difference(startDate).inDays;
     int remainDay = goalDate.difference(DateTime.now()).inDays;
     int remainPeriodPercent = ((remainDay / challengePeriod) * 100).round();
-
-    //今と、冊数。残りと、ゴール
-//今のトータル
-    // int startSassu = allData.docs[0].data()['start_sassu'];
-    // int totalSassuToRead = goalSassu - startSassu;
-    //問題箇所
     int sumDouble = await fetchSumDouble();
     int goalSassu = await allData.docs[0].data()['goal_sassu_sum'];
     int totalSassuToRead = await allData.docs[0].data()['goal_sassu_toRead'];
-
     int remainSassuToRead = goalSassu - sumDouble;
     int remainPercentToRead =
         ((remainSassuToRead / totalSassuToRead) * 100).round();
@@ -76,7 +67,7 @@ class NumCountModel extends ChangeNotifier {
     return sumDouble;
   }
 
-  //　全冊数のカウント
+  //全冊数のカウント
   Future<int> fetchReadCountAll(String musume) async {
     final _store = FirebaseFirestore.instance;
     final allData = await _store
@@ -94,8 +85,37 @@ class NumCountModel extends ChangeNotifier {
     return sumAll;
   }
 
-  // 月の冊数カウント
-  Future<int> fetchReadCountForMonth(String monthlyCount, String musume) async {
+  // 【月：冊数】のMAPを作る
+  Future<Map<String, String>> fetchMapForMonths(String musume) async {
+    Map<String, String> monthlySassuMap = {
+      "202210": "",
+      "202211": "",
+      "202212": "",
+      "202301": "",
+      "202302": "",
+      "202303": "",
+      "202304": "",
+      "202305": "",
+      "202306": "",
+      "202307": "",
+      "202308": "",
+      "202309": "",
+      "202310": "",
+      "202311": "",
+      "202312": ""
+    };
+
+    monthlySassuMap.forEach(
+      (key, value) {
+        Future<int> sassu = getCounterForMonth(monthlySassuMap[key]!, musume);
+        monthlySassuMap[key] = sassu.toString();
+      },
+    );
+    return monthlySassuMap;
+  }
+
+// 月の冊数カウント
+  Future<int> getCounterForMonth(String monthlyCount, String musume) async {
     final _store = FirebaseFirestore.instance;
     final monthData = await _store
         .collection('newCount')
@@ -109,14 +129,16 @@ class NumCountModel extends ChangeNotifier {
     //複数のDOCをここから合計する
     for (int i = 0; i < data.length; i++) {
       final count = (data[i].data()['count']) as int;
+      // print(count.toString());
+      // print(count.runtimeType);
       sumMonth += count;
     }
     return sumMonth;
   }
 
-  // 日の冊数カウント
-  Future<int> fetchReadCountForDAY(String dailyCount, String musume) async {
-    //newCountにdoc検索を変えたバージョン
+// 日の冊数カウント
+  Future<int> getCounterForDay(String dailyCount, String musume) async {
+//newCountにdoc検索を変えたバージョン
     final _store = FirebaseFirestore.instance;
     var dayData = await _store
         .collection('newCount')
@@ -127,7 +149,6 @@ class NumCountModel extends ChangeNotifier {
     List data = dayData.docs;
     int sumDay = 0;
 
-    //複数のDOCをここから合計する
     for (int i = 0; i < data.length; i++) {
       final count = (data[i].data()['count']) as int;
       // print(count.toString());
@@ -137,26 +158,23 @@ class NumCountModel extends ChangeNotifier {
     return sumDay;
   }
 
-  // 家計の方
-
-  Future<int> getKakeiForDay(String dailyCount, String musume) async {
+// 家計の方
+  Future<int> getKakeiForAll(String oya) async {
+//新しい、newCountのコード
+//上のdailyのカウント取得との違いは、「最初にnewCountのすべて」を取得している。
     final _store = FirebaseFirestore.instance;
-    var dayData = await _store
-        .collection('kakei')
-        .where('date', isEqualTo: dailyCount)
-        .get();
+    final allData = await _store.collection('kakei').get();
 
-    List data = dayData.docs;
-    int sumDay = 0;
+    List data = allData.docs;
+    int sumAll = 0;
 
     for (int i = 0; i < data.length; i++) {
       final count = (data[i].data()['amount']) as int;
-      sumDay += count;
+      sumAll += count;
     }
-    return sumDay;
+    return sumAll;
   }
 
-  // 家計の方
   Future<int> getKakeiForMonth(String monthlyCount, String musume) async {
     final _store = FirebaseFirestore.instance;
     final monthData = await _store
@@ -175,32 +193,24 @@ class NumCountModel extends ChangeNotifier {
     return sumMonth;
   }
 
-  // 家計の方
-  Future<int> getKakeiForAll(String oya) async {
-    //新しい、newCountのコード
-    //上のdailyのカウント取得との違いは、「最初にnewCountのすべて」を取得している。
+  Future<int> getKakeiForDay(String dailyCount, String musume) async {
     final _store = FirebaseFirestore.instance;
-    final allData = await _store.collection('kakei').get();
+    var dayData = await _store
+        .collection('kakei')
+        .where('date', isEqualTo: dailyCount)
+        .get();
 
-    List data = allData.docs;
-    int sumAll = 0;
+    List data = dayData.docs;
+    int sumDay = 0;
 
     for (int i = 0; i < data.length; i++) {
       final count = (data[i].data()['amount']) as int;
-      sumAll += count;
+      sumDay += count;
     }
-    return sumAll;
+    return sumDay;
   }
 
-  //[こうすけさん候補] cloud function
-  //changenotifi3rのクラスをつくり、sumAllを変数に入れる。それぞれ。
-  //２つのsumAllを足し算した、変数をつくる。
-
-  //はりつけここまで
-
-  //ここから元のコード
-  //以降情報の登録。PUSH。
-  //家計の方
+  //登録メソッド家計→絵本
   Future<void> kakeiRegister(category) async {
     int? amount = int.parse(kakeiController.text);
     String? note = kakeiNoteController.text;
@@ -220,11 +230,7 @@ class NumCountModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  //絵本の方
   Future<void> bookNumRegister(booknum, musume) async {
-    //userNameを取得するもっとスマートなやり方は？
-    //1.doc().field('name')的に、あと一歩いけないものか？
-    //2.クエリで取得するまでもない」と思うのだが、クエリを使うことはロボットにとってそんなに大きな手間ではないのか？
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final userName = snapshot.data()!['name'];
@@ -263,18 +269,6 @@ class NumCountModel extends ChangeNotifier {
         ); //then
 
     notifyListeners();
-  } //fabButtonFunction
+  }
 } //class
 
-
-  //ここから　こうすけさんメモ
-  //  readCount() {
-  //   fetchReadCountAll(musume);
-  // }
-  // int sumAllHaru = 0;
-  // int sumAllYume = 0;
-  // bool isLoading = true; //一人目の合計値が取得できるまで、ぐるぐる
-
-  //引数ないので、getter=(変数と関数のあいのこ)
-  // int get totalSumAll => sumAllHaru + sumAllYume;
-  //getterとsetter勉強ぐぐる
