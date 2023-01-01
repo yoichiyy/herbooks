@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class NumCountModel extends ChangeNotifier {
   final booknum = 0;
   final musume = "";
-  //二桁必須の方法 padLeftを使いました。
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
   final monthlyCount =
@@ -15,41 +14,44 @@ class NumCountModel extends ChangeNotifier {
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
   final uid = FirebaseAuth.instance.currentUser!.uid;
   final kakeiController = TextEditingController();
-  final kakeiNoteController = TextEditingController();
+  final kakeiCategoryController = TextEditingController();
   String graphStartDay = "";
   String graphGoalDay = ""; //変更されうるよ、という状態
   double remainPeriodPercent = 0;
+  int remainDay = 0;
   int remainSassuToRead = 0;
   int sumDouble = 0;
   double remainPercentToRead = 0;
   int goalSassu = 0;
   int totalSassuToRead = 0;
 
-  Future<Map> getGraphData() async {
+  Future<void> getGraphData() async {
     final _store = FirebaseFirestore.instance;
     final allData = await _store.collection('goals').get();
     DateTime startDate = allData.docs[0].data()['start_date'].toDate();
     graphStartDay =
-        "${startDate.month}${startDate.day}(${startDate.japaneseWeekday})";
+        "${startDate.month}/${startDate.day}(${startDate.japaneseWeekday})";
+
     DateTime goalDate = allData.docs[0].data()['goal_date'].toDate();
     graphGoalDay =
-        "${goalDate.month}${goalDate.day}(${goalDate.japaneseWeekday})";
+        "${goalDate.month}/${goalDate.day}(${goalDate.japaneseWeekday})";
     int challengePeriod = goalDate.difference(startDate).inDays;
-    int remainDay = goalDate.difference(DateTime.now()).inDays;
-    int remainPeriodPercent = ((remainDay / challengePeriod) * 100).round();
-    int sumDouble = await fetchSumDouble();
-    int goalSassu = await allData.docs[0].data()['goal_sassu_sum'];
-    int totalSassuToRead = await allData.docs[0].data()['goal_sassu_toRead'];
-    int remainSassuToRead = goalSassu - sumDouble;
-    int remainPercentToRead =
-        ((remainSassuToRead / totalSassuToRead) * 100).round();
+    remainPeriodPercent =
+        1 - ((remainDay / challengePeriod) * 100).round() / 100;
+    sumDouble = await fetchSumDouble();
+    goalSassu = await allData.docs[0].data()['goal_sassu_sum'];
+    totalSassuToRead = await allData.docs[0].data()['goal_sassu_toRead'];
+    remainSassuToRead = goalSassu - sumDouble;
+    remainPercentToRead =
+        1 - ((remainSassuToRead / totalSassuToRead) * 100).round() / 100;
+    remainDay = goalDate.difference(DateTime.now()).inDays + 1;
 
     notifyListeners();
 
-    return {
-      remainPercentToRead: remainPercentToRead,
-      remainPeriodPercent: remainPeriodPercent,
-    };
+    // return {
+    //   remainPercentToRead: remainPercentToRead,
+    //   remainPeriodPercent: remainPeriodPercent,
+    // };
   }
 
   Future<int> fetchSumDouble() async {
@@ -213,12 +215,15 @@ class NumCountModel extends ChangeNotifier {
   //登録メソッド家計→絵本
   Future<void> kakeiRegister(category) async {
     int? amount = int.parse(kakeiController.text);
-    String? note = kakeiNoteController.text;
+    String? note = kakeiCategoryController.text;
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final userName = snapshot.data()!['name'];
 
-    await FirebaseFirestore.instance.collection('kakei').doc().set({
+    await FirebaseFirestore.instance
+        .collection('kakei')
+        .doc(dailyCount + userName)
+        .set({
       'amount': amount,
       "date": dailyCount,
       "month": monthlyCount,
