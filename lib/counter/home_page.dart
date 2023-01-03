@@ -138,496 +138,507 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           body: Consumer<NumCountModel>(
             builder: (context, model, child) {
-              return SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
+              return GestureDetector(
+                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                behavior: HitTestBehavior.opaque,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
 //グラフ部分
 //グラフ１：青
-                    // Padding(
-                    //   padding: const EdgeInsets.all(15.0),
-                    //   child: LinearPercentIndicator(
-                    //     width: MediaQuery.of(context).size.width - 100,
-                    //     lineHeight: 14.0,
-                    //     percent: 0.5,
-                    //     center: const Text(
-                    //       "50.0%",
-                    //       style: TextStyle(fontSize: 12.0),
-                    //     ),
-                    //     leading: const Icon(Icons.watch),
-                    //     barRadius: const Radius.circular(16),
-                    //     backgroundColor: Colors.grey,
-                    //     progressColor: Colors.blue,
-                    //   ),
-                    //
+                      // Padding(
+                      //   padding: const EdgeInsets.all(15.0),
+                      //   child: LinearPercentIndicator(
+                      //     width: MediaQuery.of(context).size.width - 100,
+                      //     lineHeight: 14.0,
+                      //     percent: 0.5,
+                      //     center: const Text(
+                      //       "50.0%",
+                      //       style: TextStyle(fontSize: 12.0),
+                      //     ),
+                      //     leading: const Icon(Icons.watch),
+                      //     barRadius: const Radius.circular(16),
+                      //     backgroundColor: Colors.grey,
+                      //     progressColor: Colors.blue,
+                      //   ),
+                      //
 //グラフ2：赤
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width - 150,
-                        animation: true,
-                        animationDuration: 1000,
-                        lineHeight: 20.0,
-                        leading: Text(model.graphStartDay),
-                        center: Text("あと${model.remainDay.toString()}日"),
-                        trailing: Text(model.graphGoalDay),
-                        percent: model.remainPeriodPercent,
-                        barRadius: const Radius.circular(16),
-                        progressColor: Colors.red,
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: LinearPercentIndicator(
+                          width: MediaQuery.of(context).size.width - 150,
+                          animation: true,
+                          animationDuration: 1000,
+                          lineHeight: 20.0,
+                          leading: Text(model.graphStartDay),
+                          center: Text((model.remainPeriodPercent >= 1)
+                              ? "終了！"
+                              : "あと${model.remainDay.toString()}日"),
+                          trailing: Text(model.graphGoalDay),
+                          percent: (model.remainPeriodPercent > 1)
+                              ? 1
+                              : model.remainPeriodPercent,
+                          barRadius: const Radius.circular(16),
+                          progressColor: Colors.red,
+                        ),
                       ),
-                    ),
 
-                    //冊数progress
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width - 100,
-                        animation: true,
-                        lineHeight: 20.0,
-                        animationDuration: 2000,
-                        leading: Text(model.sumDouble.toString()),
-                        center:
-                            Text("あと${model.remainSassuToRead.toString()}冊"),
-                        trailing: Text(model.goalSassu.toString()),
-                        percent: model.remainPercentToRead,
-                        barRadius: const Radius.circular(16),
-                        progressColor: Colors.greenAccent,
+                      //冊数progress
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: LinearPercentIndicator(
+                          width: MediaQuery.of(context).size.width - 100,
+                          animation: true,
+                          lineHeight: 20.0,
+                          animationDuration: 2000,
+                          leading: Text(model.sumDouble.toString()),
+                          center: Text((model.remainPeriodPercent >= 100)
+                              ? "おめでとう！"
+                              : "あと${model.remainSassuToRead.toString()}冊"),
+                          trailing: Text(model.goalSassu.toString()),
+                          percent: (model.remainPercentToRead > 1)
+                              ? 1
+                              : model.remainPercentToRead,
+                          barRadius: const Radius.circular(16),
+                          progressColor: Colors.greenAccent,
+                        ),
                       ),
-                    ),
 //かけい部分
-                    HomeCardWidget(
-                      title: "おこづかい",
-                      color: Colors.green[100]!,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          kakeiCountArea("kakei"),
-                          Center(
-                            //Button_area
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  controller: model.kakeiController,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  decoration:
-                                      const InputDecoration(hintText: "金額"),
-                                ),
-                                const SizedBox(
-                                  width: double.infinity,
-                                  height: 20,
-                                ),
-                                TextFormField(
-                                  controller: model.kakeiCategoryController,
-                                  decoration:
-                                      const InputDecoration(hintText: "メモ"),
-                                ),
-                                const SizedBox(
-                                  width: double.infinity,
-                                  height: 20,
-                                ),
-
-                                //GridView カテゴリー選択
-                                GridView.builder(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 0, 8, 4),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4, //カラム数
-                                    mainAxisSpacing: 4,
-                                    crossAxisSpacing: 4,
-                                    childAspectRatio: 1.7,
+                      HomeCardWidget(
+                        title: "おこづかい",
+                        color: Colors.green[100]!,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            kakeiCountArea("kakei"),
+                            Center(
+                              //Button_area
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: model.kakeiController,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    decoration:
+                                        const InputDecoration(hintText: "金額"),
                                   ),
-                                  itemCount: 12, //要素数
+                                  const SizedBox(
+                                    width: double.infinity,
+                                    height: 20,
+                                  ),
+                                  TextFormField(
+                                    controller: model.kakeiCategoryController,
+                                    decoration:
+                                        const InputDecoration(hintText: "メモ"),
+                                  ),
+                                  const SizedBox(
+                                    width: double.infinity,
+                                    height: 20,
+                                  ),
 
-                                  itemBuilder: (context, index) {
-                                    final bool checked =
-                                        checkedList.contains(index);
-                                    return InkWell(
-                                      child: checked == false
-                                          ? Container(
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.black26),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: Text(
-                                                categoryList[index],
-                                                style: const TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 20),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              // Icon(categoryList[index], size: 50),
-                                            )
-                                          : Container(
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: Colors.yellow[200],
-                                                border: Border.all(),
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child:
-                                                  // Text(
-                                                  //   categoryList[index],
-                                                  //   style: const TextStyle(
-                                                  //       fontWeight: FontWeight.bold,
-                                                  //       fontSize: 24),
-                                                  //   textAlign: TextAlign.center,
-                                                  // ),
-                                                  Icon(
-                                                categoryIconList[index],
-                                                size: 50,
-                                                color: Colors.black54,
-                                              ),
-                                            ),
-                                      onTap: () {
-                                        castId = index;
-                                        if (checked) {
-                                          _unchecked(index);
-                                          category = "";
-                                        } else {
-                                          _checked(index);
-                                          setState(() =>
-                                              category = categoryList[index]);
-                                        }
-                                      },
-                                    );
-                                  },
+                                  //GridView カテゴリー選択
+                                  GridView.builder(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 8, 4),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4, //カラム数
+                                      mainAxisSpacing: 4,
+                                      crossAxisSpacing: 4,
+                                      childAspectRatio: 1.7,
+                                    ),
+                                    itemCount: 12, //要素数
 
-                                  shrinkWrap: true,
-                                ),
+                                    itemBuilder: (context, index) {
+                                      final bool checked =
+                                          checkedList.contains(index);
+                                      return InkWell(
+                                        child: checked == false
+                                            ? Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.black26),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: Text(
+                                                  categoryList[index],
+                                                  style: const TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 20),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                // Icon(categoryList[index], size: 50),
+                                              )
+                                            : Container(
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.yellow[200],
+                                                  border: Border.all(),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child:
+                                                    // Text(
+                                                    //   categoryList[index],
+                                                    //   style: const TextStyle(
+                                                    //       fontWeight: FontWeight.bold,
+                                                    //       fontSize: 24),
+                                                    //   textAlign: TextAlign.center,
+                                                    // ),
+                                                    Icon(
+                                                  categoryIconList[index],
+                                                  size: 50,
+                                                  color: Colors.black54,
+                                                ),
+                                              ),
+                                        onTap: () {
+                                          castId = index;
+                                          if (checked) {
+                                            _unchecked(index);
+                                            category = "";
+                                          } else {
+                                            _checked(index);
+                                            setState(() =>
+                                                category = categoryList[index]);
+                                          }
+                                        },
+                                      );
+                                    },
 
-                                const SizedBox(
-                                  width: 10,
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          ),
+                                    shrinkWrap: true,
+                                  ),
 
-                          //登録ボタン
-                          MaterialButton(
-                            color: Colors.lightBlue.shade900,
-                            onPressed: () async {
-                              FocusScope.of(context).unfocus();
-                              if (model.kakeiController.text.isEmpty ||
-                                  category.isEmpty) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text("Oops"),
-                                      content: const Text("ちゃんと書きなさい"),
-                                      actions: [
-                                        TextButton(
-                                          child: const Text('OK'),
-                                          onPressed: () {
-                                            // Navigator.of(context).pop();
-                                            FocusScope.of(context).unfocus();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                                return;
-                              } //if
-                              await model.kakeiRegister(category);
-                              model.kakeiController.clear();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            },
-                            child: const Text(
-                              "登録",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 10,
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                            height: 10,
-                          ),
-                        ],
+
+                            //登録ボタン
+                            MaterialButton(
+                              color: Colors.lightBlue.shade900,
+                              onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                if (model.kakeiController.text.isEmpty ||
+                                    category.isEmpty) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text("Oops"),
+                                        content: const Text("ちゃんと書きなさい"),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text('OK'),
+                                            onPressed: () {
+                                              // Navigator.of(context).pop();
+                                              FocusScope.of(context).unfocus();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  return;
+                                } //if
+                                await model.kakeiRegister(category);
+                                model.kakeiController.clear();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              },
+                              child: const Text(
+                                "登録",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                              height: 10,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
 //はる
-                    HomeCardWidget(
-                      title: "はる",
-                      color: Colors.red[100]!,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          bookCountArea("haru"),
-                          Center(
-                            //Button_area
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: FloatingActionButton(
-                                    heroTag: "hero1",
-                                    child: const Icon(Icons.add),
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact(); // ココ！
-                                      //void call back　または　function
-                                      _confettiEventHaru();
-                                      // _controller.play(); // ココ！
-                                      debugPrint("confetti実行");
-                                      model.bookNumRegister(1, "haru");
-                                    },
+                      HomeCardWidget(
+                        title: "はる",
+                        color: Colors.red[100]!,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            bookCountArea("haru"),
+                            Center(
+                              //Button_area
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: FloatingActionButton(
+                                      heroTag: "hero1",
+                                      child: const Icon(Icons.add),
+                                      onPressed: () {
+                                        HapticFeedback.mediumImpact(); // ココ！
+                                        //void call back　または　function
+                                        _confettiEventHaru();
+                                        // _controller.play(); // ココ！
+                                        debugPrint("confetti実行");
+                                        model.bookNumRegister(1, "haru");
+                                      },
+                                    ),
                                   ),
-                                ),
-                                ConfettiWidget(
-                                  confettiController: _controllerHaru,
-                                  blastDirectionality:
-                                      BlastDirectionality.explosive,
-                                  blastDirection: pi / 2,
-                                  // 紙吹雪を出す方向(この場合画面上に向けて発射)
-                                  emissionFrequency:
-                                      0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
-                                  minBlastForce: 5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
-                                  maxBlastForce:
-                                      10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
-                                  numberOfParticles: 7, // 1秒あたりの紙の枚数
-                                  gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
-                                  // colors: const <Color>[
-                                  //   // 紙吹雪の色指定
-                                  //   Colors.red,
-                                  //   Colors.blue,
-                                  //   //最初Colorsでなく、Constants、となっていた。
-                                  //   Colors.green,
-                                  // ],
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                  height: 20,
-                                ),
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     SizedBox(
-                                //       width: 60,
-                                //       height: 60,
-                                //       child: ElevatedButton(
-                                //         child: const Text("3"),
-                                //         style: ElevatedButton.styleFrom(
-                                //           //backgroundColor,foregroundColor
-                                //           backgroundColor: Colors.grey[300],
-                                //           foregroundColor: Colors.purple,
-                                //           textStyle: const TextStyle(
-                                //             fontSize: 20,
-                                //           ),
-                                //         ),
-                                //         onPressed: () async {
-                                //           HapticFeedback.mediumImpact(); // ココ！
-                                //           model.bookNumRegister(3, "haru");
-                                //         },
-                                //       ),
-                                //     ),
-                                //     const SizedBox(
-                                //       width: 30,
-                                //       height: 60,
-                                //     ),
-                                //     SizedBox(
-                                //       width: 60,
-                                //       height: 60,
-                                //       child: ElevatedButton(
-                                //         child: const Text("5"),
-                                //         style: ElevatedButton.styleFrom(
-                                //           //backgroundColor,foregroundColor
-                                //           backgroundColor: Colors.grey[300],
-                                //           foregroundColor: Colors.purple,
-                                //           textStyle: const TextStyle(
-                                //             fontSize: 20,
-                                //           ),
-                                //         ),
-                                //         onPressed: () async {
-                                //           HapticFeedback.mediumImpact(); // ココ！
-                                //           model.bookNumRegister(5, "haru");
-                                //         },
-                                //       ),
-                                //     ),
-                                //     const SizedBox(
-                                //       width: 30,
-                                //       height: 60,
-                                //     ),
-                                //     SizedBox(
-                                //       width: 60,
-                                //       height: 60,
-                                //       child: ElevatedButton(
-                                //         child: const Text("-1"),
-                                //         style: ElevatedButton.styleFrom(
-                                //           //backgroundColor,foregroundColor
-                                //           backgroundColor: Colors.grey[300],
-                                //           foregroundColor: Colors.purple,
-                                //           textStyle: const TextStyle(
-                                //             fontSize: 20,
-                                //           ),
-                                //         ),
-                                //         onPressed: () async {
-                                //           HapticFeedback.mediumImpact();
-                                //           model.bookNumRegister(-1, "haru");
-                                //         },
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
-                                // const SizedBox(
-                                //   width: double.infinity,
-                                //   height: 20,
-                                // ),
-                              ], //children
+                                  ConfettiWidget(
+                                    confettiController: _controllerHaru,
+                                    blastDirectionality:
+                                        BlastDirectionality.explosive,
+                                    blastDirection: pi / 2,
+                                    // 紙吹雪を出す方向(この場合画面上に向けて発射)
+                                    emissionFrequency:
+                                        0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
+                                    minBlastForce: 5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
+                                    maxBlastForce:
+                                        10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
+                                    numberOfParticles: 7, // 1秒あたりの紙の枚数
+                                    gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
+                                    // colors: const <Color>[
+                                    //   // 紙吹雪の色指定
+                                    //   Colors.red,
+                                    //   Colors.blue,
+                                    //   //最初Colorsでなく、Constants、となっていた。
+                                    //   Colors.green,
+                                    // ],
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 20,
+                                  ),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.center,
+                                  //   children: [
+                                  //     SizedBox(
+                                  //       width: 60,
+                                  //       height: 60,
+                                  //       child: ElevatedButton(
+                                  //         child: const Text("3"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           //backgroundColor,foregroundColor
+                                  //           backgroundColor: Colors.grey[300],
+                                  //           foregroundColor: Colors.purple,
+                                  //           textStyle: const TextStyle(
+                                  //             fontSize: 20,
+                                  //           ),
+                                  //         ),
+                                  //         onPressed: () async {
+                                  //           HapticFeedback.mediumImpact(); // ココ！
+                                  //           model.bookNumRegister(3, "haru");
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(
+                                  //       width: 30,
+                                  //       height: 60,
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: 60,
+                                  //       height: 60,
+                                  //       child: ElevatedButton(
+                                  //         child: const Text("5"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           //backgroundColor,foregroundColor
+                                  //           backgroundColor: Colors.grey[300],
+                                  //           foregroundColor: Colors.purple,
+                                  //           textStyle: const TextStyle(
+                                  //             fontSize: 20,
+                                  //           ),
+                                  //         ),
+                                  //         onPressed: () async {
+                                  //           HapticFeedback.mediumImpact(); // ココ！
+                                  //           model.bookNumRegister(5, "haru");
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(
+                                  //       width: 30,
+                                  //       height: 60,
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: 60,
+                                  //       height: 60,
+                                  //       child: ElevatedButton(
+                                  //         child: const Text("-1"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           //backgroundColor,foregroundColor
+                                  //           backgroundColor: Colors.grey[300],
+                                  //           foregroundColor: Colors.purple,
+                                  //           textStyle: const TextStyle(
+                                  //             fontSize: 20,
+                                  //           ),
+                                  //         ),
+                                  //         onPressed: () async {
+                                  //           HapticFeedback.mediumImpact();
+                                  //           model.bookNumRegister(-1, "haru");
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  // const SizedBox(
+                                  //   width: double.infinity,
+                                  //   height: 20,
+                                  // ),
+                                ], //children
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
-                    //ゆめ
-                    HomeCardWidget(
-                      title: "ゆめ",
-                      //constの値になるかどうか、わからない  i.e.[150]とかだと、エラーが起こるだろう。
-                      color: Colors.lightBlue[100]!,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          bookCountArea("yume"),
-                          Center(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: FloatingActionButton(
-                                    heroTag: "hero4",
-                                    child: const Icon(Icons.add),
-                                    onPressed: () {
-                                      HapticFeedback.mediumImpact(); // ココ！
-                                      //void call back　または　function
-                                      _confettiEventYume();
-                                      // _controller.play(); // ココ！
-                                      debugPrint("confetti実行");
-                                      model.bookNumRegister(1, "yume");
-                                    },
+                      //ゆめ
+                      HomeCardWidget(
+                        title: "ゆめ",
+                        //constの値になるかどうか、わからない  i.e.[150]とかだと、エラーが起こるだろう。
+                        color: Colors.lightBlue[100]!,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            bookCountArea("yume"),
+                            Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width: 60,
+                                    height: 60,
+                                    child: FloatingActionButton(
+                                      heroTag: "hero4",
+                                      child: const Icon(Icons.add),
+                                      onPressed: () {
+                                        HapticFeedback.mediumImpact(); // ココ！
+                                        //void call back　または　function
+                                        _confettiEventYume();
+                                        // _controller.play(); // ココ！
+                                        debugPrint("confetti実行");
+                                        model.bookNumRegister(1, "yume");
+                                      },
+                                    ),
                                   ),
-                                ),
-                                ConfettiWidget(
-                                  confettiController: _controllerYume,
-                                  blastDirectionality:
-                                      BlastDirectionality.explosive,
-                                  blastDirection: pi / 2,
-                                  // 紙吹雪を出す方向(この場合画面上に向けて発射)
-                                  emissionFrequency:
-                                      0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
-                                  minBlastForce: 5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
-                                  maxBlastForce:
-                                      10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
-                                  numberOfParticles: 7, // 1秒あたりの紙の枚数
-                                  gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
-                                  colors: const <Color>[
-                                    // 紙吹雪の色指定
-                                    Colors.red,
-                                    Colors.blue,
-                                    //最初Colorsでなく、Constants、となっていた。
-                                    Colors.green,
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                  height: 20,
-                                ),
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     SizedBox(
-                                //       width: 60,
-                                //       height: 60,
-                                //       child: ElevatedButton(
-                                //         child: const Text("3"),
-                                //         style: ElevatedButton.styleFrom(
-                                //           //backgroundColor,foregroundColor
-                                //           backgroundColor: Colors.grey[300],
-                                //           foregroundColor: Colors.purple,
-                                //           textStyle: const TextStyle(
-                                //             fontSize: 20,
-                                //           ),
-                                //         ),
-                                //         onPressed: () async {
-                                //           HapticFeedback.mediumImpact(); // ココ！
-                                //           model.bookNumRegister(3, "yume");
-                                //         },
-                                //       ),
-                                //     ),
-                                //     const SizedBox(
-                                //       width: 30,
-                                //       height: 60,
-                                //     ),
-                                //     SizedBox(
-                                //       width: 60,
-                                //       height: 60,
-                                //       child: ElevatedButton(
-                                //         child: const Text("5"),
-                                //         style: ElevatedButton.styleFrom(
-                                //           //backgroundColor,foregroundColor
-                                //           backgroundColor: Colors.grey[300],
-                                //           foregroundColor: Colors.purple,
-                                //           textStyle: const TextStyle(
-                                //             fontSize: 20,
-                                //           ),
-                                //         ),
-                                //         onPressed: () async {
-                                //           HapticFeedback.mediumImpact(); // ココ！
-                                //           model.bookNumRegister(5, "yume");
-                                //         },
-                                //       ),
-                                //     ),
-                                //     const SizedBox(
-                                //       width: 30,
-                                //       height: 60,
-                                //     ),
-                                //     SizedBox(
-                                //       width: 60,
-                                //       height: 60,
-                                //       child: ElevatedButton(
-                                //         child: const Text("-1"),
-                                //         style: ElevatedButton.styleFrom(
-                                //           //backgroundColor,foregroundColor
-                                //           backgroundColor: Colors.grey[300],
-                                //           foregroundColor: Colors.purple,
-                                //           textStyle: const TextStyle(
-                                //             fontSize: 20,
-                                //           ),
-                                //         ),
-                                //         onPressed: () async {
-                                //           HapticFeedback.mediumImpact();
-                                //           model.bookNumRegister(-1, "yume");
-                                //         },
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
-                                const SizedBox(
-                                  width: double.infinity,
-                                  height: 20,
-                                ),
-                              ], //children
+                                  ConfettiWidget(
+                                    confettiController: _controllerYume,
+                                    blastDirectionality:
+                                        BlastDirectionality.explosive,
+                                    blastDirection: pi / 2,
+                                    // 紙吹雪を出す方向(この場合画面上に向けて発射)
+                                    emissionFrequency:
+                                        0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
+                                    minBlastForce: 5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
+                                    maxBlastForce:
+                                        10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
+                                    numberOfParticles: 7, // 1秒あたりの紙の枚数
+                                    gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
+                                    colors: const <Color>[
+                                      // 紙吹雪の色指定
+                                      Colors.red,
+                                      Colors.blue,
+                                      //最初Colorsでなく、Constants、となっていた。
+                                      Colors.green,
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 20,
+                                  ),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.center,
+                                  //   children: [
+                                  //     SizedBox(
+                                  //       width: 60,
+                                  //       height: 60,
+                                  //       child: ElevatedButton(
+                                  //         child: const Text("3"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           //backgroundColor,foregroundColor
+                                  //           backgroundColor: Colors.grey[300],
+                                  //           foregroundColor: Colors.purple,
+                                  //           textStyle: const TextStyle(
+                                  //             fontSize: 20,
+                                  //           ),
+                                  //         ),
+                                  //         onPressed: () async {
+                                  //           HapticFeedback.mediumImpact(); // ココ！
+                                  //           model.bookNumRegister(3, "yume");
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(
+                                  //       width: 30,
+                                  //       height: 60,
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: 60,
+                                  //       height: 60,
+                                  //       child: ElevatedButton(
+                                  //         child: const Text("5"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           //backgroundColor,foregroundColor
+                                  //           backgroundColor: Colors.grey[300],
+                                  //           foregroundColor: Colors.purple,
+                                  //           textStyle: const TextStyle(
+                                  //             fontSize: 20,
+                                  //           ),
+                                  //         ),
+                                  //         onPressed: () async {
+                                  //           HapticFeedback.mediumImpact(); // ココ！
+                                  //           model.bookNumRegister(5, "yume");
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //     const SizedBox(
+                                  //       width: 30,
+                                  //       height: 60,
+                                  //     ),
+                                  //     SizedBox(
+                                  //       width: 60,
+                                  //       height: 60,
+                                  //       child: ElevatedButton(
+                                  //         child: const Text("-1"),
+                                  //         style: ElevatedButton.styleFrom(
+                                  //           //backgroundColor,foregroundColor
+                                  //           backgroundColor: Colors.grey[300],
+                                  //           foregroundColor: Colors.purple,
+                                  //           textStyle: const TextStyle(
+                                  //             fontSize: 20,
+                                  //           ),
+                                  //         ),
+                                  //         onPressed: () async {
+                                  //           HapticFeedback.mediumImpact();
+                                  //           model.bookNumRegister(-1, "yume");
+                                  //         },
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                  const SizedBox(
+                                    width: double.infinity,
+                                    height: 20,
+                                  ),
+                                ], //children
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

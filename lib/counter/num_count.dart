@@ -36,6 +36,7 @@ class NumCountModel extends ChangeNotifier {
     graphGoalDay =
         "${goalDate.month}/${goalDate.day}(${goalDate.japaneseWeekday})";
     int challengePeriod = goalDate.difference(startDate).inDays;
+    remainDay = goalDate.difference(DateTime.now()).inDays + 1;
     remainPeriodPercent =
         1 - ((remainDay / challengePeriod) * 100).round() / 100;
     sumDouble = await fetchSumDouble();
@@ -44,7 +45,6 @@ class NumCountModel extends ChangeNotifier {
     remainSassuToRead = goalSassu - sumDouble;
     remainPercentToRead =
         1 - ((remainSassuToRead / totalSassuToRead) * 100).round() / 100;
-    remainDay = goalDate.difference(DateTime.now()).inDays + 1;
 
     notifyListeners();
 
@@ -85,35 +85,6 @@ class NumCountModel extends ChangeNotifier {
       sumAll += count;
     }
     return sumAll;
-  }
-
-  // 【月：冊数】のMAPを作る
-  Future<Map<String, String>> fetchMapForMonths(String musume) async {
-    Map<String, String> monthlySassuMap = {
-      "202210": "",
-      "202211": "",
-      "202212": "",
-      "202301": "",
-      "202302": "",
-      "202303": "",
-      "202304": "",
-      "202305": "",
-      "202306": "",
-      "202307": "",
-      "202308": "",
-      "202309": "",
-      "202310": "",
-      "202311": "",
-      "202312": ""
-    };
-
-    monthlySassuMap.forEach(
-      (key, value) {
-        Future<int> sassu = getCounterForMonth(monthlySassuMap[key]!, musume);
-        monthlySassuMap[key] = sassu.toString();
-      },
-    );
-    return monthlySassuMap;
   }
 
 // 月の冊数カウント

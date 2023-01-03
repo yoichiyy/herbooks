@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../counter/num_count.dart';
+
 class HistoryModel extends ChangeNotifier {
   List<History> historyList = [];
   List<History> historyListYume = [];
@@ -11,28 +13,60 @@ class HistoryModel extends ChangeNotifier {
   }
 
   Future<void> fetchHistory() async {
-    final docs = await FirebaseFirestore.instance
+    final snapShotHaru = await FirebaseFirestore.instance
         .collection('newCount')
         .where('musume', isEqualTo: "haru")
         .get();
-    final readingHistory = docs.docs.map((doc) => History(doc)).toList();
+    final readingHistory =
+        snapShotHaru.docs.map((doc) => History(doc)).toList();
     readingHistory.sort((a, b) => b.date.compareTo(a.date));
     historyList = readingHistory;
 
-    final docsYume = await FirebaseFirestore.instance
+    final snapShotYume = await FirebaseFirestore.instance
         .collection('newCount')
         .where('musume', isEqualTo: "yume")
         .get();
     final readingHistoryYume =
-        docsYume.docs.map((doc) => History(doc)).toList();
+        snapShotYume.docs.map((doc) => History(doc)).toList();
     readingHistoryYume.sort((a, b) => b.date.compareTo(a.date));
     historyListYume = readingHistoryYume;
+    debugPrint(historyListYume.toString());
 
     // final users = await FirebaseFirestore.instance.collection('users').get();
     // final readingUsers = users.docs.map((doc) => History(doc)).toList();
     // userList = readingUsers;
 
     notifyListeners();
+  }
+
+  // 【月：冊数】のMAPを作る
+  Future<Map<String, String>> fetchMapForMonths(String musume) async {
+    Map<String, String> monthlySassuMap = {
+      "202210": "",
+      "202211": "",
+      "202212": "",
+      "202301": "",
+      "202302": "",
+      "202303": "",
+      "202304": "",
+      "202305": "",
+      "202306": "",
+      "202307": "",
+      "202308": "",
+      "202309": "",
+      "202310": "",
+      "202311": "",
+      "202312": ""
+    };
+
+    monthlySassuMap.forEach(
+      (key, value) {
+        Future<int> sassu =
+            NumCountModel().getCounterForMonth(monthlySassuMap[key]!, musume);
+        monthlySassuMap[key] = sassu.toString();
+      },
+    );
+    return monthlySassuMap;
   }
 }
 
