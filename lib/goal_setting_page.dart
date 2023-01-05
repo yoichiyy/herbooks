@@ -68,10 +68,6 @@ class _GoalSetting extends State<GoalSetting> {
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15.0, horizontal: 10.0),
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      width: 1.0, color: Colors.grey))),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -81,18 +77,21 @@ class _GoalSetting extends State<GoalSetting> {
                                 child: Text('読む絵本の数'),
                               ),
                               Flexible(
-                                child: TextField(
-                                  autofocus: true,
-                                  controller: _sassuToReadController,
-                                  textInputAction: TextInputAction.next,
-                                  // inputFormatters: [
-                                  //   FilteringTextInputFormatter.digitsOnly
-                                  // ],
-                                  // decoration: const InputDecoration(
-                                  //   border: InputBorder.none,
-                                  // ),
+                                child: SizedBox(
+                                  width: 100,
+                                  child: TextField(
+                                    autofocus: true,
+                                    controller: _sassuToReadController,
+                                    textInputAction: TextInputAction.next,
+                                    // inputFormatters: [
+                                    //   FilteringTextInputFormatter.digitsOnly
+                                    // ],
+                                    // decoration: const InputDecoration(
+                                    //   border: InputBorder.none,
+                                    // ),
+                                  ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -101,17 +100,19 @@ class _GoalSetting extends State<GoalSetting> {
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15.0, horizontal: 10.0),
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      width: 1.0, color: Colors.grey))),
+                          // decoration: const BoxDecoration(
+                          //     // border: Border(
+                          //     //   bottom:
+                          //     //       BorderSide(width: 1.0, color: Colors.grey),
+                          //     // ),
+                          //     ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               const Padding(
                                 padding: EdgeInsets.only(
                                     top: 10.0, bottom: 10.0, right: 40.0),
-                                child: Text('実施機関（◯日）'),
+                                child: Text('実施期間（◯日）'),
                               ),
                               Flexible(
                                 child: TextField(
@@ -134,28 +135,33 @@ class _GoalSetting extends State<GoalSetting> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 15.0, horizontal: 10.0),
                             child: const Text("開始日")),
-                        ElevatedButton(
-                          child: Text(
-                              "${_startDateController.year}-${_startDateController.month}/${_startDateController.day}"),
-                          onPressed: () async {
-                            final _result = await showDatePicker(
-                              context: context,
-                              currentDate: _startDateController,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now()
-                                  .subtract(const Duration(days: 30)),
-                              lastDate: DateTime.now().add(
-                                const Duration(days: 1 * 365),
-                              ),
-                            );
-                            setState(() {
-                              if (_result != null) {
-                                _startDateController = _result;
-                              }
-                            });
-                          }, //onPress
+                        //横幅小さいボタン
+                        SizedBox(
+                          width: 53,
+                          height: 30,
+                          child: ElevatedButton(
+                            child: Text(
+                                "${_startDateController.year}-${_startDateController.month}/${_startDateController.day}"),
+                            onPressed: () async {
+                              final _result = await showDatePicker(
+                                context: context,
+                                currentDate: _startDateController,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now()
+                                    .subtract(const Duration(days: 30)),
+                                lastDate: DateTime.now().add(
+                                  const Duration(days: 1 * 365),
+                                ),
+                              );
+                              setState(() {
+                                if (_result != null) {
+                                  _startDateController = _result;
+                                }
+                              });
+                            }, //onPress
+                          ),
                         ),
-//登録タンのコンテナ
+                        //登録ボタンのコンテナ
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15.0, horizontal: 10.0),

@@ -10,7 +10,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
-import '../ui/goal_setting_page.dart';
+import '../goal_setting_page.dart';
 import 'kakei_count_area.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -23,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final dailyCount =
-      "${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}";
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day}";
   final monthlyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}";
   final totalCount = "total";
@@ -32,7 +32,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final _controllerYume =
       ConfettiController(duration: const Duration(milliseconds: 500));
   // DateTime _pickedDate = DateTime.now();
+
   String category = "";
+
   final List<IconData> categoryIconList = [
     Icons.dining,
     Icons.coffee,
@@ -70,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     "子ども",
   ];
 
+  //enhanced enum実装前
   int castId = 0;
   final List<int> checkedList = [];
 
@@ -86,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  //confetti
   void _confettiEventHaru() {
     setState(() {
       _controllerHaru.play(); // ココ！
@@ -272,7 +276,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       fontSize: 20),
                                                   textAlign: TextAlign.center,
                                                 ),
-                                                // Icon(categoryList[index], size: 50),
                                               )
                                             : Container(
                                                 alignment: Alignment.center,
@@ -282,15 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                 ),
-                                                child:
-                                                    // Text(
-                                                    //   categoryList[index],
-                                                    //   style: const TextStyle(
-                                                    //       fontWeight: FontWeight.bold,
-                                                    //       fontSize: 24),
-                                                    //   textAlign: TextAlign.center,
-                                                    // ),
-                                                    Icon(
+                                                child: Icon(
                                                   categoryIconList[index],
                                                   size: 50,
                                                   color: Colors.black54,
