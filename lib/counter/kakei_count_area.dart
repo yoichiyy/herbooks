@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 Widget kakeiCountArea(String oya) {
   final dailyCount =
-      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day}";
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
   final monthlyCount = "${DateTime.now().year}${DateTime.now().month}";
 
   return Container(

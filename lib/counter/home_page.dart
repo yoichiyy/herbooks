@@ -109,10 +109,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  final snackBar = const SnackBar(
-    content: Text('登録しました'),
-  );
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -327,23 +323,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return;
                                 } //if
                                 await model.kakeiRegister(category);
-                                model.kakeiController.clear();
-                                model.kakeiCategoryController.clear();
-
-//  onTap: () {
-//                                           castId = index;
-//                                           if (checked) {
-//                                             _unchecked(index);
-//                                             category = "";
-//                                           } else {
-//                                             _checked(index);
-//                                             setState(() =>
-//                                                 category = categoryList[index]);
-//                                           }
-//                                         },
+                                setState(() {
+                                  model.kakeiController.clear();
+                                  model.kakeiCategoryController.clear();
+                                  checkedList.clear();
+                                });
 
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
+                                    .showSnackBar(SnackBar(
+                                  content: const Text('おめでとうございます。'),
+                                  behavior: SnackBarBehavior.floating,
+                                  duration: const Duration(milliseconds: 400),
+                                  margin: EdgeInsets.only(
+                                      bottom:
+                                          MediaQuery.of(context).size.height /
+                                                  2 -
+                                              50),
+                                ));
                               },
                               child: const Text(
                                 "登録",

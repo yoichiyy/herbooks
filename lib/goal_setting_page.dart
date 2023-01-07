@@ -78,14 +78,14 @@ class _GoalSetting extends State<GoalSetting> {
                               ),
                               Flexible(
                                 child: SizedBox(
-                                  width: 100,
+                                  width: 140,
                                   child: TextField(
                                     autofocus: true,
                                     controller: _sassuToReadController,
                                     textInputAction: TextInputAction.next,
-                                    // inputFormatters: [
-                                    //   FilteringTextInputFormatter.digitsOnly
-                                    // ],
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
                                     // decoration: const InputDecoration(
                                     //   border: InputBorder.none,
                                     // ),
@@ -110,7 +110,7 @@ class _GoalSetting extends State<GoalSetting> {
                               ),
                               Flexible(
                                 child: SizedBox(
-                                  width: 150,
+                                  width: 140,
                                   child: TextField(
                                     inputFormatters: [
                                       FilteringTextInputFormatter.digitsOnly
@@ -128,35 +128,39 @@ class _GoalSetting extends State<GoalSetting> {
                         ),
 
                         //開始日（showDatePicker）
-                        Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15.0, horizontal: 10.0),
-                            child: const Text("開始日")),
-                        //横幅小さいボタン
-                        SizedBox(
-                          width: 53,
-                          height: 30,
-                          child: ElevatedButton(
-                            child: Text(
-                                "${_startDateController.year}-${_startDateController.month}/${_startDateController.day}"),
-                            onPressed: () async {
-                              final _result = await showDatePicker(
-                                context: context,
-                                currentDate: _startDateController,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime.now()
-                                    .subtract(const Duration(days: 30)),
-                                lastDate: DateTime.now().add(
-                                  const Duration(days: 1 * 365),
-                                ),
-                              );
-                              setState(() {
-                                if (_result != null) {
-                                  _startDateController = _result;
-                                }
-                              });
-                            }, //onPress
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 40.0, horizontal: 10.0),
+                                child: const Text("開始日")),
+                            //横幅小さいボタン
+                            SizedBox(
+                              width: 150,
+                              child: OutlinedButton(
+                                child: Text(
+                                    "${_startDateController.year}-${_startDateController.month}/${_startDateController.day}"),
+                                onPressed: () async {
+                                  final _result = await showDatePicker(
+                                    context: context,
+                                    currentDate: _startDateController,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now()
+                                        .subtract(const Duration(days: 30)),
+                                    lastDate: DateTime.now().add(
+                                      const Duration(days: 1 * 365),
+                                    ),
+                                  );
+                                  setState(() {
+                                    if (_result != null) {
+                                      _startDateController = _result;
+                                    }
+                                  });
+                                }, //onPress
+                              ),
+                            ),
+                          ],
                         ),
                         //登録ボタンのコンテナ
                         Container(
@@ -165,64 +169,68 @@ class _GoalSetting extends State<GoalSetting> {
                           // child: const Text("開始日"),
                         ),
                         //Button
-                        ElevatedButton(
-                          child: const Text("登録"),
-                          //ここから
-                          onPressed: () async {
-                            //関連数値を計算して確定
-                            //冊数
-                            int nowTotalSassu = await model.fetchSumDouble();
-                            debugPrint(_sassuToReadController.text);
-                            int goalSassuToRead =
-                                int.parse(_sassuToReadController.text);
-                            int goalSassuSum = nowTotalSassu + goalSassuToRead;
-                            // int remainSassuToRead =
-                            //     goalTotalSassu - nowTotalSassu;
-                            //期間
-                            DateTime goalDate = _startDateController.add(
-                                Duration(
-                                    days: int.parse(
-                                        _challengePeriodController.text)));
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            child: const Text("登録"),
+                            //ここから
+                            onPressed: () async {
+                              //関連数値を計算して確定
+                              //冊数
+                              int nowTotalSassu = await model.fetchSumDouble();
+                              debugPrint(_sassuToReadController.text);
+                              int goalSassuToRead =
+                                  int.parse(_sassuToReadController.text);
+                              int goalSassuSum =
+                                  nowTotalSassu + goalSassuToRead;
+                              // int remainSassuToRead =
+                              //     goalTotalSassu - nowTotalSassu;
+                              //期間
+                              DateTime goalDate = _startDateController.add(
+                                  Duration(
+                                      days: int.parse(
+                                          _challengePeriodController.text)));
 
-                            User? user = FirebaseAuth.instance.currentUser;
-                            Map<String, dynamic> insertObj = {
-                              // 'id': user!.uid,
-                              'goal_sassu_toRead': goalSassuToRead,
-                              'goal_sassu_sum': goalSassuSum,
-                              'goal_date': goalDate,
-                              'start_date': _startDateController,
-                              'user': user,
-                            };
-                            var doc = FirebaseFirestore.instance
-                                .collection('goals')
-                                .doc("goal");
-                            await doc.update(insertObj);
+                              User? user = FirebaseAuth.instance.currentUser;
+                              Map<String, dynamic> insertObj = {
+                                // 'id': user!.uid,
+                                'goal_sassu_toRead': goalSassuToRead,
+                                'goal_sassu_sum': goalSassuSum,
+                                'goal_date': goalDate,
+                                'start_date': _startDateController,
+                                'user': user,
+                              };
+                              var doc = FirebaseFirestore.instance
+                                  .collection('goals')
+                                  .doc("goal");
+                              await doc.update(insertObj);
 
-                            //新しいコード andremoveuntilが多分正しい
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MyHomePage(),
-                              ),
-                            );
-                          },
-                          //ここまで
-                          // onPressed: () async {
-                          //   final _result = await showDatePicker(
-                          //     context: context,
-                          //     currentDate: _startDateController,
-                          //     initialDate: DateTime.now(),
-                          //     firstDate:
-                          //         DateTime.now().subtract(const Duration(days: 30)),
-                          //     lastDate: DateTime.now().add(
-                          //       const Duration(days: 1 * 365),
-                          //     ),
-                          //   );
-                          //   if (_result != null) {
-                          //     _startDateController = _result;
-                          //   }
-                          //   setState(() {});
-                          // }, //onPress
+                              //新しいコード andremoveuntilが多分正しい
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MyHomePage(),
+                                ),
+                              );
+                            },
+                            //ここまで
+                            // onPressed: () async {
+                            //   final _result = await showDatePicker(
+                            //     context: context,
+                            //     currentDate: _startDateController,
+                            //     initialDate: DateTime.now(),
+                            //     firstDate:
+                            //         DateTime.now().subtract(const Duration(days: 30)),
+                            //     lastDate: DateTime.now().add(
+                            //       const Duration(days: 1 * 365),
+                            //     ),
+                            //   );
+                            //   if (_result != null) {
+                            //     _startDateController = _result;
+                            //   }
+                            //   setState(() {});
+                            // }, //onPress
+                          ),
                         ),
                       ],
                     ),
