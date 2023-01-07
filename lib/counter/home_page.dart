@@ -150,23 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
 //グラフ部分
-//グラフ１：青
-                      // Padding(
-                      //   padding: const EdgeInsets.all(15.0),
-                      //   child: LinearPercentIndicator(
-                      //     width: MediaQuery.of(context).size.width - 100,
-                      //     lineHeight: 14.0,
-                      //     percent: 0.5,
-                      //     center: const Text(
-                      //       "50.0%",
-                      //       style: TextStyle(fontSize: 12.0),
-                      //     ),
-                      //     leading: const Icon(Icons.watch),
-                      //     barRadius: const Radius.circular(16),
-                      //     backgroundColor: Colors.grey,
-                      //     progressColor: Colors.blue,
-                      //   ),
-                      //
 //グラフ2：赤
                       Padding(
                         padding: const EdgeInsets.all(15.0),
@@ -228,15 +211,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ],
                                     decoration:
                                         const InputDecoration(hintText: "金額"),
-                                  ),
-                                  const SizedBox(
-                                    width: double.infinity,
-                                    height: 20,
-                                  ),
-                                  TextFormField(
-                                    controller: model.kakeiCategoryController,
-                                    decoration:
-                                        const InputDecoration(hintText: "メモ"),
                                   ),
                                   const SizedBox(
                                     width: double.infinity,
@@ -312,6 +286,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: 10,
                                     height: 10,
                                   ),
+                                  TextFormField(
+                                    controller: model.kakeiCategoryController,
+                                    decoration:
+                                        const InputDecoration(hintText: "メモ"),
+                                  ),
+                                  const SizedBox(
+                                    width: double.infinity,
+                                    height: 20,
+                                  ),
                                 ],
                               ),
                             ),
@@ -345,6 +328,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                 } //if
                                 await model.kakeiRegister(category);
                                 model.kakeiController.clear();
+                                model.kakeiCategoryController.clear();
+
+//  onTap: () {
+//                                           castId = index;
+//                                           if (checked) {
+//                                             _unchecked(index);
+//                                             category = "";
+//                                           } else {
+//                                             _checked(index);
+//                                             setState(() =>
+//                                                 category = categoryList[index]);
+//                                           }
+//                                         },
+
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
                               },
@@ -552,76 +549,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: 10,
                                     height: 20,
                                   ),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                  //   children: [
-                                  //     SizedBox(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       child: ElevatedButton(
-                                  //         child: const Text("3"),
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           //backgroundColor,foregroundColor
-                                  //           backgroundColor: Colors.grey[300],
-                                  //           foregroundColor: Colors.purple,
-                                  //           textStyle: const TextStyle(
-                                  //             fontSize: 20,
-                                  //           ),
-                                  //         ),
-                                  //         onPressed: () async {
-                                  //           HapticFeedback.mediumImpact(); // ココ！
-                                  //           model.bookNumRegister(3, "yume");
-                                  //         },
-                                  //       ),
-                                  //     ),
-                                  //     const SizedBox(
-                                  //       width: 30,
-                                  //       height: 60,
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       child: ElevatedButton(
-                                  //         child: const Text("5"),
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           //backgroundColor,foregroundColor
-                                  //           backgroundColor: Colors.grey[300],
-                                  //           foregroundColor: Colors.purple,
-                                  //           textStyle: const TextStyle(
-                                  //             fontSize: 20,
-                                  //           ),
-                                  //         ),
-                                  //         onPressed: () async {
-                                  //           HapticFeedback.mediumImpact(); // ココ！
-                                  //           model.bookNumRegister(5, "yume");
-                                  //         },
-                                  //       ),
-                                  //     ),
-                                  //     const SizedBox(
-                                  //       width: 30,
-                                  //       height: 60,
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       child: ElevatedButton(
-                                  //         child: const Text("-1"),
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           //backgroundColor,foregroundColor
-                                  //           backgroundColor: Colors.grey[300],
-                                  //           foregroundColor: Colors.purple,
-                                  //           textStyle: const TextStyle(
-                                  //             fontSize: 20,
-                                  //           ),
-                                  //         ),
-                                  //         onPressed: () async {
-                                  //           HapticFeedback.mediumImpact();
-                                  //           model.bookNumRegister(-1, "yume");
-                                  //         },
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
                                   const SizedBox(
                                     width: double.infinity,
                                     height: 20,

@@ -73,7 +73,7 @@ class _GoalSetting extends State<GoalSetting> {
                             children: <Widget>[
                               const Padding(
                                 padding: EdgeInsets.only(
-                                    top: 10.0, bottom: 10.0, right: 40.0),
+                                    top: 10.0, bottom: 10.0, right: 10.0),
                                 child: Text('読む絵本の数'),
                               ),
                               Flexible(
@@ -100,32 +100,29 @@ class _GoalSetting extends State<GoalSetting> {
                         Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 15.0, horizontal: 10.0),
-                          // decoration: const BoxDecoration(
-                          //     // border: Border(
-                          //     //   bottom:
-                          //     //       BorderSide(width: 1.0, color: Colors.grey),
-                          //     // ),
-                          //     ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               const Padding(
                                 padding: EdgeInsets.only(
-                                    top: 10.0, bottom: 10.0, right: 40.0),
+                                    top: 10.0, bottom: 10.0, right: 10.0),
                                 child: Text('実施期間（◯日）'),
                               ),
                               Flexible(
-                                child: TextField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  textInputAction: TextInputAction.next,
-                                  controller: _challengePeriodController,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
+                                child: SizedBox(
+                                  width: 150,
+                                  child: TextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    textInputAction: TextInputAction.next,
+                                    controller: _challengePeriodController,
+                                    // decoration: const InputDecoration(
+                                    //   border: InputBorder.none,
+                                    // ),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
