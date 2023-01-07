@@ -61,7 +61,7 @@ class _GoalSetting extends State<GoalSetting> {
                   child: Padding(
                     padding: EdgeInsets.only(bottom: bottomSpace),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      // crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         //読む絵本の数

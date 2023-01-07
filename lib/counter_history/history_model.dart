@@ -39,34 +39,34 @@ class HistoryModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 【月：冊数】のMAPを作る
-  Future<Map<String, String>> fetchMapForMonths(String musume) async {
-    Map<String, String> monthlySassuMap = {
-      "202210": "",
-      "202211": "",
-      "202212": "",
-      "202301": "",
-      "202302": "",
-      "202303": "",
-      "202304": "",
-      "202305": "",
-      "202306": "",
-      "202307": "",
-      "202308": "",
-      "202309": "",
-      "202310": "",
-      "202311": "",
-      "202312": ""
-    };
+  final monthList = [
+    "202210",
+    "202211",
+    "202212",
+    "202301",
+    "202302",
+    "202303",
+    "202304",
+    "202305",
+    "202306",
+    "202307",
+    "202308",
+    "202309",
+    "202310",
+    "202311",
+    "202312",
+  ];
 
-    monthlySassuMap.forEach(
-      (key, value) {
-        Future<int> sassu =
-            NumCountModel().getCounterForMonth(monthlySassuMap[key]!, musume);
-        monthlySassuMap[key] = sassu.toString();
-      },
-    );
-    return monthlySassuMap;
+  // 【月：冊数】のMAPを作る
+  Future<List<int>> fetchMapForMonths(String musume) async {
+    final result = <int>[];
+    for (final monthString in monthList) {
+      final sassu =
+          await NumCountModel().getCounterForMonth(monthString, musume);
+      result.add(sassu);
+    }
+
+    return result;
   }
 }
 
