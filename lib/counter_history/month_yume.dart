@@ -29,7 +29,7 @@ class MonthlyLogYume extends StatelessWidget {
                   final monthToDisplay = historyData[index].id;
                   return Card(
                     child: ListTile(
-                      leading: Text(historyData[index].month),
+                      leading: Text(historyData[index].monthString),
                       title: Text("${historyData[index].count.toString()}冊"),
                       trailing: const Icon(Icons.more_vert),
                       onTap: () async {

@@ -16,7 +16,7 @@ class MonthlyHistoryModel extends ChangeNotifier {
     monthlyHistoryListHaru = readingHistoryHaru;
 
     final monthlySnapShotYume = await FirebaseFirestore.instance
-        .collection('newCount')
+        .collection('monthHistory')
         .where('musume', isEqualTo: "yume")
         .get();
     final readingHistoryYume =
@@ -26,20 +26,20 @@ class MonthlyHistoryModel extends ChangeNotifier {
 
     notifyListeners();
   }
-
 }
 
 class HistoryForMonth {
   String id = "";
+  String monthId = "";
   int count = 0;
-  String month = "";
+  String monthString = "";
   String musume = "";
 
   HistoryForMonth(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     id = documentSnapshot.id;
+    monthId = documentSnapshot['monthId'];
     count = documentSnapshot['count'];
-    month = documentSnapshot['month'];
+    monthString = documentSnapshot['month'];
     musume = documentSnapshot['musume'];
   }
-
 }

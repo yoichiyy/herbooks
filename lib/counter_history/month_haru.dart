@@ -26,10 +26,10 @@ class MonthlyLogHaru extends StatelessWidget {
               return ListView.builder(
                 itemCount: historyData.length,
                 itemBuilder: (context, index) {
-                  final monthToDisplay = historyData[index].id;
+                  final monthToDisplay = historyData[index].monthId;
                   return Card(
                     child: ListTile(
-                      leading: Text(historyData[index].month),
+                      leading: Text(historyData[index].monthString),
                       title: Text("${historyData[index].count.toString()}冊"),
                       trailing: const Icon(Icons.more_vert),
                       onTap: () async {
