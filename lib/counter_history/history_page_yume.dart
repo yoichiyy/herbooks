@@ -6,13 +6,14 @@ import 'package:provider/provider.dart';
 import 'history_model.dart';
 
 class HistoryPageYume extends StatelessWidget {
-  const HistoryPageYume({Key? key}) : super(key: key);
+  final String month;
+  const HistoryPageYume(this.month, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: ChangeNotifierProvider<HistoryModel>(
-        create: (_) => HistoryModel()..fetchHistory(),
+        create: (_) => HistoryModel()..fetchHistory(month),
         child: Scaffold(
           appBar: AppBar(
             title: const Text('履歴'),
@@ -40,7 +41,7 @@ class HistoryPageYume extends StatelessWidget {
                             builder: (context) => EditHistoryPage(historyIndex),
                           ),
                         );
-                        model.fetchHistory();
+                        model.fetchHistory(month);
                       },
                     ),
                   );

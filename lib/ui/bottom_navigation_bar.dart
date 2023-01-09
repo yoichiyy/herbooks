@@ -1,8 +1,8 @@
-import 'package:counter/counter_history/history_page_haru.dart';
 import 'package:counter/counter/home_page.dart';
 import 'package:flutter/material.dart';
-import '../counter_history/history_page_yume.dart';
 import '../task_list/task_list.dart';
+import 'package:counter/counter_history/month_haru.dart';
+import 'package:counter/counter_history/month_yume.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({Key? key, required this.currentIndex}) : super(key: key);
@@ -37,7 +37,7 @@ class BottomBar extends StatelessWidget {
       onTap: (index) {
         if (index == 0) {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const HistoryPageYume()));
+              MaterialPageRoute(builder: (context) => const MonthlyLogYume()));
         }
 
         if (index == 1) {
@@ -47,7 +47,7 @@ class BottomBar extends StatelessWidget {
 
         if (index == 2) {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const HistoryPage()));
+              MaterialPageRoute(builder: (context) => const MonthlyLogHaru()));
         }
         if (index == 3) {
           Navigator.of(context).push(

@@ -1,7 +1,7 @@
+import 'package:counter/counter_history/month_haru.dart';
+import 'package:counter/counter_history/month_yume.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/home_page.dart';
-import '../counter_history/history_page_haru.dart';
-import '../counter_history/history_page_yume.dart';
 import '../task_list/task_list.dart';
 
 class PageViewClass extends StatelessWidget {
@@ -9,9 +9,9 @@ class PageViewClass extends StatelessWidget {
 
 //変数であった。final。中身が変わる。 pagesというメソッドにした（getter)。「Javaゲッター　dartゲッター」
   List<Widget> get pages => [
-        const HistoryPageYume(),
+        const MonthlyLogYume(),
         const MyHomePage(),
-        const HistoryPage(),
+        const MonthlyLogHaru(),
         const TaskListPage(),
       ];
 
@@ -23,13 +23,13 @@ class PageViewClass extends StatelessWidget {
       controller: controller,
       children: const <Widget>[
         Center(
-          child: HistoryPageYume(),
+          child: MonthlyLogYume(),
         ),
         Center(
           child: MyHomePage(),
         ),
         Center(
-          child: HistoryPage(),
+          child: MonthlyLogHaru(),
         ),
         Center(
           child: TaskListPage(),

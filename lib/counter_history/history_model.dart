@@ -1,21 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../counter/num_count.dart';
-
 class HistoryModel extends ChangeNotifier {
   List<History> historyList = [];
   List<History> historyListYume = [];
-  List<History> userList = [];
+  // List<History> userList = [];
 
   void reload() {
     notifyListeners();
   }
 
-  Future<void> fetchHistory() async {
+  Future<void> fetchHistory(month) async {
     final snapShotHaru = await FirebaseFirestore.instance
         .collection('newCount')
         .where('musume', isEqualTo: "haru")
+        .where('month', isEqualTo: month)
         .get();
     final readingHistory =
         snapShotHaru.docs.map((doc) => History(doc)).toList();
@@ -25,12 +24,12 @@ class HistoryModel extends ChangeNotifier {
     final snapShotYume = await FirebaseFirestore.instance
         .collection('newCount')
         .where('musume', isEqualTo: "yume")
+        .where('month', isEqualTo: month)
         .get();
     final readingHistoryYume =
         snapShotYume.docs.map((doc) => History(doc)).toList();
     readingHistoryYume.sort((a, b) => b.date.compareTo(a.date));
     historyListYume = readingHistoryYume;
-    debugPrint(historyListYume.toString());
 
     // final users = await FirebaseFirestore.instance.collection('users').get();
     // final readingUsers = users.docs.map((doc) => History(doc)).toList();
@@ -39,35 +38,36 @@ class HistoryModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  final monthList = [
-    "202210",
-    "202211",
-    "202212",
-    "202301",
-    "202302",
-    "202303",
-    "202304",
-    "202305",
-    "202306",
-    "202307",
-    "202308",
-    "202309",
-    "202310",
-    "202311",
-    "202312",
-  ];
+  // final monthList = [
+  //   "202210",
+  //   "202211",
+  //   "202212",
+  //   "202301",
+  //   "202302",
+  //   "202303",
+  //   "202304",
+  //   "202305",
+  //   "202306",
+  //   "202307",
+  //   "202308",
+  //   "202309",
+  //   "202310",
+  //   "202311",
+  //   "202312",
+  // ];
 
-  // 【月：冊数】のMAPを作る
-  Future<List<int>> fetchMapForMonths(String musume) async {
-    final result = <int>[];
-    for (final monthString in monthList) {
-      final sassu =
-          await NumCountModel().getCounterForMonth(monthString, musume);
-      result.add(sassu);
-    }
+  // 【月：冊数】のLISTを作る・・・冊数のみ→
+  // Future<List<int>> fetchMapForMonths(String musume) async {
+  //   final result = <int>[];
+  //   for (final monthString in monthList) {
+  //     final sassu =
+  //         await NumCountModel().getCounterForMonth(monthString, musume);
+  //     result.add(sassu);
+  //   }
 
-    return result;
-  }
+  //   return result;
+  // }
+
 }
 
 class History {
