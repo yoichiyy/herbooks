@@ -41,7 +41,7 @@ class HistoryPageHaru extends StatelessWidget {
                             builder: (context) => EditHistoryPage(historyIndex),
                           ),
                         );
-                        model.fetchHistory(month);
+                        model.fetchHistory(month);//別ページで編集してから戻ってきたときに、最新情報となる streamなどで読んでいれば、不要。
                       },
                     ),
                   );

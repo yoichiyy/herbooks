@@ -6,9 +6,6 @@ class HistoryModel extends ChangeNotifier {
   List<History> historyListYume = [];
   // List<History> userList = [];
 
-  void reload() {
-    notifyListeners();
-  }
 
   Future<void> fetchHistory(month) async {
     final snapShotHaru = await FirebaseFirestore.instance
@@ -29,6 +26,8 @@ class HistoryModel extends ChangeNotifier {
     final readingHistoryYume =
         snapShotYume.docs.map((doc) => History(doc)).toList();
     readingHistoryYume.sort((a, b) => b.date.compareTo(a.date));
+
+    //final書いてあるので、この関数の中でしか行きられない。29行目を、左辺に変える。
     historyListYume = readingHistoryYume;
 
     // final users = await FirebaseFirestore.instance.collection('users').get();
