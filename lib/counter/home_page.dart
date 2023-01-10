@@ -220,9 +220,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 4, //カラム数
-                                      mainAxisSpacing: 4,
-                                      crossAxisSpacing: 4,
-                                      childAspectRatio: 1.7,
+                                      mainAxisSpacing: 4, //セル同士の隙間
+                                      crossAxisSpacing: 8,
+                                      childAspectRatio: 3,
                                     ),
                                     itemCount: 12, //要素数
 
@@ -243,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   categoryList[index],
                                                   style: const TextStyle(
                                                       color: Colors.black45,
-                                                      fontSize: 20),
+                                                      fontSize: 12),
                                                   textAlign: TextAlign.center,
                                                 ),
                                               )
@@ -257,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 ),
                                                 child: Icon(
                                                   categoryIconList[index],
-                                                  size: 50,
+                                                  size: 20,
                                                   color: Colors.black54,
                                                 ),
                                               ),
@@ -299,6 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             MaterialButton(
                               color: Colors.lightBlue.shade900,
                               onPressed: () async {
+                                HapticFeedback.mediumImpact(); // バイブレーション
                                 FocusScope.of(context).unfocus();
                                 if (model.kakeiController.text.isEmpty ||
                                     category.isEmpty) {
@@ -377,8 +378,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       heroTag: "hero1",
                                       child: const Icon(Icons.add),
                                       onPressed: () {
-                                        HapticFeedback.mediumImpact(); // ココ！
-                                        //void call back　または　function
+                                        HapticFeedback
+                                            .mediumImpact(); // バイブレーション
                                         _confettiEventHaru();
                                         // _controller.play(); // ココ！
                                         debugPrint("confetti実行");

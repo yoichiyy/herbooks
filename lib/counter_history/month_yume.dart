@@ -1,5 +1,6 @@
 import 'package:counter/counter_history/history_model_month.dart';
 import 'package:counter/counter_history/history_page_haru.dart';
+import 'package:counter/counter_history/history_page_yume.dart';
 import 'package:counter/user_Edits.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class MonthlyLogYume extends StatelessWidget {
               return ListView.builder(
                 itemCount: historyData.length,
                 itemBuilder: (context, index) {
-                  final monthToDisplay = historyData[index].id;
+                  final monthToDisplay = historyData[index].monthId;
                   return Card(
                     child: ListTile(
                       leading: Text(historyData[index].monthString),
@@ -37,10 +38,10 @@ class MonthlyLogYume extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                HistoryPageHaru(monthToDisplay),
+                                HistoryPageYume(monthToDisplay),
                           ),
                         );
-                        model.fetchMonthlyHistory();
+                        // model.fetchMonthlyHistory();
                       },
                     ),
                   );

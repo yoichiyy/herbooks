@@ -40,7 +40,7 @@ class MonthlyLogHaru extends StatelessWidget {
                                 HistoryPageHaru(monthToDisplay),
                           ),
                         );
-                        model.fetchMonthlyHistory();
+                        // model.fetchMonthlyHistory();
                       },
                     ),
                   );

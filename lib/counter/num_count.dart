@@ -10,6 +10,8 @@ class NumCountModel extends ChangeNotifier {
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
   final monthlyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}";
+  final monthString = "${DateTime.now().year}年${DateTime.now().month}月";
+
   final time =
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
   final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -237,6 +239,71 @@ class NumCountModel extends ChangeNotifier {
                     "count": booknum,
                     "user": userName,
                     "time": time,
+                    "musume": musume,
+                  },
+                ),
+              },
+          },
+        ); //then
+
+    // 工事：firebaseのIDを一括変更
+    // final List<String> listForFixDocName = [
+    //   // "202201",
+    //   "202202",
+    //   "202203",
+    //   "202204",
+    //   "202205",
+    //   "202206",
+    //   "202207",
+    //   "202208",
+    //   "202209",
+    //   "202210",
+    //   "202211",
+    //   "202212",
+    // ];
+
+    // for (int i = 0; i < listForFixDocName.length; i++) {
+    //   await FirebaseFirestore.instance
+    //       .collection("monthHistory")
+    //       .doc(listForFixDocName[i])
+    //       .get()
+    //       .then((doc) async {
+    //     var fixData = doc.data()!;
+    //     await FirebaseFirestore.instance
+    //         .collection("monthHistory")
+    //         .doc(listForFixDocName[i] + "haru")
+    //         .set(fixData);
+    //     // await FirebaseFirestore.instance
+    //     //     .collection("monthHistory")
+    //     //     .doc(listForFixDocName[i])
+    //     //     .delete();
+    //   });
+    // }
+
+    // ここから、monthlyへの登録
+    await FirebaseFirestore.instance
+        .collection('monthHistory')
+        .doc(monthlyCount + musume)
+        .get()
+        .then(
+          (docSnapshot) => {
+            if (docSnapshot.exists)
+              {
+                FirebaseFirestore.instance
+                    .collection('monthHistory')
+                    .doc(monthlyCount + musume)
+                    .update({"count": FieldValue.increment(booknum)})
+              }
+            else
+              {
+                FirebaseFirestore.instance
+                    .collection('monthHistory')
+                    .doc(monthlyCount + musume)
+                    .set(
+                  {
+                    "monthId": monthlyCount,
+                    "count": booknum,
+                    "month": monthString,
                     "musume": musume,
                   },
                 ),
