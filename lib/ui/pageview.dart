@@ -1,5 +1,6 @@
 import 'package:counter/counter_history/month_haru.dart';
 import 'package:counter/counter_history/month_yume.dart';
+import 'package:counter/kakei_history/kakei_history.dart';
 import 'package:flutter/material.dart';
 import 'package:counter/counter/home_page.dart';
 import '../task_list/task_list.dart';
@@ -12,7 +13,8 @@ class PageViewClass extends StatelessWidget {
         const MonthlyLogYume(),
         const MyHomePage(),
         const MonthlyLogHaru(),
-        const TaskListPage(),
+        const KakeiHistory(),
+        // const TaskListPage(),
       ];
 
   @override
@@ -32,8 +34,11 @@ class PageViewClass extends StatelessWidget {
           child: MonthlyLogHaru(),
         ),
         Center(
-          child: TaskListPage(),
+          child: KakeiHistory(),
         ),
+        // Center(
+        //   child: TaskListPage(),
+        // ),
       ],
     );
   }

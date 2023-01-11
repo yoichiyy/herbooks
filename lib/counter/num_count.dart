@@ -37,7 +37,7 @@ class NumCountModel extends ChangeNotifier {
     DateTime goalDate = allData.docs[0].data()['goal_date'].toDate();
     graphGoalDay =
         "${goalDate.month}/${goalDate.day}(${goalDate.japaneseWeekday})";
-    int challengePeriod = goalDate.difference(startDate).inDays;
+    int challengePeriod = goalDate.difference(startDate).inDays + 1;
     remainDay = goalDate.difference(DateTime.now()).inDays + 1;
     remainPeriodPercent =
         1 - ((remainDay / challengePeriod) * 100).round() / 100;
@@ -247,76 +247,62 @@ class NumCountModel extends ChangeNotifier {
         ); //then
 
     // 工事：firebaseのIDを一括変更
-    final List<String> listForFixDocName = [
-      // "202201",
-      "202202",
-      "202203",
-      "202204",
-      "202205",
-      "202206",
-      "202207",
-      "202208",
-      "202209",
-      "202210",
-      "202211",
-      "202212",
-    ];
+    // final List<String> listForFixDocName = [
+    //   // "202201",
+    //   "202202",
+    //   "202203",
+    //   "202204",
+    //   "202205",
+    //   "202206",
+    //   "202207",
+    //   "202208",
+    //   "202209",
+    //   "202210",
+    //   "202211",
+    //   "202212",
+    // ];
 
-    for (int i = 0; i < listForFixDocName.length; i++) {
-      await FirebaseFirestore.instance
-          .collection("monthHistory")
-          .doc(listForFixDocName[i])
-          .get()
-          .then((doc) async {
-        var fixData = doc.data()!;
+    // for (int i = 0; i < listForFixDocName.length; i++) {
+    //   await FirebaseFirestore.instance
+    //       .collection("monthHistory")
+    //       .doc(listForFixDocName[i])
+    //       .get()
+    //       .then((doc) async {
+    //     var fixData = doc.data()!;
 
-        await FirebaseFirestore.instance
-            .collection("monthHistory")
-            .doc(listForFixDocName[i] + "haru")
-            .set(fixData);
+    //     await FirebaseFirestore.instance
+    //         .collection("monthHistory")
+    //         .doc(listForFixDocName[i] + "haru")
+    //         .set(fixData);
 
-        await FirebaseFirestore.instance
-            .collection("monthHistory")
-            .doc(listForFixDocName[i])
-            .delete();
-      });
-    }
+    //     await FirebaseFirestore.instance
+    //         .collection("monthHistory")
+    //         .doc(listForFixDocName[i])
+    //         .delete();
+    //   });
+    // }
 
-    //Daigoさん
-    for (final name in listForFixDocName) {
-      //元のデータを取得
-      final originalDoc = await FirebaseFirestore.instance
-          .collection("monthHistory")
-          .doc(name)
-          .get();
+    // //Daigoさん
+    // for (final name in listForFixDocName) {
+    //   //元のデータを取得
+    //   final originalDoc = await FirebaseFirestore.instance
+    //       .collection("monthHistory")
+    //       .doc(name)
+    //       .get();
 
-      final fixData = originalDoc.data()!;
-      //新しいデータを挿入
-      await FirebaseFirestore.instance
-          .collection("monthHistory")
-          .doc(name + "haru")
-          .set(fixData);
-          
-      //元のデータを削除
-      await FirebaseFirestore.instance
-          .collection("monthHistory")
-          .doc(name)
-          .delete();
-    }
+    //   final fixData = originalDoc.data()!;
+    //   //新しいデータを挿入
+    //   await FirebaseFirestore.instance
+    //       .collection("monthHistory")
+    //       .doc(name + "haru")
+    //       .set(fixData);
 
-// 参考にしたコード
-    // const firestore = firebase.firestore();
-// get the data from 'name@xxx.com'
-
-// FirebaseFirestore.instance.collection("users").doc("name@xxx.com").get().then( (doc) {
-//         var data = doc.data();
-//         // saves the data to 'name'
-//         FirebaseFirestore.instance.collection("users").doc("name").set(data!).then(
-//            {
-//           await FirebaseFirestore.instance.collection("users").doc("name@xxx.com").delete();
-//         });
-
-// });
+    //   //元のデータを削除
+    //   await FirebaseFirestore.instance
+    //       .collection("monthHistory")
+    //       .doc(name)
+    //       .delete();
+    // }
 
     // ここから、monthlyへの登録
     await FirebaseFirestore.instance

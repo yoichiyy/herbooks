@@ -1,4 +1,5 @@
 import 'package:counter/counter/home_page.dart';
+import 'package:counter/kakei_history/kakei_history.dart';
 import 'package:flutter/material.dart';
 import '../task_list/task_list.dart';
 import 'package:counter/counter_history/month_haru.dart';
@@ -31,8 +32,13 @@ class BottomBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.cruelty_free),
-          label: "Task",
+          label: "¥",
         ),
+
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.cruelty_free),
+        //   label: "Task",
+        // ),
       ],
       onTap: (index) {
         if (index == 0) {
@@ -51,8 +57,12 @@ class BottomBar extends StatelessWidget {
         }
         if (index == 3) {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const TaskListPage()));
+              MaterialPageRoute(builder: (context) => const KakeiHistory()));
         }
+        // if (index == 4) {
+        //   Navigator.of(context).push(
+        //       MaterialPageRoute(builder: (context) => const TaskListPage()));
+        // }
       },
     );
   }

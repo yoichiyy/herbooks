@@ -145,56 +145,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-//グラフ部分
-//グラフ2：赤
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 150,
-                          animation: true,
-                          animationDuration: 1000,
-                          lineHeight: 20.0,
-                          leading: Text(model.graphStartDay),
-                          center: Text((model.remainPeriodPercent >= 1)
-                              ? "終了！"
-                              : "あと${model.remainDay.toString()}日"),
-                          trailing: Text(model.graphGoalDay),
-                          percent: (model.remainPeriodPercent > 1)
-                              ? 1
-                              : model.remainPeriodPercent,
-                          barRadius: const Radius.circular(16),
-                          progressColor: Colors.red,
-                        ),
-                      ),
-
-                      //冊数progress
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 100,
-                          animation: true,
-                          lineHeight: 20.0,
-                          animationDuration: 2000,
-                          leading: Text(model.sumDouble.toString()),
-                          center: Text((model.remainPeriodPercent >= 100)
-                              ? "おめでとう！"
-                              : "あと${model.remainSassuToRead.toString()}冊"),
-                          trailing: Text(model.goalSassu.toString()),
-                          percent: (model.remainPercentToRead > 1)
-                              ? 1
-                              : model.remainPercentToRead,
-                          barRadius: const Radius.circular(16),
-                          progressColor: Colors.greenAccent,
-                        ),
-                      ),
-//かけい部分
+                      //かけい部分
                       HomeCardWidget(
                         title: "おこづかい",
                         color: Colors.green[100]!,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            kakeiCountArea("kakei"),
+                            // kakeiCountArea("kakei"),
                             Center(
                               //Button_area
                               child: Column(
@@ -359,14 +317,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
 
-//はる
+                      //はる
                       HomeCardWidget(
                         title: "はる",
                         color: Colors.red[100]!,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            bookCountArea("haru"),
+                            // bookCountArea("haru"),
                             Center(
                               //Button_area
                               child: Column(
@@ -412,80 +370,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: 10,
                                     height: 20,
                                   ),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                  //   children: [
-                                  //     SizedBox(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       child: ElevatedButton(
-                                  //         child: const Text("3"),
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           //backgroundColor,foregroundColor
-                                  //           backgroundColor: Colors.grey[300],
-                                  //           foregroundColor: Colors.purple,
-                                  //           textStyle: const TextStyle(
-                                  //             fontSize: 20,
-                                  //           ),
-                                  //         ),
-                                  //         onPressed: () async {
-                                  //           HapticFeedback.mediumImpact(); // ココ！
-                                  //           model.bookNumRegister(3, "haru");
-                                  //         },
-                                  //       ),
-                                  //     ),
-                                  //     const SizedBox(
-                                  //       width: 30,
-                                  //       height: 60,
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       child: ElevatedButton(
-                                  //         child: const Text("5"),
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           //backgroundColor,foregroundColor
-                                  //           backgroundColor: Colors.grey[300],
-                                  //           foregroundColor: Colors.purple,
-                                  //           textStyle: const TextStyle(
-                                  //             fontSize: 20,
-                                  //           ),
-                                  //         ),
-                                  //         onPressed: () async {
-                                  //           HapticFeedback.mediumImpact(); // ココ！
-                                  //           model.bookNumRegister(5, "haru");
-                                  //         },
-                                  //       ),
-                                  //     ),
-                                  //     const SizedBox(
-                                  //       width: 30,
-                                  //       height: 60,
-                                  //     ),
-                                  //     SizedBox(
-                                  //       width: 60,
-                                  //       height: 60,
-                                  //       child: ElevatedButton(
-                                  //         child: const Text("-1"),
-                                  //         style: ElevatedButton.styleFrom(
-                                  //           //backgroundColor,foregroundColor
-                                  //           backgroundColor: Colors.grey[300],
-                                  //           foregroundColor: Colors.purple,
-                                  //           textStyle: const TextStyle(
-                                  //             fontSize: 20,
-                                  //           ),
-                                  //         ),
-                                  //         onPressed: () async {
-                                  //           HapticFeedback.mediumImpact();
-                                  //           model.bookNumRegister(-1, "haru");
-                                  //         },
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                  // const SizedBox(
-                                  //   width: double.infinity,
-                                  //   height: 20,
-                                  // ),
                                 ], //children
                               ),
                             ),
@@ -501,7 +385,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            bookCountArea("yume"),
+                            // bookCountArea("yume"),
                             Center(
                               child: Column(
                                 children: [

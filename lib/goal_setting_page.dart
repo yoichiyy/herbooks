@@ -191,14 +191,14 @@ class _GoalSetting extends State<GoalSetting> {
                                       days: int.parse(
                                           _challengePeriodController.text)));
 
-                              User? user = FirebaseAuth.instance.currentUser;
+                              // User? user = FirebaseAuth.instance.currentUser;
                               Map<String, dynamic> insertObj = {
                                 // 'id': user!.uid,
                                 'goal_sassu_toRead': goalSassuToRead,
                                 'goal_sassu_sum': goalSassuSum,
                                 'goal_date': goalDate,
                                 'start_date': _startDateController,
-                                'user': user,
+                                // 'user': user,
                               };
                               var doc = FirebaseFirestore.instance
                                   .collection('goals')
