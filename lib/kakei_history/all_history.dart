@@ -7,14 +7,14 @@ import 'package:counter/counter/book_count_area.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-class KakeiHistory extends StatefulWidget {
-  const KakeiHistory({Key? key}) : super(key: key);
+class AllHistory extends StatefulWidget {
+  const AllHistory({Key? key}) : super(key: key);
 
   @override
-  State<KakeiHistory> createState() => _KakeiHistoryState();
+  State<AllHistory> createState() => _AllHistoryState();
 }
 
-class _KakeiHistoryState extends State<KakeiHistory> {
+class _AllHistoryState extends State<AllHistory> {
   // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day}";

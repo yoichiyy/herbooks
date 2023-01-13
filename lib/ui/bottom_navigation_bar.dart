@@ -1,5 +1,5 @@
 import 'package:counter/counter/home_page.dart';
-import 'package:counter/kakei_history/kakei_history.dart';
+import 'package:counter/kakei_history/all_history.dart';
 import 'package:flutter/material.dart';
 import '../task_list/task_list.dart';
 import 'package:counter/counter_history/month_haru.dart';
@@ -57,7 +57,7 @@ class BottomBar extends StatelessWidget {
         }
         if (index == 3) {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const KakeiHistory()));
+              MaterialPageRoute(builder: (context) => const AllHistory()));
         }
         // if (index == 4) {
         //   Navigator.of(context).push(

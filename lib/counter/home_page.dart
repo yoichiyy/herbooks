@@ -167,76 +167,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                         const InputDecoration(hintText: "金額"),
                                   ),
                                   const SizedBox(
-                                    width: double.infinity,
-                                    height: 20,
-                                  ),
-
-                                  //GridView カテゴリー選択
-                                  GridView.builder(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 0, 8, 4),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4, //カラム数
-                                      mainAxisSpacing: 4, //セル同士の隙間
-                                      crossAxisSpacing: 8,
-                                      childAspectRatio: 3,
-                                    ),
-                                    itemCount: 12, //要素数
-
-                                    itemBuilder: (context, index) {
-                                      final bool checked =
-                                          checkedList.contains(index);
-                                      return InkWell(
-                                        child: checked == false
-                                            ? Container(
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Colors.black26),
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                child: Text(
-                                                  categoryList[index],
-                                                  style: const TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 12),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              )
-                                            : Container(
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.yellow[200],
-                                                  border: Border.all(),
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                child: Icon(
-                                                  categoryIconList[index],
-                                                  size: 20,
-                                                  color: Colors.black54,
-                                                ),
-                                              ),
-                                        onTap: () {
-                                          castId = index;
-                                          if (checked) {
-                                            _unchecked(index);
-                                            category = "";
-                                          } else {
-                                            _checked(index);
-                                            setState(() =>
-                                                category = categoryList[index]);
-                                          }
-                                        },
-                                      );
-                                    },
-
-                                    shrinkWrap: true,
-                                  ),
-
-                                  const SizedBox(
                                     width: 10,
                                     height: 10,
                                   ),
@@ -251,6 +181,74 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ],
                               ),
+                            ),
+                            const SizedBox(
+                              width: double.infinity,
+                              height: 20,
+                            ),
+
+                            //GridView カテゴリー選択
+                            GridView.builder(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 4, //カラム数
+                                mainAxisSpacing: 4, //セル同士の隙間
+                                crossAxisSpacing: 8,
+                                childAspectRatio: 3,
+                              ),
+                              itemCount: 12, //要素数
+
+                              itemBuilder: (context, index) {
+                                final bool checked =
+                                    checkedList.contains(index);
+                                return InkWell(
+                                  child: checked == false
+                                      ? Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black26),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            categoryList[index],
+                                            style: const TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 12),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        )
+                                      : Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            color: Colors.yellow[200],
+                                            border: Border.all(),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Icon(
+                                            categoryIconList[index],
+                                            size: 20,
+                                            color: Colors.black54,
+                                          ),
+                                        ),
+                                  onTap: () {
+                                    castId = index;
+                                    if (checked) {
+                                      _unchecked(index);
+                                      category = "";
+                                    } else {
+                                      _checked(index);
+                                      setState(
+                                          () => category = categoryList[index]);
+                                    }
+                                  },
+                                );
+                              },
+
+                              shrinkWrap: true,
                             ),
 
                             //登録ボタン
