@@ -1,3 +1,4 @@
+import 'package:counter/kakei_history/month_kakei.dart';
 import 'package:flutter/material.dart';
 
 class HomeCardWidget extends StatelessWidget {
@@ -25,8 +26,22 @@ class HomeCardWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title.toUpperCase(),
-                  style: Theme.of(context).textTheme.titleLarge),
+              Row(
+                children: [
+                  Text(title.toUpperCase(),
+                      style: Theme.of(context).textTheme.titleLarge),
+                  TextButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MonthlyLogKakei(),
+                          ),
+                        );
+                      },
+                      child: const Text("詳細"))
+                ],
+              ),
               Flexible(
                 child: Center(child: child),
               ),
