@@ -1,17 +1,14 @@
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counter/Util/date_time.dart';
-import 'package:counter/counter/num_count.dart';
+
+import 'package:confetti/confetti.dart';
 import 'package:counter/counter/home_card.dart';
+import 'package:counter/counter/num_count.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:counter/counter/book_count_area.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:provider/provider.dart';
-import 'package:confetti/confetti.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
 import '../goal_setting_page.dart';
-import 'kakei_count_area.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -145,6 +142,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      Row(
+                        children: [
+                          for (var i = 0; i < 5; i++) //flutter コレクションフォー　で検索せよ
+                            if (i == 1) //コレクションいふ。以上は、mapでもできる。
+                              const Icon(
+                                Icons.ac_unit,
+                              )
+                        ],
+                      ),
+
+                      // const が自動でつく設定がある
+
                       //かけい部分
                       HomeCardWidget(
                         title: "おこづかい",
