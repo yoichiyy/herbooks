@@ -1,9 +1,9 @@
+import 'package:counter/counter/book_count_area.dart';
+import 'package:counter/counter/home_card_kakei.dart';
 import 'package:counter/counter/kakei_count_area.dart';
 import 'package:counter/counter/num_count.dart';
-import 'package:counter/counter/home_card.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:counter/counter/book_count_area.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -85,7 +85,7 @@ class _AllHistoryState extends State<AllHistory> {
                       ),
 
                       //かけい部分
-                      HomeCardWidget(
+                      HomeCardWidgetKakei(
                         title: "おこづかい",
                         color: Colors.green[100]!,
                         child: Column(
@@ -101,7 +101,7 @@ class _AllHistoryState extends State<AllHistory> {
                       ),
 
 //はる
-                      HomeCardWidget(
+                      HomeCardWidgetKakei(
                         title: "はる",
                         color: Colors.red[100]!,
                         child: Column(
@@ -120,7 +120,7 @@ class _AllHistoryState extends State<AllHistory> {
                       ),
 
                       //ゆめ
-                      HomeCardWidget(
+                      HomeCardWidgetKakei(
                         title: "ユメ",
                         color: Colors.red[100]!,
                         child: Column(

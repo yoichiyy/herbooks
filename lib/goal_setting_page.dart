@@ -1,4 +1,4 @@
-import 'package:counter/counter/home_card.dart';
+import 'package:counter/counter/home_card_kakei.dart';
 import 'package:counter/counter/num_count.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

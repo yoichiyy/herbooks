@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 class KakeiHistoryModel extends ChangeNotifier {
   List<KakeiHistory> kakeiHistoryList = [];
 
-  Future<void> fetchKakeiHistory(month) async {
+  Future<void> fetchKakeiHistory() async {
     final snapShotKakei = await FirebaseFirestore.instance
         .collection('kakei')
-        .where('month', isEqualTo: month)
+        // .where('month', isEqualTo: month)
         .get();
     final readingHistory =
         snapShotKakei.docs.map((doc) => KakeiHistory(doc)).toList();

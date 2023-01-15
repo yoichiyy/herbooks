@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HistoryPageKakei extends StatelessWidget {
-  final String month;
-  const HistoryPageKakei(this.month, {Key? key}) : super(key: key);
-
+  // final String month;
+  // const HistoryPageKakei(this.month, {Key? key}) : super(key: key);
+  const HistoryPageKakei({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: ChangeNotifierProvider<KakeiHistoryModel>(
-        create: (_) => KakeiHistoryModel()..fetchKakeiHistory(month),
+        create: (_) => KakeiHistoryModel()..fetchKakeiHistory(),
         child: Scaffold(
           appBar: AppBar(
             title: const Text('履歴'),
@@ -42,7 +42,7 @@ class HistoryPageKakei extends StatelessWidget {
                           ),
                         );
                         model.fetchKakeiHistory(
-                            month); //別ページで編集してから戻ってきたときに、最新情報となる streamなどで読んでいれば、不要。
+                            ); //別ページで編集してから戻ってきたときに、最新情報となる streamなどで読んでいれば、不要。
                       },
                     ),
                   );

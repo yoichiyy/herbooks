@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
-import 'package:counter/counter/home_card.dart';
+import 'package:counter/counter/home_card_book%20.dart';
+import 'package:counter/counter/home_card_kakei.dart';
 import 'package:counter/counter/num_count.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       // const が自動でつく設定がある
 
                       //かけい部分
-                      HomeCardWidget(
+                      HomeCardWidgetKakei(
                         title: "おこづかい",
                         color: Colors.green[100]!,
                         child: Column(
@@ -325,7 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
 
                       //はる
-                      HomeCardWidget(
+                      HomeCardWidgetBook(
                         title: "はる",
                         color: Colors.red[100]!,
                         child: Column(
@@ -385,7 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
 
                       //ゆめ
-                      HomeCardWidget(
+                      HomeCardWidgetBook(
                         title: "ゆめ",
                         //constの値になるかどうか、わからない  i.e.[150]とかだと、エラーが起こるだろう。
                         color: Colors.lightBlue[100]!,
