@@ -438,10 +438,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: 10,
                                     height: 20,
                                   ),
-                                  const SizedBox(
-                                    width: double.infinity,
-                                    height: 20,
-                                  ),
+                                  // const SizedBox(
+                                  //   width: double.infinity,
+                                  //   height: 20,
+                                  // ),
                                 ], //children
                               ),
                             ),
