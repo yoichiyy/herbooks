@@ -31,6 +31,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ConfettiController(duration: const Duration(milliseconds: 500));
   // DateTime _pickedDate = DateTime.now();
 
+  int _tempCounterYume = 0;
+  void incrementTempCounterYume() {
+    setState(() {
+      _tempCounterYume++;
+    });
+  }
+
+  int _tempCounterHaru = 0;
+  void incrementTempCounterHaru() {
+    setState(() {
+      _tempCounterHaru++;
+    });
+  }
+
   String category = "";
 
   final List<IconData> categoryIconList = [
@@ -143,18 +157,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Row(
-                        children: [
-                          for (var i = 0; i < 5; i++) //flutter コレクションフォー　で検索せよ
-                            if (i == 1) //コレクションいふ。以上は、mapでもできる。
-                              const Icon(
-                                Icons.ac_unit,
-                              )
-                        ],
-                      ),
-
-                      // const が自動でつく設定がある
-
                       //かけい部分
                       HomeCardWidgetKakei(
                         title: "おこづかい",
@@ -335,50 +337,86 @@ class _MyHomePageState extends State<MyHomePage> {
                             // bookCountArea("haru"),
                             Center(
                               //Button_area
-                              child: Column(
+                              child: Row(
                                 children: [
-                                  SizedBox(
-                                    width: 60,
-                                    height: 60,
-                                    child: FloatingActionButton(
-                                      heroTag: "hero1",
-                                      child: const Icon(Icons.add),
-                                      onPressed: () {
-                                        HapticFeedback
-                                            .mediumImpact(); // バイブレーション
-                                        _confettiEventHaru();
-                                        // _controller.play(); // ココ！
-                                        debugPrint("confetti実行");
-                                        model.bookNumRegister(1, "haru");
-                                      },
-                                    ),
-                                  ),
-                                  ConfettiWidget(
-                                    confettiController: _controllerHaru,
-                                    blastDirectionality:
-                                        BlastDirectionality.explosive,
-                                    blastDirection: pi / 2,
-                                    // 紙吹雪を出す方向(この場合画面上に向けて発射)
-                                    emissionFrequency:
-                                        0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
-                                    minBlastForce: 5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
-                                    maxBlastForce:
-                                        10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
-                                    numberOfParticles: 7, // 1秒あたりの紙の枚数
-                                    gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
-                                    // colors: const <Color>[
-                                    //   // 紙吹雪の色指定
-                                    //   Colors.red,
-                                    //   Colors.blue,
-                                    //   //最初Colorsでなく、Constants、となっていた。
-                                    //   Colors.green,
-                                    // ],
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 60,
+                                        height: 60,
+                                        child: FloatingActionButton(
+                                          heroTag: "hero1",
+                                          child: const Icon(Icons.add),
+                                          onPressed: () {
+                                            incrementTempCounterHaru();
+                                            HapticFeedback
+                                                .mediumImpact(); // バイブレーション
+                                            _confettiEventHaru();
+                                            // _controller.play(); // ココ！
+                                            debugPrint("confetti実行");
+                                            model.bookNumRegister(1, "haru");
+                                          },
+                                        ),
+                                      ),
+                                      ConfettiWidget(
+                                        confettiController: _controllerHaru,
+                                        blastDirectionality:
+                                            BlastDirectionality.explosive,
+                                        blastDirection: pi / 2,
+                                        // 紙吹雪を出す方向(この場合画面上に向けて発射)
+                                        emissionFrequency:
+                                            0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
+                                        minBlastForce:
+                                            5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
+                                        maxBlastForce:
+                                            10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
+                                        numberOfParticles: 7, // 1秒あたりの紙の枚数
+                                        gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
+                                        // colors: const <Color>[
+                                        //   // 紙吹雪の色指定
+                                        //   Colors.red,
+                                        //   Colors.blue,
+                                        //   //最初Colorsでなく、Constants、となっていた。
+                                        //   Colors.green,
+                                        // ],
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                        height: 20,
+                                      ),
+                                    ], //children
                                   ),
                                   const SizedBox(
                                     width: 10,
                                     height: 20,
                                   ),
-                                ], //children
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '$_tempCounterHaru',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      for (var i = 0;
+                                          i < _tempCounterHaru;
+                                          i++) //flutter コレクションフォー　で検索せよ
+                                        // if (i == 1) //コレクションいふ。以上は、mapでもできる。
+                                        const Icon(
+                                          Icons.android,
+                                        )
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -395,54 +433,87 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             // bookCountArea("yume"),
                             Center(
-                              child: Column(
+                              child: Row(
                                 children: [
-                                  SizedBox(
-                                    width: 60,
-                                    height: 60,
-                                    child: FloatingActionButton(
-                                      heroTag: "hero4",
-                                      child: const Icon(Icons.add),
-                                      onPressed: () {
-                                        HapticFeedback.mediumImpact(); // ココ！
-                                        //void call back　または　function
-                                        _confettiEventYume();
-                                        // _controller.play(); // ココ！
-                                        debugPrint("confetti実行");
-                                        model.bookNumRegister(1, "yume");
-                                      },
-                                    ),
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 60,
+                                        height: 60,
+                                        child: FloatingActionButton(
+                                          heroTag: "hero4",
+                                          child: const Icon(Icons.add),
+                                          onPressed: () {
+                                            incrementTempCounterYume();
+                                            HapticFeedback
+                                                .mediumImpact(); // ココ！
+                                            //void call back　または　function
+                                            _confettiEventYume();
+                                            // _controller.play(); // ココ！
+                                            debugPrint("confetti実行");
+                                            model.bookNumRegister(1, "yume");
+                                          },
+                                        ),
+                                      ),
+                                      ConfettiWidget(
+                                        confettiController: _controllerYume,
+                                        blastDirectionality:
+                                            BlastDirectionality.explosive,
+                                        blastDirection: pi / 2,
+                                        // 紙吹雪を出す方向(この場合画面上に向けて発射)
+                                        emissionFrequency:
+                                            0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
+                                        minBlastForce:
+                                            5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
+                                        maxBlastForce:
+                                            10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
+                                        numberOfParticles: 7, // 1秒あたりの紙の枚数
+                                        gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
+                                        colors: const <Color>[
+                                          // 紙吹雪の色指定
+                                          Colors.red,
+                                          Colors.blue,
+                                          //最初Colorsでなく、Constants、となっていた。
+                                          Colors.green,
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ], //children
                                   ),
-                                  ConfettiWidget(
-                                    confettiController: _controllerYume,
-                                    blastDirectionality:
-                                        BlastDirectionality.explosive,
-                                    blastDirection: pi / 2,
-                                    // 紙吹雪を出す方向(この場合画面上に向けて発射)
-                                    emissionFrequency:
-                                        0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
-                                    minBlastForce: 5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
-                                    maxBlastForce:
-                                        10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
-                                    numberOfParticles: 7, // 1秒あたりの紙の枚数
-                                    gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
-                                    colors: const <Color>[
-                                      // 紙吹雪の色指定
-                                      Colors.red,
-                                      Colors.blue,
-                                      //最初Colorsでなく、Constants、となっていた。
-                                      Colors.green,
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 20,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '$_tempCounterYume',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(
                                     width: 10,
                                     height: 20,
                                   ),
-                                  // const SizedBox(
-                                  //   width: double.infinity,
-                                  //   height: 20,
-                                  // ),
-                                ], //children
+                                  Row(
+                                    children: [
+                                      for (var i = 0;
+                                          i < _tempCounterYume;
+                                          i++) //flutter コレクションフォー　で検索せよ
+                                        // if (i == 1) //コレクションいふ。以上は、mapでもできる。
+                                        const Icon(
+                                          Icons.baby_changing_station,
+                                        )
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ],

@@ -22,19 +22,13 @@ class HomeCardWidgetBook extends StatelessWidget {
         color: color,
         child: Padding(
           padding: const EdgeInsets.all(5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(title.toUpperCase(),
-                      style: Theme.of(context).textTheme.titleLarge),
-                  Flexible(
-                    child: Center(child: child),
-                  ),
-                ],
+              Text(title.toUpperCase(),
+                  style: Theme.of(context).textTheme.titleLarge),
+              Flexible(
+                child: Center(child: child),
               ),
             ],
           ),
