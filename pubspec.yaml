@@ -29,6 +29,7 @@ dependencies:
   # sound_mode: ^2.0.2
   # vibration: ^1.7.6
   percent_indicator: ^4.2.2
+  http: ^0.13.5
 
   
 
