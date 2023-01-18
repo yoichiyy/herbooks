@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NumCountModel extends ChangeNotifier {
-  final booknum = 0;
+  final bookNum = 0;
   final musume = "";
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
@@ -16,7 +16,7 @@ class NumCountModel extends ChangeNotifier {
       "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
   final uid = FirebaseAuth.instance.currentUser!.uid;
   final kakeiController = TextEditingController();
-  final kakeiCategoryController = TextEditingController();
+  final kakeiNoteController = TextEditingController();
   String graphStartDay = "";
   String graphGoalDay = ""; //変更されうるよ、という状態
   double remainPeriodPercent = 0;
@@ -188,7 +188,7 @@ class NumCountModel extends ChangeNotifier {
   //登録メソッド家計→絵本
   Future<void> kakeiRegister(category) async {
     int? amount = int.parse(kakeiController.text);
-    String? note = kakeiCategoryController.text;
+    String? note = kakeiNoteController.text;
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final userName = snapshot.data()!['name'];

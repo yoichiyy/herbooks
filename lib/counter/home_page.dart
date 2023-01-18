@@ -1,9 +1,10 @@
 import 'dart:math';
-import 'package:counter/ui/api.dart';
+
 import 'package:confetti/confetti.dart';
 import 'package:counter/counter/home_card_book%20.dart';
 import 'package:counter/counter/home_card_kakei.dart';
 import 'package:counter/counter/num_count.dart';
+import 'package:counter/ui/api.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -183,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: model.kakeiCategoryController,
+                                    controller: model.kakeiNoteController,
                                     decoration:
                                         const InputDecoration(hintText: "メモ"),
                                   ),
@@ -292,10 +293,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return;
                                 } //if
                                 await model.kakeiRegister(category);
-                                await addToSheet(amount,category,date ,month,note ,user);
+                                await APIS.addToSheet(
+                                    model.kakeiController.text,
+                                    category,
+                                    model.kakeiNoteController.text);
                                 setState(() {
                                   model.kakeiController.clear();
-                                  model.kakeiCategoryController.clear();
+                                  model.kakeiNoteController.clear();
                                   checkedList.clear();
                                 });
 
