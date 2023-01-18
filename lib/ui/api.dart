@@ -1,52 +1,38 @@
-// import 'package:http/http.dart' as http;
-// import 'package:intl/intl.dart';
-// import 'package:taskapp2/globals.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
-// class APIS {
-//   static Future<void> addEntryInSheet({
-//     String taskID,
-//     int taskStatus,
-//     int points,
-//     String taskName,
-//     String note,
-//     DateTime due,
-//   }) async {
-//     String status = taskStatus == 1
-//         ? "◯"
-//         : taskStatus == 2
-//             ? "/"
-//             : "X";
 
-//     String _url =
-//         // // original
-//         // "https://script.google.com/macros/s/AKfycbzFyl01B39Neaa0vMWCga3ekClXLjvnEZ0GsW-MMu-31p3x6_5entyCeMBfokAvNpcQVw/exec";
-//         // new spreadsheet
-//         "https://script.google.com/macros/s/AKfycbzkYj4D-76X0lWDC3abb74b7vLVbDKzL1WOOCZsgyYN-0UL5cKzbHOLz1hFYZF7b4LZpg/exec";
-//     try {
-//       print("start submitting the form");
-//       Map body = {
-//         'email': userData['email'] ?? "",
-//         'taskId': taskID.toString(),
-//         'dueDate': DateFormat('MM/dd').format(due),
-//         'status': status,
-//         'note': note,
-//         'point': points.toString(),
-//         'taskName': taskName,
-//       };
-//       print("Json Succeeded");
+class APIS {
+  static Future<void> addToSheet(amount,category,date ,month,note ,user) async {
+            //WEBデプロイしたURL
+    String _url ="https://script.google.com/macros/s/AKfycbx71CsPQ45szUDVIR4R0DMP6S71VoCT6cB3HYSJTICO7qVJP-EYeU-M6G_tPH3Aw65e_Q/exec";
+            // //スプレッドシート
+            // https://docs.google.com/spreadsheets/d/1sByIb872RedVQjnWZZR6C8IlHKp6ujmXzYDWFPyz0iE/edit#gid=1174254070
+            // //スクリプト
+            // https://script.google.com/home/projects/1d2Ky3fnyfbVn_CEZpWDSNz4pXSLOxCydhs7XpqgF-azqOSMAHAxh75wP/edit
+        
+    try {
+      // debugPrint("start submitting the form");
+      Map body = {
+        'amount'  :amount,
+        'category':category,
+        'date' :DateFormat('MM/dd').format(date),
+        'note'  :note,
+        'user'  :user,
+      };
+      // debugPrint("Json Succeeded");
 
-      
-//       http.Response response = await http.post(
-//         Uri.parse(_url),
-//         body: body,
-//       );
-//       print(response.body);
-//       print("http succeeded");
+      http.Response response = await http.post(
+        Uri.parse(_url),
+        body: body,
+      );
+      debugPrint(response.body);
+      // debugPrint("http succeeded");
 
-//       return (response.statusCode == 302);
-//     } catch (e) {
-//       print("error");
-//       print(e);
-//     }
-//   }
-// }
+      // return (response.statusCode == 302);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+}

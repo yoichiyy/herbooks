@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:counter/ui/api.dart';
 import 'package:confetti/confetti.dart';
 import 'package:counter/counter/home_card_book%20.dart';
 import 'package:counter/counter/home_card_kakei.dart';
@@ -292,6 +292,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return;
                                 } //if
                                 await model.kakeiRegister(category);
+                                await addToSheet(amount,category,date ,month,note ,user);
                                 setState(() {
                                   model.kakeiController.clear();
                                   model.kakeiCategoryController.clear();
