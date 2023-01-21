@@ -24,23 +24,29 @@ class APIS {
 
     try {
       debugPrint("start submitting the form");
-      Map body = {
+      final body = {
         'amount': amount,
         'category': category,
         'date': dateString,
         'note': note,
         'user': user,
       };
-      debugPrint("Json Succeeded");
+      debugPrint("Json Succeeded:$body");
 
+      //post リソース（≒データ）を作成するようなリクエスト
       http.Response response = await http.post(
         Uri.parse(_url),
         body: body,
+        headers: <String, String>{
+          //リクエストに関するメタ情報
+          'Accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          
+        },
       );
       debugPrint(response.body);
       debugPrint("http succeeded");
 
-      // return (response.statusCode == 302);
     } catch (e) {
       debugPrint(e.toString());
     }

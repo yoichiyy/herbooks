@@ -292,11 +292,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                   );
                                   return;
                                 } //if
-                                await model.kakeiRegister(category);
-                                await APIS.addToSheet(
-                                    model.kakeiController.text,
-                                    category,
-                                    model.kakeiNoteController.text);
+                                await Future.wait([
+                                  model.kakeiRegister(category),
+                                  APIS.addToSheet(model.kakeiController.text,
+                                      category, model.kakeiNoteController.text),
+                                ]);
                                 setState(() {
                                   model.kakeiController.clear();
                                   model.kakeiNoteController.clear();
