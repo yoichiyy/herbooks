@@ -1,0 +1,6 @@
+POST https://script.google.com/macros/s/AKfycbyXFL6gbsOgObTxtOEp_gwPfwW-KsucrPGRlWAZfk2AXmSxrh6qw4dWVyQ1rRZRbV6jxA/exec
+# Accept: application/json
+# Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
+
+{  "amount": "50" }
