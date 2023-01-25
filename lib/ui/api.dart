@@ -41,12 +41,10 @@ class APIS {
           //リクエストに関するメタ情報
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
-          
         },
       );
       debugPrint(response.body);
       debugPrint("http succeeded");
-
     } catch (e) {
       debugPrint(e.toString());
     }
