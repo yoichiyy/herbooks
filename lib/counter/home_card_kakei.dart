@@ -1,5 +1,6 @@
 import 'package:counter/kakei_history/history_page_kakei.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeCardWidgetKakei extends StatelessWidget {
   const HomeCardWidgetKakei(
@@ -39,7 +40,10 @@ class HomeCardWidgetKakei extends StatelessWidget {
                           ),
                         );
                       },
-                      child: const Text("詳細"))
+                      child: TextButton(
+                        child: const Text("詳細"),
+                        onPressed: () => _openUrl(),
+                      ))
                 ],
               ),
               Flexible(
@@ -50,5 +54,16 @@ class HomeCardWidgetKakei extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+void _openUrl() async {
+  final url = Uri.parse('https://www.kamo-it.org/'); //←ここに表示させたいURLを入力する
+  if (await canLaunchUrl(url)) {
+    await launchUrl(
+      url,
+    );
+  } else {
+    throw 'このURLにはアクセスできません';
   }
 }
