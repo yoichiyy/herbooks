@@ -65,5 +65,3 @@ void _openUrl() async {
     throw 'このURLにはアクセスできません';
   }
 }
-
-
