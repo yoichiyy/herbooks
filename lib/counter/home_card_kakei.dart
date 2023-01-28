@@ -58,12 +58,12 @@ class HomeCardWidgetKakei extends StatelessWidget {
 }
 
 void _openUrl() async {
-  final url = Uri.parse('https://www.kamo-it.org/'); //←ここに表示させたいURLを入力する
+  final url = Uri.parse('https://tinyurl.com/2d5c6cvc');
   if (await canLaunchUrl(url)) {
-    await launchUrl(
-      url,
-    );
+    await launchUrl(url);
   } else {
     throw 'このURLにはアクセスできません';
   }
 }
+
+
