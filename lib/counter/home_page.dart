@@ -210,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 crossAxisSpacing: 8,
                                 childAspectRatio: 3,
                               ),
-                              itemCount: 12, //要素数
+                              itemCount: 15, //要素数
 
                               itemBuilder: (context, index) {
                                 final bool checked =
@@ -334,16 +334,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       //はる
                       HomeCardWidgetBook(
-                        title: "はる",
+                        title: "はるTODAY: ",
+                        musume: "haru",
                         color: Colors.red[100]!,
-                        child: Column(
+                        buttonWidget: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // bookCountArea("haru"),
                             Center(
-                              //Button_area
                               child: Row(
                                 children: [
+                                  const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                  ),
                                   Column(
                                     children: [
                                       SizedBox(
@@ -430,16 +433,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
                       //ゆめ
                       HomeCardWidgetBook(
-                        title: "ゆめ",
-                        //constの値になるかどうか、わからない  i.e.[150]とかだと、エラーが起こるだろう。
+                        title: "ゆめTODAY: ",
+                        musume: "yume",
                         color: Colors.lightBlue[100]!,
-                        child: Column(
+                        buttonWidget: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             // bookCountArea("yume"),
                             Center(
                               child: Row(
+                                // crossAxisAlignment: CrossAxisAlignment.center,//効かぬ
                                 children: [
+                                  const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                  ),
                                   Column(
                                     children: [
                                       SizedBox(

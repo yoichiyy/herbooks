@@ -1,13 +1,21 @@
+import 'package:counter/counter/num_count.dart';
 import 'package:flutter/material.dart';
 
 class HomeCardWidgetBook extends StatelessWidget {
-  const HomeCardWidgetBook(
-      {Key? key, required this.color, required this.title, required this.child})
+  HomeCardWidgetBook(
+      {Key? key,
+      required this.color,
+      required this.title,
+      required this.musume,
+      required this.buttonWidget})
       : super(key: key);
 
   final Color color;
   final String title;
-  final Widget child;
+  final String musume;
+  final Widget buttonWidget;
+  final dailyCount =
+      "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +33,26 @@ class HomeCardWidgetBook extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title.toUpperCase(),
-                  style: Theme.of(context).textTheme.titleLarge),
+              Row(
+                children: [
+                  Text(title, style: Theme.of(context).textTheme.titleLarge),
+                  FutureBuilder<int>(
+                      future:
+                          NumCountModel().getCounterForDay(dailyCount, musume),
+                      builder: (context, snapshot) {
+                        return Text(
+                          snapshot.data.toString(),
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        );
+                      }),
+                ],
+              ),
+              const SizedBox(
+                height: 12,
+              ),
               Flexible(
-                child: Center(child: child),
+                child: Center(child: buttonWidget),
               ),
             ],
           ),
