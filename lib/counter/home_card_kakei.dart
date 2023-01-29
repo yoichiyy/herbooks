@@ -1,4 +1,3 @@
-import 'package:counter/kakei_history/history_page_kakei.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -32,18 +31,9 @@ class HomeCardWidgetKakei extends StatelessWidget {
                   Text(title.toUpperCase(),
                       style: Theme.of(context).textTheme.titleLarge),
                   TextButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HistoryPageKakei(),
-                          ),
-                        );
-                      },
-                      child: TextButton(
-                        child: const Text("詳細"),
-                        onPressed: () => _openUrl(),
-                      ))
+                    child: const Text("履歴：スプレッドシート"),
+                    onPressed: () => _openUrl(),
+                  )
                 ],
               ),
               Flexible(

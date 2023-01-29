@@ -5,14 +5,21 @@ import 'package:provider/provider.dart';
 import '../counter_history/history_model.dart';
 import 'edit_history_model.dart';
 
-class EditHistoryPage extends StatelessWidget {
+class EditHistoryPage extends StatefulWidget {
   final History history;
   const EditHistoryPage(this.history, {Key? key}) : super(key: key);
 
   @override
+  State<EditHistoryPage> createState() => _EditHistoryPageState();
+}
+
+class _EditHistoryPageState extends State<EditHistoryPage> {
+  DateTime _pickedDate = DateTime.now();
+  bool isDateChanged = false;
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EditHistoryModel>(
-      create: (_) => EditHistoryModel(history),
+      create: (_) => EditHistoryModel(widget.history),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('履歴を編集'),
@@ -32,12 +39,34 @@ class EditHistoryPage extends StatelessWidget {
                     //     fontSize: 20,
                     //   ),
                     // ),
+                    // TextField(
+                    //   controller: model.dateStringController,
+                    //   decoration: const InputDecoration(
+                    //     hintText: '読んだ日（表示用）',
+                    //   ),
+                    // ),
 
-                    TextField(
-                      controller: model.dateStringController,
-                      decoration: const InputDecoration(
-                        hintText: '読んだ日（表示用）',
-                      ),
+                    TextButton(
+                      child: isDateChanged
+                          ? const Text("変更済")
+                          : Text(model.history.dateString),
+                      onPressed: () async {
+                        final _result = await showDatePicker(
+                          context: context,
+                          currentDate: _pickedDate,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now()
+                              .subtract(const Duration(days: 365)),
+                          lastDate: DateTime.now().add(
+                            const Duration(days: 7),
+                          ),
+                        );
+                        if (_result != null) {
+                          isDateChanged = true;
+                          _pickedDate = _result;
+                          setState(() {});
+                        }
+                      },
                     ),
 
                     const SizedBox(
@@ -45,18 +74,17 @@ class EditHistoryPage extends StatelessWidget {
                     ),
 
                     //日付編集できるやつ：datetimepicker はりつけ
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      controller: model.bookDateController,
-                      decoration: const InputDecoration(
-                        hintText: '読んだ日（集計用）',
-                      ),
-                    ),
-
-                    const SizedBox(
-                      height: 8,
-                    ),
+                    // TextField(
+                    //   keyboardType: TextInputType.number,
+                    //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    //   controller: model.bookDateController,
+                    //   decoration: const InputDecoration(
+                    //     hintText: '読んだ日（集計用）',
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 8,
+                    // ),
 
                     TextField(
                       keyboardType: TextInputType.number,
@@ -78,7 +106,7 @@ class EditHistoryPage extends StatelessWidget {
                           () async {
                         // 追加の処理
                         try {
-                          await model.update();
+                          await model.update(_pickedDate);
                           Navigator.of(context).pop(model.bookNumForEditpage);
                         } catch (e) {
                           final snackBar = SnackBar(
