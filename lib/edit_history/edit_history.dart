@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
 import '../counter_history/history_model.dart';
 import 'edit_history_model.dart';
 
@@ -23,26 +24,34 @@ class EditHistoryPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-//現在の、日付を表示するだけのやつ
-                    Text(
-                      model.history.dateString,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                    //現在の、日付を表示するだけのやつ
+                    // Text(
+                    //   model.history.dateString,
+                    //   style: const TextStyle(
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 20,
+                    //   ),
+                    // ),
+
+                    TextField(
+                      controller: model.dateStringController,
+                      decoration: const InputDecoration(
+                        hintText: '読んだ日（表示用）',
                       ),
                     ),
 
-//日付編集できるやつ：datetimepicker はりつけ
+                    const SizedBox(
+                      height: 8,
+                    ),
+
+                    //日付編集できるやつ：datetimepicker はりつけ
                     TextField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       controller: model.bookDateController,
                       decoration: const InputDecoration(
-                        hintText: '読んだ数',
+                        hintText: '読んだ日（集計用）',
                       ),
-                      // onChanged: (text) {
-                      //   model.setCountHistory(text);
-                      // },
                     ),
 
                     const SizedBox(
@@ -56,9 +65,6 @@ class EditHistoryPage extends StatelessWidget {
                       decoration: const InputDecoration(
                         hintText: '読んだ数',
                       ),
-                      // onChanged: (text) {
-                      //   model.setCountHistory(text);
-                      // },
                     ),
 
                     const SizedBox(
