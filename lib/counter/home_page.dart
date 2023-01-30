@@ -30,6 +30,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ConfettiController(duration: const Duration(milliseconds: 500));
   final _controllerYume =
       ConfettiController(duration: const Duration(milliseconds: 500));
+  final _controllerHuhu =
+      ConfettiController(duration: const Duration(milliseconds: 500));
+
   // DateTime _pickedDate = DateTime.now();
 
   int _tempCounterYume = 0;
@@ -43,6 +46,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void incrementTempCounterHaru() {
     setState(() {
       _tempCounterHaru++;
+    });
+  }
+
+  int _tempCounterHuhu = 0;
+  void incrementTempCounterHuhu() {
+    setState(() {
+      _tempCounterHuhu++;
     });
   }
 
@@ -105,13 +115,19 @@ class _MyHomePageState extends State<MyHomePage> {
   //confetti
   void _confettiEventHaru() {
     setState(() {
-      _controllerHaru.play(); // ココ！
+      _controllerHaru.play();
     });
   }
 
   void _confettiEventYume() {
     setState(() {
-      _controllerYume.play(); // ココ！
+      _controllerYume.play();
+    });
+  }
+
+  void _confettiEventHuhu() {
+    setState(() {
+      _controllerHuhu.play();
     });
   }
 
@@ -119,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose() {
     _controllerHaru.dispose(); // controllerを破棄する
     _controllerYume.dispose(); // controllerを破棄する
+    _controllerHuhu.dispose(); // controllerを破棄する
     super.dispose();
   }
 
@@ -523,6 +540,107 @@ class _MyHomePageState extends State<MyHomePage> {
                                         // if (i == 1) //コレクションいふ。以上は、mapでもできる。
                                         const Icon(
                                           Icons.baby_changing_station,
+                                        )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      //ゆめ
+                      HomeCardWidgetBook(
+                        title: "ありがとうTODAY: ",
+                        musume: "huhu",
+                        color: Colors.yellow[100]!,
+                        buttonWidget: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // bookCountArea("yume"),
+                            Center(
+                              child: Row(
+                                // crossAxisAlignment: CrossAxisAlignment.center,//効かぬ
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 60,
+                                        height: 60,
+                                        child: FloatingActionButton(
+                                          heroTag: "hero4",
+                                          child: const Icon(Icons.savings),
+                                          onPressed: () {
+                                            incrementTempCounterHuhu();
+                                            HapticFeedback
+                                                .mediumImpact(); // ココ！
+                                            //void call back　または　function
+                                            _confettiEventHuhu();
+                                            // _controller.play(); // ココ！
+                                            model.bookNumRegister(1, "huhu");
+                                          },
+                                        ),
+                                      ),
+                                      ConfettiWidget(
+                                        confettiController: _controllerHuhu,
+                                        blastDirectionality:
+                                            BlastDirectionality.explosive,
+                                        blastDirection: pi / 2,
+                                        // 紙吹雪を出す方向(この場合画面上に向けて発射)
+                                        emissionFrequency:
+                                            0.9, // 発射頻度(数が小さいほど紙と紙の間隔が狭くなる)
+                                        minBlastForce:
+                                            5, // 紙吹雪の出る瞬間の5フレーム分の速度の最小
+                                        maxBlastForce:
+                                            10, // 紙吹雪の出る瞬間の5フレーム分の速度の最大(数が大きほど紙吹雪は遠くに飛んでいきます。)
+                                        numberOfParticles: 7, // 1秒あたりの紙の枚数
+                                        gravity: 0.5, // 紙の落ちる速さ(0~1で0だとちょーゆっくり)
+                                        colors: const <Color>[
+                                          // 紙吹雪の色指定
+                                          Colors.red,
+                                          Colors.blue,
+                                          //最初Colorsでなく、Constants、となっていた。
+                                          Colors.green,
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ], //children
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 20,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '$_tempCounterHuhu',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      for (var i = 0;
+                                          i < _tempCounterHuhu;
+                                          i++) //flutter コレクションフォー　で検索せよ
+                                        // if (i == 1) //コレクションいふ。以上は、mapでもできる。
+                                        const Icon(
+                                          Icons.savings,
                                         )
                                     ],
                                   ),

@@ -246,63 +246,6 @@ class NumCountModel extends ChangeNotifier {
           },
         ); //then
 
-    // 工事：firebaseのIDを一括変更
-    // final List<String> listForFixDocName = [
-    //   // "202201",
-    //   "202202",
-    //   "202203",
-    //   "202204",
-    //   "202205",
-    //   "202206",
-    //   "202207",
-    //   "202208",
-    //   "202209",
-    //   "202210",
-    //   "202211",
-    //   "202212",
-    // ];
-
-    // for (int i = 0; i < listForFixDocName.length; i++) {
-    //   await FirebaseFirestore.instance
-    //       .collection("monthHistory")
-    //       .doc(listForFixDocName[i])
-    //       .get()
-    //       .then((doc) async {
-    //     var fixData = doc.data()!;
-
-    //     await FirebaseFirestore.instance
-    //         .collection("monthHistory")
-    //         .doc(listForFixDocName[i] + "haru")
-    //         .set(fixData);
-
-    //     await FirebaseFirestore.instance
-    //         .collection("monthHistory")
-    //         .doc(listForFixDocName[i])
-    //         .delete();
-    //   });
-    // }
-
-    // //Daigoさん
-    // for (final name in listForFixDocName) {
-    //   //元のデータを取得
-    //   final originalDoc = await FirebaseFirestore.instance
-    //       .collection("monthHistory")
-    //       .doc(name)
-    //       .get();
-
-    //   final fixData = originalDoc.data()!;
-    //   //新しいデータを挿入
-    //   await FirebaseFirestore.instance
-    //       .collection("monthHistory")
-    //       .doc(name + "haru")
-    //       .set(fixData);
-
-    //   //元のデータを削除
-    //   await FirebaseFirestore.instance
-    //       .collection("monthHistory")
-    //       .doc(name)
-    //       .delete();
-    // }
 
     // ここから、monthlyへの登録
     await FirebaseFirestore.instance

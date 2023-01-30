@@ -1,4 +1,5 @@
 import 'package:counter/counter/book_count_area.dart';
+import 'package:counter/counter/history_sum_card.dart';
 import 'package:counter/counter/home_card_kakei.dart';
 import 'package:counter/counter/kakei_count_area.dart';
 import 'package:counter/counter/num_count.dart';
@@ -101,7 +102,7 @@ class _AllHistoryState extends State<AllHistory> {
                       ),
 
 //はる
-                      HomeCardWidgetKakei(
+                      HistorySumCard(
                         title: "はる",
                         color: Colors.red[100]!,
                         child: Column(
@@ -120,7 +121,7 @@ class _AllHistoryState extends State<AllHistory> {
                       ),
 
                       //ゆめ
-                      HomeCardWidgetKakei(
+                      HistorySumCard(
                         title: "ユメ",
                         color: Colors.red[100]!,
                         child: Column(
