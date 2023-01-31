@@ -104,6 +104,7 @@ class _AllHistoryState extends State<AllHistory> {
 //はる
                       HistorySumCard(
                         title: "はる",
+                        musume: "haru",
                         color: Colors.red[100]!,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -122,7 +123,8 @@ class _AllHistoryState extends State<AllHistory> {
 
                       //ゆめ
                       HistorySumCard(
-                        title: "ユメ",
+                        title: "ゆめ",
+                        musume: "yume",
                         color: Colors.red[100]!,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,

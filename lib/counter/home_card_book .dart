@@ -1,4 +1,6 @@
 import 'package:counter/counter/num_count.dart';
+import 'package:counter/counter_history/month_haru.dart';
+import 'package:counter/counter_history/month_yume.dart';
 import 'package:flutter/material.dart';
 
 class HomeCardWidgetBook extends StatelessWidget {
@@ -12,7 +14,7 @@ class HomeCardWidgetBook extends StatelessWidget {
 
   final Color color;
   final String title;
-  final String musume;
+  String musume;
   final Widget buttonWidget;
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
@@ -46,6 +48,40 @@ class HomeCardWidgetBook extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleLarge,
                         );
                       }),
+                  if (musume == "haru")
+                    TextButton(
+                      child: const Text(
+                        "履歴",
+                        // style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MonthlyLogHaru(),
+                          ),
+                        );
+                      },
+                    )
+                  else if (musume == "yume")
+                    TextButton(
+                      child: const Text(
+                        "履歴",
+                        // style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MonthlyLogYume(),
+                          ),
+                        );
+                      },
+                    )
+                  else
+                    (const SizedBox(
+                      height: 12,
+                    )),
                 ],
               ),
               const SizedBox(
