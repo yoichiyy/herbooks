@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counter/task_list/todo_class.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -10,8 +9,7 @@ import '../edit_task/edit_task.dart';
 import 'task_model.dart';
 
 class TaskListPage extends StatefulWidget {
-  const TaskListPage(this.todo, {Key? key}) : super(key: key);
-  final Todo todo;
+  const TaskListPage({Key? key}) : super(key: key);
 
   @override
   State<TaskListPage> createState() => _TaskListPageState();
@@ -96,7 +94,8 @@ class _TaskListPageState extends State<TaskListPage> {
                       itemBuilder: (BuildContext context, int index) {
                         final todoIndex = todoList[index];
                         return Dismissible(
-                          key: ObjectKey(widget.todo.id),//ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
+                          key: ObjectKey(todoIndex
+                              .id), //ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
                           child: InkWell(
                             onTap: () async {
                               //ここでString title = ...とやっていることが理解できぬ。この
@@ -112,25 +111,25 @@ class _TaskListPageState extends State<TaskListPage> {
                             child: Card(
                               child: ListTile(
                                 title: Text(
-                                    '${todoIndex.taskNameOfTodoClass}　${todoIndex.createdAt?.month}/${todoIndex.createdAt?.day}  ${todoIndex.createdAt?.hour}時'),
-                                // ${model.todo.createdAt?.month}/${model.todo.createdAt?.day}  ${model.todo.createdAt?.hour}時'),
+                                    '${todoIndex.taskNameOfTodoClass}　${todoIndex.dueDate?.month}/${todoIndex.dueDate?.day}  ${todoIndex.dueDate?.hour}時'),
                               ),
                             ),
                           ),
                           background: Container(
                               color: const Color.fromRGBO(244, 67, 54, 1)),
                           onDismissed: (direction) {
-
                             if (direction == DismissDirection.startToEnd) {
                               //削除
-                              updateTaskStatus();
+                              updateTaskStatus(todoIndex);
+                              //TODO:dismissed Dismissible widget is still part of the tree.
+                              //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
+
                             } else if (direction ==
                                 DismissDirection.endToStart) {
-                              updateTaskStatus();
+                              updateTaskStatus(todoIndex);
                             } else {
                               debugPrint("Nothing");
                             }
-
                             setState(
                               () {},
                             );
@@ -159,33 +158,33 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 }
 
-  Future<void> updateTaskStatus() async {
+Future<void> updateTaskStatus(todoIndex) async {
+  //ユーザー情報取得
+  // final snapshot =
+  //     await FirebaseFirestore.instance.collection('users').doc(todoIndex).get();
+  // final userName = snapshot.data()!['name'];
 
-    await FirebaseFirestore.instance
-        .collection("tasks")
-        .doc()
-        .update(
-      {"task_status": ""},
-    );
+  final taskToUpDate = await FirebaseFirestore.instance
+      .collection('todoList')
+      .doc(todoIndex.id)
+      .get();
+
+  //_TypeError (type 'Timestamp' is not a subtype of type 'DateTime') =>とりあえずVARにした。FINALでも怒られない。違いは？ぐぐれ。
+  final dueDate = taskToUpDate.data()!["dueDate"];
+  final dueDateUpdated = dueDate.add(const Duration(days: 1));
+  //TODO:NoSuchMethodError (NoSuchMethodError: Class 'Timestamp' has no instance method 'add'.
+  // Receiver: Instance of 'Timestamp'
+  // Tried calling: add(Instance of 'Duration'))
 
 
-    // taskStatusUndoButton.value = this.taskID;
+  // TODO:日付を＋１するだけなのに、一度get()してから、下のようにUPdateするのは無駄がある？
+  // 該当DOC名を指定して、直接UPDATEする方法はあるか？
+  //TODO:日付を１プラスする方法。incrementは無理ですよね。一度、dueDateを取得するしかないか？
 
-    // if (status == 1) {
-    //   //1.関数は頭に必ずかたつけろ
-    //   //2.if のかっこいい敵書き方は、推奨されぬ。リントをいれるならば。
-    //   await updateUserPoints(this.taskPoints);
-    // }
 
-    // newTaskInserted.value = await this.makeRepeat();
-    // if (this.specialNumber != "") {
-    //   await APIS.addEntryInSheet(
-    //     taskID: this.specialNumber,
-    //     taskStatus: status,
-    //     note: this.taskNote,
-    //     points: this.taskPoints,
-    //     taskName: this.taskName,
-    //     due: this.taskDeadline.toDate(),
-      // );
-    }
-  }
+  //TODO:taskToUpDateとして一度取得したのに、もう一度、下のように取得するしかないのか？
+  FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id).update({
+    "dueDate": dueDateUpdated,
+  });
+}
+

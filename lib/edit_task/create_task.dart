@@ -192,7 +192,7 @@ class _TaskCardState extends State<TaskCard> {
                       .doc() // ドキュメントID自動生成
                       .set({
                     'title': _controller.value.text, //stringを送る
-                    'createdAt': _pickedDate, //本当はタイムスタンプ　「サーバー　タイムスタンプ」検索
+                    'dueDate': _pickedDate, //本当はタイムスタンプ　「サーバー　タイムスタンプ」検索
                     'status': "0"
                   });
                   _controller.clear();

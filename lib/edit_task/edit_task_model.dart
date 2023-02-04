@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counter/task_list/task_model.dart';
 import 'package:flutter/material.dart';
-import '../task_list/todo_class.dart';
 
 class EditTaskModel extends ChangeNotifier {
   final Todo todo;
@@ -12,7 +12,7 @@ class EditTaskModel extends ChangeNotifier {
   }
 
   void updateForFirebase(DateTime dateSelected) {
-    todo.createdAt = dateSelected;
+    todo.dueDate = dateSelected;
     notifyListeners();
   }
 
@@ -22,7 +22,7 @@ class EditTaskModel extends ChangeNotifier {
   }
 
   bool isUpdated() {
-    return taskNameForEditpage != null || todo.createdAt != null;
+    return taskNameForEditpage != null || todo.dueDate != null;
   }
 
   Future update() async {
@@ -32,7 +32,7 @@ class EditTaskModel extends ChangeNotifier {
         .doc(todo.id)
         .update({
       'title': taskNameForEditpage,
-      'createdAt': todo.createdAt,
+      'dueDate': todo.dueDate,
       // 'taskStatus': ,
     });
   }

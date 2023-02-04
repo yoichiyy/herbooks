@@ -1,18 +1,15 @@
 // import 'package:book_list_sample/domain/book.dart';
 // import 'package:book_list_sample/edit_book/edit_book_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../task_list/task_model.dart';
-import '../task_list/todo_class.dart';
 import 'edit_task_model.dart';
 
 class EditTaskPage extends StatelessWidget {
   final Todo todo;
   const EditTaskPage(this.todo, {Key? key}) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -49,15 +46,13 @@ class EditTaskPage extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      '${model.todo.createdAt?.month}/${model.todo.createdAt?.day}  ${model.todo.createdAt?.hour}時',
+                      '${model.todo.dueDate?.month}/${model.todo.dueDate?.day}  ${model.todo.dueDate?.hour}時',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                     ),
                   ),
-                  // Text( 討ち死にしたコード
-                  //     "${model.createdAtForDisplay.toDate().month}/${model.createdAtForDisplay.toDate().day}  ${model.createdAtForDisplay.toDate().hour}時"),
 
                   const SizedBox(
                     height: 8,
