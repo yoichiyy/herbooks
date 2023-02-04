@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counter/task_list/todo_class.dart';
+import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import '../edit_task/edit_task.dart';
-import '../edit_task/create_task.dart';
-import 'task_model.dart';
 import 'package:provider/provider.dart';
-import 'package:counter/ui/bottom_navigation_bar.dart';
+
+import '../edit_task/create_task.dart';
+import '../edit_task/edit_task.dart';
+import 'task_model.dart';
 
 class TaskListPage extends StatefulWidget {
-  const TaskListPage({Key? key}) : super(key: key);
+  const TaskListPage(this.todo, {Key? key}) : super(key: key);
+  final Todo todo;
 
   @override
   State<TaskListPage> createState() => _TaskListPageState();
@@ -30,7 +33,7 @@ class _TaskListPageState extends State<TaskListPage> {
         // },
         create: (_) => TaskModel()..getTodoListRealtime(),
         child: Scaffold(
-          bottomNavigationBar: const BottomBar(currentIndex: 3),
+          bottomNavigationBar: const BottomBar(currentIndex: 0),
           appBar: AppBar(
             title: const Text('やること'),
           ),
@@ -93,7 +96,7 @@ class _TaskListPageState extends State<TaskListPage> {
                       itemBuilder: (BuildContext context, int index) {
                         final todoIndex = todoList[index];
                         return Dismissible(
-                          key: ValueKey(todoIndex),
+                          key: ObjectKey(widget.todo.id),//ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
                           child: InkWell(
                             onTap: () async {
                               //ここでString title = ...とやっていることが理解できぬ。この
@@ -117,25 +120,19 @@ class _TaskListPageState extends State<TaskListPage> {
                           background: Container(
                               color: const Color.fromRGBO(244, 67, 54, 1)),
                           onDismissed: (direction) {
-// //dismissを更新中
 
-//         if (direction == DismissDirection.startToEnd) {
-//           widget.t.updateTaskStatusAndPlaySound(1);
-//         } else if (direction == DismissDirection.endToStart) {
-//           widget.t.updateTaskStatusAndPlaySound(3);
-//         } else {
-//          debugPrint("Nothing");
-//         }
+                            if (direction == DismissDirection.startToEnd) {
+                              //削除
+                              updateTaskStatus();
+                            } else if (direction ==
+                                DismissDirection.endToStart) {
+                              updateTaskStatus();
+                            } else {
+                              debugPrint("Nothing");
+                            }
 
                             setState(
-                              () {
-                                //removeAtと、Firebaseのdelete両方をやる必要あるのかな？後者だけで良い感じも。→試してみる。
-                                todoList.removeAt(index);
-                                FirebaseFirestore.instance
-                                    .collection('todoList')
-                                    .doc(todoIndex.id)
-                                    .delete(); //そもそもこれは、doc.idがないので、おそらく動かぬ。
-                              },
+                              () {},
                             );
                           },
                         );
@@ -161,3 +158,34 @@ class _TaskListPageState extends State<TaskListPage> {
     );
   }
 }
+
+  Future<void> updateTaskStatus() async {
+
+    await FirebaseFirestore.instance
+        .collection("tasks")
+        .doc()
+        .update(
+      {"task_status": ""},
+    );
+
+
+    // taskStatusUndoButton.value = this.taskID;
+
+    // if (status == 1) {
+    //   //1.関数は頭に必ずかたつけろ
+    //   //2.if のかっこいい敵書き方は、推奨されぬ。リントをいれるならば。
+    //   await updateUserPoints(this.taskPoints);
+    // }
+
+    // newTaskInserted.value = await this.makeRepeat();
+    // if (this.specialNumber != "") {
+    //   await APIS.addEntryInSheet(
+    //     taskID: this.specialNumber,
+    //     taskStatus: status,
+    //     note: this.taskNote,
+    //     points: this.taskPoints,
+    //     taskName: this.taskName,
+    //     due: this.taskDeadline.toDate(),
+      // );
+    }
+  }

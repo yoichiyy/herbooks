@@ -146,7 +146,7 @@ class _AllHistoryState extends State<AllHistory> {
               );
             },
           ),
-          bottomNavigationBar: const BottomBar(currentIndex: 3),
+          bottomNavigationBar: const BottomBar(currentIndex: 2),
         ),
       ),
     );

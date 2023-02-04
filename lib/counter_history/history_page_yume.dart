@@ -18,7 +18,7 @@ class HistoryPageYume extends StatelessWidget {
           appBar: AppBar(
             title: const Text('履歴'),
           ),
-          bottomNavigationBar: const BottomBar(currentIndex: 0),
+          bottomNavigationBar: const BottomBar(currentIndex: 2),
           body: Consumer<HistoryModel>(
             builder: (context, model, child) {
               final historyData = model.historyListYume;

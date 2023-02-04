@@ -18,7 +18,7 @@ class MonthlyLogYume extends StatelessWidget {
           appBar: AppBar(
             title: const Text('履歴(月)'),
           ),
-          bottomNavigationBar: const BottomBar(currentIndex: 0),
+          bottomNavigationBar: const BottomBar(currentIndex: 2),
           body: Consumer<MonthlyHistoryModel>(
             builder: (context, model, child) {
               final historyData = model.monthlyHistoryListYume;
