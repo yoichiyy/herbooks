@@ -125,7 +125,7 @@ class _TaskListPageState extends State<TaskListPage> {
                               updateTaskStatus(todoIndex);
                               //TODO:dismissed Dismissible widget is still part of the tree.
                               //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
-
+                              //99行目を変更して解決はしたのだが、仕組みを理解しておらぬ。ObjectKey, ValueKey。。。
                             } else if (direction ==
                                 DismissDirection.endToStart) {
                               updateTaskStatus(todoIndex);
@@ -165,21 +165,16 @@ Future<void> updateTaskStatus(todoIndex) async {
   // final snapshot =
   //     await FirebaseFirestore.instance.collection('users').doc(todoIndex).get();
   // final userName = snapshot.data()!['name'];
-
-  final taskToUpDate = await FirebaseFirestore.instance
-      .collection('todoList')
-      .doc(todoIndex.id)
-      .get();
+  final docRef =
+      FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id);
+  final taskToUpDate = await docRef.get();
 
   //_TypeError (type 'Timestamp' is not a subtype of type 'DateTime') =>とりあえずVARにした。FINALでも怒られない。違いは？ぐぐれ。
-  final dueDate = taskToUpDate.data()!["dueDate"];
-  final dueDateUpdated = dueDate.add(const Duration(days: 1));
-  //TODO:NoSuchMethodError (NoSuchMethodError: Class 'Timestamp' has no instance method 'add'.
-  // Receiver: Instance of 'Timestamp'
-  // Tried calling: add(Instance of 'Duration'))
+  final dueDate = taskToUpDate.data()!["dueDate"] as Timestamp;
+  final dueDateUpdated = dueDate.toDate().add(const Duration(days: 1));
+  final ultraDuedate = Timestamp.fromDate(dueDateUpdated);
 
-  //TODO:taskToUpDateとして一度取得したのに、もう一度、下のように取得するしかないのか？
-  FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id).update({
-    "dueDate": dueDateUpdated,
+  await docRef.update({
+    "dueDate": ultraDuedate,
   });
 }
