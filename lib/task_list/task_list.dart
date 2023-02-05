@@ -94,8 +94,10 @@ class _TaskListPageState extends State<TaskListPage> {
                       itemBuilder: (BuildContext context, int index) {
                         final todoIndex = todoList[index];
                         return Dismissible(
-                          key: ObjectKey(todoIndex
-                              .id), //ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
+                          // key: ObjectKey(todoIndex
+                          //     .id),
+                          key:
+                              UniqueKey(), //ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
                           child: InkWell(
                             onTap: () async {
                               //ここでString title = ...とやっていることが理解できぬ。この
@@ -176,15 +178,8 @@ Future<void> updateTaskStatus(todoIndex) async {
   // Receiver: Instance of 'Timestamp'
   // Tried calling: add(Instance of 'Duration'))
 
-
-  // TODO:日付を＋１するだけなのに、一度get()してから、下のようにUPdateするのは無駄がある？
-  // 該当DOC名を指定して、直接UPDATEする方法はあるか？
-  //TODO:日付を１プラスする方法。incrementは無理ですよね。一度、dueDateを取得するしかないか？
-
-
   //TODO:taskToUpDateとして一度取得したのに、もう一度、下のように取得するしかないのか？
   FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id).update({
     "dueDate": dueDateUpdated,
   });
 }
-
