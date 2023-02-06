@@ -16,12 +16,19 @@ class EditTaskPage extends StatefulWidget {
 }
 
 class _EditTaskPageState extends State<EditTaskPage> {
-  bool checkBox = true;
+  // bool checkBox = true;
+
+  late EditTaskModel model;
+  @override //FUL作られたときに１回だけよばれる
+  void initState() {
+    model = EditTaskModel(widget.todo);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<EditTaskModel>(
-      create: (_) => EditTaskModel(widget.todo),
+    return ChangeNotifierProvider.value(
+      value: model,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('タスクを編集'),
@@ -82,11 +89,10 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     children: [
                       Checkbox(
                           activeColor: Colors.blue, // Onになった時の色を指定
-                          value: checkBox, // チェックボックスのOn/Offを保持する値
-                          onChanged: (bool? e) {
+                          value: model.todo.repeatOption, // チェックボックスのOn/Offを保持する値
+                          onChanged: (bool? e) {//関数を渡している。callback関数。
                             setState(() {
-                              checkBox = e!;
-                              model.updateRepeatOption(checkBox);
+                              model.updateRepeatOption(e!);
                               // TODO:FlutterError (A TaskModel was used after being disposed.
                               // Once you have called dispose() on a TaskModel, it can no longer be used.)
                             });
