@@ -50,6 +50,7 @@ class TaskModel extends ChangeNotifier {
 class Todo {
   String taskNameOfTodoClass = ""; //クラスが所持している変数
   String id = "";
+  bool repeatOption = true;
   DateTime? dueDate;
   Todo(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     // MEMO
@@ -62,7 +63,8 @@ class Todo {
     //lint：静的解析をどのくらい強くするか
     final data = documentSnapshot.data() as Map<String, dynamic>;
     taskNameOfTodoClass = data["title"] as String;
-    dueDate = (data['dueDate'] as Timestamp?)?.toDate(); //null aware operator
+    dueDate = (data['dueDate'] as Timestamp?)?.toDate();
+    repeatOption = data['repeatOption'] as bool; 
     id = documentSnapshot.id;
   }
 }

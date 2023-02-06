@@ -7,14 +7,21 @@ import 'package:provider/provider.dart';
 import '../task_list/task_model.dart';
 import 'edit_task_model.dart';
 
-class EditTaskPage extends StatelessWidget {
+class EditTaskPage extends StatefulWidget {
   final Todo todo;
   const EditTaskPage(this.todo, {Key? key}) : super(key: key);
 
   @override
+  State<EditTaskPage> createState() => _EditTaskPageState();
+}
+
+class _EditTaskPageState extends State<EditTaskPage> {
+  bool checkBox = true;
+
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EditTaskModel>(
-      create: (_) => EditTaskModel(todo),
+      create: (_) => EditTaskModel(widget.todo),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('タスクを編集'),
@@ -71,7 +78,25 @@ class EditTaskPage extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-
+                  Row(
+                    children: [
+                      Checkbox(
+                          activeColor: Colors.blue, // Onになった時の色を指定
+                          value: checkBox, // チェックボックスのOn/Offを保持する値
+                          onChanged: (bool? e) {
+                            setState(() {
+                              checkBox = e!;
+                              model.updateRepeatOption(checkBox);
+                              // TODO:FlutterError (A TaskModel was used after being disposed.
+                              // Once you have called dispose() on a TaskModel, it can no longer be used.)
+                            });
+                          }),
+                      const Text("リピートする"),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   ElevatedButton(
                     onPressed: model.isUpdated()
                         ? () async {
@@ -81,7 +106,6 @@ class EditTaskPage extends StatelessWidget {
                               //FQ：popの引数は、「遷移先ページに、タスク名更新したからこれを使ってね。」でOKか？
                               Navigator.of(context)
                                   .pop(model.taskNameForEditpage);
-                              debugPrint("タスク編集しています");
                             } catch (e) {
                               final snackBar = SnackBar(
                                 backgroundColor: Colors.red,

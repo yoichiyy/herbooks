@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import '../task_list/task_list.dart';
 
 class TaskCard extends StatefulWidget {
@@ -193,7 +193,12 @@ class _TaskCardState extends State<TaskCard> {
                       .set({
                     'title': _controller.value.text, //stringを送る
                     'dueDate': _pickedDate, //本当はタイムスタンプ　「サーバー　タイムスタンプ」検索
-                    'status': "0"
+                    'intelligence': "0",
+                    'care': "0",
+                    'power': "0",
+                    'skill': "0",
+                    'patience': "0",
+                    'repeatOption': true,
                   });
                   _controller.clear();
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

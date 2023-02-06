@@ -6,6 +6,8 @@ class EditTaskModel extends ChangeNotifier {
   final Todo todo;
   final taskNameController = TextEditingController();
   String? taskNameForEditpage;
+  bool repeatOption = true;
+
 
   EditTaskModel(this.todo) {
     taskNameController.text = todo.taskNameOfTodoClass;
@@ -21,6 +23,12 @@ class EditTaskModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateRepeatOption(bool checkBox) {
+    todo.repeatOption = checkBox;
+    notifyListeners();
+  }
+  
+
   bool isUpdated() {
     return taskNameForEditpage != null || todo.dueDate != null;
   }
@@ -33,6 +41,7 @@ class EditTaskModel extends ChangeNotifier {
         .update({
       'title': taskNameForEditpage,
       'dueDate': todo.dueDate,
+      'repeatOption': todo.repeatOption,
       // 'taskStatus': ,
     });
   }
