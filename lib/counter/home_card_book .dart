@@ -48,40 +48,25 @@ class HomeCardWidgetBook extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleLarge,
                         );
                       }),
-                  if (musume == "haru")
-                    TextButton(
-                      child: const Text(
-                        "履歴",
-                        // style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MonthlyLogHaru(),
-                          ),
-                        );
-                      },
-                    )
-                  else if (musume == "yume")
-                    TextButton(
-                      child: const Text(
-                        "履歴",
-                        // style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MonthlyLogYume(),
-                          ),
-                        );
-                      },
-                    )
-                  else
-                    (const SizedBox(
-                      height: 12,
-                    )),
+                  TextButton(
+                    child: const Text(
+                      "履歴",
+                      // style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return (musume == "haru")
+                                ? const MonthlyLogHaru()
+                                : const MonthlyLogYume();
+                          },
+                          //アロー関数。
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
               const SizedBox(

@@ -48,10 +48,18 @@ class TaskModel extends ChangeNotifier {
 }
 
 class Todo {
-  String taskNameOfTodoClass = ""; //クラスが所持している変数
+  String taskNameOfTodoClass = "";
   String id = "";
   bool repeatOption = true;
-  DateTime? dueDate;
+  DateTime? dueDate; //TODO:これだけ 奈良ブルになっている意味？
+  int intelligence = 0;
+  int care = 0;
+  int power = 0;
+  int skill = 0;
+  int patience = 0;
+  int thanks = 0;
+  int total = 0;
+
   Todo(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     // MEMO
     //https://flutter.ctrnost.com/basic/interactive/form/datapicker/
@@ -64,7 +72,14 @@ class Todo {
     final data = documentSnapshot.data() as Map<String, dynamic>;
     taskNameOfTodoClass = data["title"] as String;
     dueDate = (data['dueDate'] as Timestamp?)?.toDate();
-    repeatOption = data['repeatOption'] as bool; 
+    repeatOption = data['repeatOption'] as bool;
+    intelligence = data['intelligence'] as int;
+    care = data['care'] as int;
+    power = data['power'] as int;
+    skill = data['skill'] as int;
+    patience = data['patience'] as int;
+    thanks = data['thanks'] as int;
+    total = data['total'] as int;
     id = documentSnapshot.id;
   }
 }

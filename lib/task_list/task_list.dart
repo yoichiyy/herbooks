@@ -121,20 +121,25 @@ class _TaskListPageState extends State<TaskListPage> {
                               color: const Color.fromRGBO(244, 67, 54, 1)),
                           onDismissed: (direction) {
                             if (direction == DismissDirection.startToEnd) {
-                              //削除
-                              updateTaskStatus(todoIndex);
-                              //TODO:dismissed Dismissible widget is still part of the tree.
-                              //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
-                              //99行目を変更して解決はしたのだが、仕組みを理解しておらぬ。ObjectKey, ValueKey。。。
+                              todoIndex.repeatOption
+                                  ?
+                                  //repeatならUPDATEして日付更新。
+                                  //falseならPOINT付与だけして、タスク削除
+                                  updateAndRepeatTask(todoIndex)
+                                  : updateAndDeleteTask(todoIndex);
                             } else if (direction ==
                                 DismissDirection.endToStart) {
-                              updateTaskStatus(todoIndex);
+                              //逆方向スワイプで、付与せず削除
+                              updateAndRepeatTask(todoIndex);
                             } else {
                               debugPrint("Nothing");
                             }
                             setState(
                               () {},
                             );
+                            //TODO:dismissed Dismissible widget is still part of the tree.
+                            //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
+                            //99行目を変更して解決はしたのだが、仕組みを理解しておらぬ。ObjectKey, ValueKey。。。
                           },
                         );
                       },
@@ -160,7 +165,7 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 }
 
-Future<void> updateTaskStatus(todoIndex) async {
+Future<void> updateAndRepeatTask(todoIndex) async {
   //ユーザー情報取得
   // final snapshot =
   //     await FirebaseFirestore.instance.collection('users').doc(todoIndex).get();
@@ -172,9 +177,29 @@ Future<void> updateTaskStatus(todoIndex) async {
   //_TypeError (type 'Timestamp' is not a subtype of type 'DateTime') =>とりあえずVARにした。FINALでも怒られない。違いは？ぐぐれ。
   final dueDate = taskToUpDate.data()!["dueDate"] as Timestamp;
   final dueDateUpdated = dueDate.toDate().add(const Duration(days: 1));
-  final ultraDuedate = Timestamp.fromDate(dueDateUpdated);
+  final dueDateAsTimeStamp = Timestamp.fromDate(dueDateUpdated);
 
   await docRef.update({
-    "dueDate": ultraDuedate,
+    "dueDate": dueDateAsTimeStamp,
+    
+
+
+
+
+  });
+}
+
+Future<void> updateAndDeleteTask(todoIndex) async {
+  //ユーザー情報取得
+  // final snapshot =
+  //     await FirebaseFirestore.instance.collection('users').doc(todoIndex).get();
+  // final userName = snapshot.data()!['name'];
+  final docRef =
+      FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id);
+  final taskToUpDate = await docRef.get();
+
+
+  await docRef.update({
+    "dueDate": ,
   });
 }
