@@ -39,7 +39,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  //datetimepicker　はりつけ
                   TextButton(
                     onPressed: () {
                       DatePicker.showDateTimePicker(
@@ -67,11 +66,9 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(
                     height: 8,
                   ),
-
                   TextField(
                     controller: model.taskNameController,
                     decoration: const InputDecoration(
@@ -81,25 +78,156 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       model.setTaskName(text);
                     },
                   ),
-
                   const SizedBox(
                     height: 16,
                   ),
+
                   Row(
                     children: [
                       Checkbox(
                           activeColor: Colors.blue, // Onになった時の色を指定
-                          value: model.todo.repeatOption, // チェックボックスのOn/Offを保持する値
-                          onChanged: (bool? e) {//関数を渡している。callback関数。
+                          value:
+                              model.todo.repeatOption, // チェックボックスのOn/Offを保持する値
+                          onChanged: (bool? e) {
+                            //関数を渡している。callback関数。
                             setState(() {
                               model.updateRepeatOption(e!);
-                              // TODO:FlutterError (A TaskModel was used after being disposed.
-                              // Once you have called dispose() on a TaskModel, it can no longer be used.)
                             });
                           }),
                       const Text("リピートする"),
                     ],
                   ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text("知"),
+                      ),
+                      Slider(
+                        onChanged: (value) {
+                          setState(() {
+                            model.todo.intelligence = value.toInt();
+                          });
+                        },
+                        value: model.todo.intelligence.toDouble(),
+                        max: 5,
+                        min: 0,
+                        activeColor: Colors.orange,
+                        inactiveColor: Colors.white,
+                        divisions: 5,
+                        label: "$model.todo.intelligence",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text("♡"),
+                      ),
+                      Slider(
+                        onChanged: (value) {
+                          setState(() {
+                            model.todo.care = value.toInt();
+                          });
+                        },
+                        value: model.todo.care.toDouble(),
+                        max: 5,
+                        min: 0,
+                        activeColor: Colors.orange,
+                        inactiveColor: Colors.white,
+                        divisions: 5,
+                        label: "$model.todo.care",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text("力"),
+                      ),
+                      Slider(
+                        onChanged: (value) {
+                          setState(() {
+                            model.todo.power = value.toInt();
+                          });
+                        },
+                        value: model.todo.power.toDouble(),
+                        max: 5,
+                        min: 0,
+                        activeColor: Colors.orange,
+                        inactiveColor: Colors.white,
+                        divisions: 5,
+                        label: "$model.todo.power",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text("技"),
+                      ),
+                      Slider(
+                        onChanged: (value) {
+                          setState(() {
+                            model.todo.skill = value.toInt();
+                          });
+                        },
+                        value: model.todo.skill.toDouble(),
+                        max: 5,
+                        min: 0,
+                        activeColor: Colors.orange,
+                        inactiveColor: Colors.white,
+                        divisions: 5,
+                        label: "$model.todo.skill",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text("根性"),
+                      ),
+                      Slider(
+                        onChanged: (value) {
+                          setState(() {
+                            model.todo.patience = value.toInt();
+                          });
+                        },
+                        value: model.todo.patience.toDouble(),
+                        max: 5,
+                        min: 0,
+                        activeColor: Colors.orange,
+                        inactiveColor: Colors.white,
+                        divisions: 5,
+                        label: "$model.todo.patience",
+                      ),
+                    ],
+                  ),
+                  //kokomade column
                   const SizedBox(
                     height: 16,
                   ),

@@ -19,8 +19,15 @@ class _TaskCardState extends State<TaskCard> {
     super.dispose();
   }
 
+  int intelligence = 0;
+  int care = 0;
+  int power = 0;
+  int skill = 0;
+  int patience = 0;
+  int thanks = 0;
+  int total = 0;
   DateTime _pickedDate = DateTime.now();
-
+  bool repeatOption = true;
   final snackBar = const SnackBar(
     content: Text('登録しました'),
   );
@@ -57,7 +64,7 @@ class _TaskCardState extends State<TaskCard> {
                     ),
                     const SizedBox(
                       width: double.infinity,
-                      height: 20,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -112,7 +119,7 @@ class _TaskCardState extends State<TaskCard> {
                     ),
                     const SizedBox(
                       width: 10,
-                      height: 10,
+                      height: 2,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -157,9 +164,153 @@ class _TaskCardState extends State<TaskCard> {
                     ),
                     const SizedBox(
                       width: 10,
-                      height: 10,
+                      height: 4,
                     ),
-                  ],
+                    Row(
+                      children: [
+                        Checkbox(
+                            activeColor: Colors.blue, // Onになった時の色を指定
+                            value: repeatOption, // チェックボックスのOn/Offを保持する値
+                            onChanged: (bool? e) {
+                              //関数を渡している。callback関数。
+                              setState(() {
+                                repeatOption = e!;
+                              });
+                            }),
+                        const Text("リピートする"),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Text("知"),
+                        ),
+                        Slider(
+                          onChanged: (value) {
+                            setState(() {
+                              intelligence = value.toInt();
+                            });
+                          },
+                          value: intelligence.toDouble(),
+                          max: 5,
+                          min: 0,
+                          activeColor: Colors.orange,
+                          inactiveColor: Colors.white,
+                          divisions: 5,
+                          label: "$intelligence",
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Text("♡"),
+                        ),
+                        Slider(
+                          onChanged: (value) {
+                            setState(() {
+                              care = value.toInt();
+                            });
+                          },
+                          value: care.toDouble(),
+                          max: 5,
+                          min: 0,
+                          activeColor: Colors.orange,
+                          inactiveColor: Colors.white,
+                          divisions: 5,
+                          label: "$care",
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Text("力"),
+                        ),
+                        Slider(
+                          onChanged: (value) {
+                            setState(() {
+                              power = value.toInt();
+                            });
+                          },
+                          value: power.toDouble(),
+                          max: 5,
+                          min: 0,
+                          activeColor: Colors.orange,
+                          inactiveColor: Colors.white,
+                          divisions: 5,
+                          label: "$power",
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Text("技"),
+                        ),
+                        Slider(
+                          onChanged: (value) {
+                            setState(() {
+                              skill = value.toInt();
+                            });
+                          },
+                          value: skill.toDouble(),
+                          max: 5,
+                          min: 0,
+                          activeColor: Colors.orange,
+                          inactiveColor: Colors.white,
+                          divisions: 5,
+                          label: "$skill",
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Text("根性"),
+                        ),
+                        Slider(
+                          onChanged: (value) {
+                            setState(() {
+                              patience = value.toInt();
+                            });
+                          },
+                          value: patience.toDouble(),
+                          max: 5,
+                          min: 0,
+                          activeColor: Colors.orange,
+                          inactiveColor: Colors.white,
+                          divisions: 5,
+                          label: "$patience",
+                        ),
+                      ],
+                    )
+                  ], //children
                 ),
               ),
 
@@ -193,12 +344,12 @@ class _TaskCardState extends State<TaskCard> {
                       .set({
                     'title': _controller.value.text, //stringを送る
                     'dueDate': _pickedDate, //本当はタイムスタンプ　「サーバー　タイムスタンプ」検索
-                    'intelligence': "0",
-                    'care': "0",
-                    'power': "0",
-                    'skill': "0",
-                    'patience': "0",
-                    'repeatOption': true,
+                    'intelligence': intelligence,
+                    'care': care,
+                    'power': power,
+                    'skill': skill,
+                    'patience': patience,
+                    'repeatOption': repeatOption,
                   });
                   _controller.clear();
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -124,13 +124,13 @@ class _TaskListPageState extends State<TaskListPage> {
                               todoIndex.repeatOption
                                   ?
                                   //repeatならUPDATEして日付更新。
-                                  //falseならPOINT付与だけして、タスク削除
                                   updateAndRepeatTask(todoIndex)
+                                  //falseならPOINT付与だけして、タスク削除
                                   : updateAndDeleteTask(todoIndex);
                             } else if (direction ==
                                 DismissDirection.endToStart) {
                               //逆方向スワイプで、付与せず削除
-                              updateAndRepeatTask(todoIndex);
+                              deleteTask(todoIndex);
                             } else {
                               debugPrint("Nothing");
                             }
@@ -181,25 +181,28 @@ Future<void> updateAndRepeatTask(todoIndex) async {
 
   await docRef.update({
     "dueDate": dueDateAsTimeStamp,
-    
-
-
-
-
   });
 }
 
 Future<void> updateAndDeleteTask(todoIndex) async {
-  //ユーザー情報取得
-  // final snapshot =
-  //     await FirebaseFirestore.instance.collection('users').doc(todoIndex).get();
-  // final userName = snapshot.data()!['name'];
-  final docRef =
+  // ユーザー情報取得
+  final docRefUser =
+      FirebaseFirestore.instance.collection('users').doc(todoIndex);
+  final docRefTask =
       FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id);
-  final taskToUpDate = await docRef.get();
 
+  await docRefTask.delete();
 
-  await docRef.update({
-    "dueDate": ,
-  });
+  // await docRefUser.update({
+  //   "dueDate": ,
+  //   //得点変数をADDしてアップデート。
+  // });
+}
+
+Future<void> deleteTask(todoIndex) async {
+  // ユーザー情報取得
+  await FirebaseFirestore.instance
+      .collection('todoList')
+      .doc(todoIndex.id)
+      .delete();
 }

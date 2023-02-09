@@ -8,7 +8,6 @@ class EditTaskModel extends ChangeNotifier {
   String? taskNameForEditpage;
   bool repeatOption = true;
 
-
   EditTaskModel(this.todo) {
     taskNameController.text = todo.taskNameOfTodoClass;
   }
@@ -27,7 +26,6 @@ class EditTaskModel extends ChangeNotifier {
     todo.repeatOption = checkBox;
     notifyListeners();
   }
-  
 
   bool isUpdated() {
     return taskNameForEditpage != null || todo.dueDate != null;
@@ -42,7 +40,11 @@ class EditTaskModel extends ChangeNotifier {
       'title': taskNameForEditpage,
       'dueDate': todo.dueDate,
       'repeatOption': todo.repeatOption,
-      // 'taskStatus': ,
+      'intelligence': todo.intelligence,
+      'care': todo.care,
+      'power': todo.power,
+      'skill': todo.skill,
+      'patience': todo.patience,
     });
   }
 }

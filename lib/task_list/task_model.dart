@@ -78,8 +78,8 @@ class Todo {
     power = data['power'] as int;
     skill = data['skill'] as int;
     patience = data['patience'] as int;
-    thanks = data['thanks'] as int;
-    total = data['total'] as int;
+    // thanks = data['thanks'] as int;
+    // total = data['total'] as int;
     id = documentSnapshot.id;
   }
 }
