@@ -18,14 +18,18 @@ class EditTaskPage extends StatefulWidget {
 class _EditTaskPageState extends State<EditTaskPage> {
   // bool checkBox = true;
 
-  late EditTaskModel model;
-  @override //FUL作られたときに１回だけよばれる
+  late EditTaskModel model; 
+  //TODO:lateとは？　ここでなんで使ってるのか？
+  //地獄の解説　：　1.遅延初期化 2.宣言後に初期化されるnon-nullable変数の宣言
+  //…を、もう少し　噛み砕いた表現でいけないものだろうか？
+
+  @override //じゃあこのoverrideは、initStateについて、どういう意味を持たせている？
   void initState() {
     model = EditTaskModel(widget.todo);
     super.initState();
   }
 
-  @override
+  @override//TODO:buildメソッドなんだけどさ、単なるウィジェットじゃなくて、Statelessウィジェットだよ？いいね？
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: model,
@@ -81,7 +85,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                   const SizedBox(
                     height: 16,
                   ),
-
                   Row(
                     children: [
                       Checkbox(
@@ -227,7 +230,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       ),
                     ],
                   ),
-                  //kokomade column
                   const SizedBox(
                     height: 16,
                   ),

@@ -3,12 +3,13 @@ import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
-
 import '../edit_task/create_task.dart';
 import '../edit_task/edit_task.dart';
 import 'task_model.dart';
 
 class TaskListPage extends StatefulWidget {
+  // final Todo todo;
+  // const TaskListPage(this.todo, {Key? key}) : super(key: key);
   const TaskListPage({Key? key}) : super(key: key);
 
   @override
@@ -23,6 +24,7 @@ class _TaskListPageState extends State<TaskListPage> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      //
       home: ChangeNotifierProvider<TaskModel>(
         // create: (_) {
         //   final taskModel = TaskModel(); //インスタンス化して
@@ -163,24 +165,41 @@ class _TaskListPageState extends State<TaskListPage> {
       ),
     );
   }
+
+
+
+
 }
 
 Future<void> updateAndRepeatTask(todoIndex) async {
-  //ユーザー情報取得
-  // final snapshot =
-  //     await FirebaseFirestore.instance.collection('users').doc(todoIndex).get();
-  // final userName = snapshot.data()!['name'];
-  final docRef =
+  // ユーザー・タスク情報取得
+  final docRefUser =
+      FirebaseFirestore.instance.collection('users').doc(todoIndex);
+  final docRefTask =
       FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id);
-  final taskToUpDate = await docRef.get();
 
-  //_TypeError (type 'Timestamp' is not a subtype of type 'DateTime') =>とりあえずVARにした。FINALでも怒られない。違いは？ぐぐれ。
+  //タスク処理
+  final taskToUpDate = await docRefTask.get();
+  //TODO:_TypeError (type 'Timestamp' is not a subtype of type 'DateTime') =>とりあえずVARにした。FINALでも怒られない。違いは？ぐぐれ。
   final dueDate = taskToUpDate.data()!["dueDate"] as Timestamp;
   final dueDateUpdated = dueDate.toDate().add(const Duration(days: 1));
   final dueDateAsTimeStamp = Timestamp.fromDate(dueDateUpdated);
 
-  await docRef.update({
+  await docRefTask.update({
     "dueDate": dueDateAsTimeStamp,
+  });
+
+  //ユーザー処理
+  await docRefUser.update({
+   'intelligence' : intelligence,
+   'care' : care,  
+   'power' : power,  
+   'skill' : skill,  
+   'patience' : patience, 
+   'thanks' : thanks,
+   'total' : total, 
+
+
   });
 }
 

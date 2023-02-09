@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../counter_history/history_model.dart';
 import 'edit_history_model.dart';
 
@@ -11,7 +10,7 @@ class EditHistoryPage extends StatefulWidget {
 
   @override
   State<EditHistoryPage> createState() => _EditHistoryPageState();
-}
+}//TODO:なぜ、initstateここでは呼ばれていない？他との違いは？
 
 class _EditHistoryPageState extends State<EditHistoryPage> {
   DateTime _pickedDate = DateTime.now();
