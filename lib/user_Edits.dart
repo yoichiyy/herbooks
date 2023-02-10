@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/ui/pageview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
 class UsersEdits extends StatefulWidget {
   const UsersEdits({Key? key}) : super(key: key);
 
@@ -49,10 +50,19 @@ class _UsersEditsState extends State<UsersEdits> {
                     'id': user!.uid,
                     'name': _textContName.text,
                     'note': _textContProf.text,
-                    'vaild': true,
+                    'intelligence': 0,
+                    'care': 0,
+                    'power': 0,
+                    'skill': 0,
+                    'patience': 0,
+                    'thanks': 0,
+                    'valid': true,
                     'created_at': FieldValue.serverTimestamp(),
                     'modified_at': FieldValue.serverTimestamp()
-                  };
+                  };//TODO:ユーザー情報が毎回setされるということか？UPdateはされない？したければ、SETではなくUPDATEにすればよいだけだろう。
+                  //もしもset二回目やったら、新しいユーザーとして塗り替えられて、前のユーザー情報からは「切り離される」という仕組みだろうか？
+                  //ユーザーが保有しているポイントを、新しく更新をかけた場合に引き継ぐためには、ユーザー情報を取得して…」という一連のコードをかけば、それでOKかな？
+                  //コードを書いて実際試せば良い話ではあるが、特に【ユーザー情報とFIREBASE】の仕組みについて、そういうものなのだと、教えていただけると1分で完了案件
                   try {
                     var doc = FirebaseFirestore.instance
                         .collection('users')

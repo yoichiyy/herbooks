@@ -3,6 +3,7 @@ import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+
 import '../edit_task/create_task.dart';
 import '../edit_task/edit_task.dart';
 import 'task_model.dart';
@@ -126,13 +127,13 @@ class _TaskListPageState extends State<TaskListPage> {
                               todoIndex.repeatOption
                                   ?
                                   //repeatならUPDATEして日付更新。
-                                  updateAndRepeatTask(todoIndex)
+                                  updateAndRepeatTask(todoIndex.id)
                                   //falseならPOINT付与だけして、タスク削除
-                                  : updateAndDeleteTask(todoIndex);
+                                  : updateAndDeleteTask(todoIndex.id);
                             } else if (direction ==
                                 DismissDirection.endToStart) {
                               //逆方向スワイプで、付与せず削除
-                              deleteTask(todoIndex);
+                              deleteTask(todoIndex.id);
                             } else {
                               debugPrint("Nothing");
                             }
@@ -165,50 +166,71 @@ class _TaskListPageState extends State<TaskListPage> {
       ),
     );
   }
-
-
-
-
 }
 
-Future<void> updateAndRepeatTask(todoIndex) async {
-  // ユーザー・タスク情報取得
-  final docRefUser =
-      FirebaseFirestore.instance.collection('users').doc(todoIndex);
+Future<void> updateAndRepeatTask(docId) async {
+  //それぞれのdocRef取得
+  final docRefUser = FirebaseFirestore.instance.collection('users').doc(docId);
+  //TODO:スワイプすると出てきてしまう：_TypeError (type 'Todo' is not a subtype of type 'String?')
   final docRefTask =
-      FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id);
+      FirebaseFirestore.instance.collection('todoList').doc(docId.id);
 
-  //タスク処理
-  final taskToUpDate = await docRefTask.get();
+  //タスク情報取得
+  final taskInfo = await docRefTask.get();
   //TODO:_TypeError (type 'Timestamp' is not a subtype of type 'DateTime') =>とりあえずVARにした。FINALでも怒られない。違いは？ぐぐれ。
-  final dueDate = taskToUpDate.data()!["dueDate"] as Timestamp;
+  final dueDate = taskInfo.data()!["dueDate"] as Timestamp;
+
+  //タスク処理＆UP
   final dueDateUpdated = dueDate.toDate().add(const Duration(days: 1));
   final dueDateAsTimeStamp = Timestamp.fromDate(dueDateUpdated);
-
   await docRefTask.update({
     "dueDate": dueDateAsTimeStamp,
   });
 
-  //ユーザー処理
+  //加算前ユーザー情報取得
+  final userInfo = await docRefUser.get();
+  final intelligence = userInfo.data()!["intelligence"] as int;
+  final care = userInfo.data()!["care"] as int;
+  final power = userInfo.data()!["power"] as int;
+  final skill = userInfo.data()!["skill"] as int;
+  final patience = userInfo.data()!["patience"] as int;
+  final thanks = userInfo.data()!["thanks"] as int;
+  // final total = userInfo.data()!["total"] as int;
+
+  //PLUS用タスク情報取得
+  final intelligenceToAdd = userInfo.data()!["intelligence"] as int;
+  final careToAdd = userInfo.data()!["care"] as int;
+  final powerToAdd = userInfo.data()!["power"] as int;
+  final skillToAdd = userInfo.data()!["skill"] as int;
+  final patienceToAdd = userInfo.data()!["patience"] as int;
+  final thanksToAdd = userInfo.data()!["thanks"] as int;
+  // final totalToAdd = userInfo.data()!["total"] as int;
+
+  //PLUS処理＆UP
+  final intelligenceUpdated = intelligence + intelligenceToAdd;
+  final careUpdated = care + careToAdd;
+  final powerUpdated = power + powerToAdd;
+  final skillUpdated = skill + skillToAdd;
+  final patienceUpdated = patience + patienceToAdd;
+  final thanksUpdated = thanks + thanksToAdd;
+  // final totalUpdated = total + totalToAdd;
+
   await docRefUser.update({
-   'intelligence' : intelligence,
-   'care' : care,  
-   'power' : power,  
-   'skill' : skill,  
-   'patience' : patience, 
-   'thanks' : thanks,
-   'total' : total, 
-
-
+    'intelligence': intelligenceUpdated,
+    'care': careUpdated,
+    'power': powerUpdated,
+    'skill': skillUpdated,
+    'patience': patienceUpdated,
+    'thanks': thanksUpdated,
+    // 'total': totalUpdated,
   });
 }
 
-Future<void> updateAndDeleteTask(todoIndex) async {
+Future<void> updateAndDeleteTask(docId) async {
   // ユーザー情報取得
-  final docRefUser =
-      FirebaseFirestore.instance.collection('users').doc(todoIndex);
+  final docRefUser = FirebaseFirestore.instance.collection('users').doc(docId);
   final docRefTask =
-      FirebaseFirestore.instance.collection('todoList').doc(todoIndex.id);
+      FirebaseFirestore.instance.collection('todoList').doc(docId.id);
 
   await docRefTask.delete();
 
@@ -218,10 +240,7 @@ Future<void> updateAndDeleteTask(todoIndex) async {
   // });
 }
 
-Future<void> deleteTask(todoIndex) async {
+Future<void> deleteTask(docId) async {
   // ユーザー情報取得
-  await FirebaseFirestore.instance
-      .collection('todoList')
-      .doc(todoIndex.id)
-      .delete();
+  await FirebaseFirestore.instance.collection('todoList').doc(docId).delete();
 }
