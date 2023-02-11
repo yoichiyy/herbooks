@@ -95,12 +95,15 @@ class _TaskListPageState extends State<TaskListPage> {
                       shrinkWrap: true,
                       itemCount: todoList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final todoIndex = todoList[index];
+                        final todo = todoList[index];
                         return Dismissible(
                           // key: ObjectKey(todoIndex
                           //     .id),
-                          key:
-                              UniqueKey(), //ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
+//valueKEy。文字とか数字の値。これで特定できるんだったら十分。reorderbleとか。もともとそこにいたかどうかなど確かめる。
+//objectkey：値は一緒だけど。これを保持してるオブジェクトが違う場合。==
+
+                          key: ValueKey(todo
+                              .id), //ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
                           child: InkWell(
                             onTap: () async {
                               //ここでString title = ...とやっていることが理解できぬ。この
@@ -109,14 +112,14 @@ class _TaskListPageState extends State<TaskListPage> {
                               await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => EditTaskPage(todoIndex),
+                                  builder: (context) => EditTaskPage(todo),
                                 ),
                               );
                             },
                             child: Card(
                               child: ListTile(
                                 title: Text(
-                                    '${todoIndex.taskNameOfTodoClass}　${todoIndex.dueDate?.month}/${todoIndex.dueDate?.day}  ${todoIndex.dueDate?.hour}時'),
+                                    '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
                               ),
                             ),
                           ),
@@ -124,16 +127,16 @@ class _TaskListPageState extends State<TaskListPage> {
                               color: const Color.fromRGBO(244, 67, 54, 1)),
                           onDismissed: (direction) {
                             if (direction == DismissDirection.startToEnd) {
-                              todoIndex.repeatOption
+                              todo.repeatOption
                                   ?
                                   //repeatならUPDATEして日付更新。
-                                  updateAndRepeatTask(todoIndex.id)
+                                  updateAndRepeatTask(todo.id)
                                   //falseならPOINT付与だけして、タスク削除
-                                  : updateAndDeleteTask(todoIndex.id);
+                                  : updateAndDeleteTask(todo.id);
                             } else if (direction ==
                                 DismissDirection.endToStart) {
                               //逆方向スワイプで、付与せず削除
-                              deleteTask(todoIndex.id);
+                              deleteTask(todo.id);
                             } else {
                               debugPrint("Nothing");
                             }
@@ -168,12 +171,12 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 }
 
-Future<void> updateAndRepeatTask(docId) async {
+Future<void> updateAndRepeatTask(String docId) async {
   //それぞれのdocRef取得
   final docRefUser = FirebaseFirestore.instance.collection('users').doc(docId);
   //TODO:スワイプすると出てきてしまう：_TypeError (type 'Todo' is not a subtype of type 'String?')
   final docRefTask =
-      FirebaseFirestore.instance.collection('todoList').doc(docId.id);
+      FirebaseFirestore.instance.collection('todoList').doc(docId);
 
   //タスク情報取得
   final taskInfo = await docRefTask.get();

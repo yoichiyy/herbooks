@@ -11,8 +11,17 @@ class EditHistoryPage extends StatefulWidget {
   @override
   State<EditHistoryPage> createState() => _EditHistoryPageState();
 }//TODO:なぜ、initstateここでは呼ばれていない？他との違いは？
+//じつは呼ばれている。でも明示的に書くなら。
+
 
 class _EditHistoryPageState extends State<EditHistoryPage> {
+  @override//これ。
+  void initState() {
+    // TODO: implement initState
+    super.initState();//継承もとの親クラス。
+  }
+
+
   DateTime _pickedDate = DateTime.now();
   bool isDateChanged = false;
   @override

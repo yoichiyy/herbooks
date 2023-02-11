@@ -59,6 +59,10 @@ class _UsersEditsState extends State<UsersEdits> {
                     'valid': true,
                     'created_at': FieldValue.serverTimestamp(),
                     'modified_at': FieldValue.serverTimestamp()
+
+  //firebaseauth、ユーザーの情報を司っている。メアド（＝＞ユニーク）とパスワードとか。方法いろいろ提供してる。
+
+
                   };//TODO:ユーザー情報が毎回setされるということか？UPdateはされない？したければ、SETではなくUPDATEにすればよいだけだろう。
                   //もしもset二回目やったら、新しいユーザーとして塗り替えられて、前のユーザー情報からは「切り離される」という仕組みだろうか？
                   //ユーザーが保有しているポイントを、新しく更新をかけた場合に引き継ぐためには、ユーザー情報を取得して…」という一連のコードをかけば、それでOKかな？
@@ -67,7 +71,11 @@ class _UsersEditsState extends State<UsersEdits> {
                     var doc = FirebaseFirestore.instance
                         .collection('users')
                         .doc(user.uid);
-                    await doc.set(insertObj);
+                    await doc.set(insertObj, SetOptions(merge: true));
+                    //set:作成。もともとあったやつ、全部上書きされる。optionがある。merge trueにしたら。元あったフィールドはそのままになる。
+                    //または、if ...をつかう。
+
+
 
                     //新しいコード andremoveuntilが多分正しい
                     await Navigator.push(

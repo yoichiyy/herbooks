@@ -30,6 +30,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
   }
 
   @override //TODO:buildメソッドなんだけどさ、単なるウィジェットじゃなくて、Statelessウィジェットだよ？いいね？
+  //dart言語のはなし。クラスの継承。上に抽象的なクラス定義。そのメソッドを継承。
+  //のりものクラス（一番上）→これを継承して、無知でたたくとか。追加トッピング。
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: model,
