@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -97,18 +98,14 @@ class _TaskListPageState extends State<TaskListPage> {
                       itemBuilder: (BuildContext context, int index) {
                         final todo = todoList[index];
                         return Dismissible(
+                          key: UniqueKey(),
                           // key: ObjectKey(todoIndex
                           //     .id),
-//valueKEy。文字とか数字の値。これで特定できるんだったら十分。reorderbleとか。もともとそこにいたかどうかなど確かめる。
-//objectkey：値は一緒だけど。これを保持してるオブジェクトが違う場合。==
 
-                          key: ValueKey(todo
-                              .id), //ValueKeyとの違いはまだよくわかっとらん。ObjectKeyの方がすごそう。並べ替えできそう。でも今は並べ替えなんてしてないので、なんでここで６１３がつかったのかは謎
+                          // key: ValueKey(todo
+                          //     .id),
                           child: InkWell(
                             onTap: () async {
-                              //ここでString title = ...とやっていることが理解できぬ。この
-                              //title変数を、次のeditTaskページに渡しているようにも見えない。
-                              // final String? title =
                               await Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -132,7 +129,8 @@ class _TaskListPageState extends State<TaskListPage> {
                                   //repeatならUPDATEして日付更新。
                                   updateAndRepeatTask(todo.id)
                                   //falseならPOINT付与だけして、タスク削除
-                                  : updateAndDeleteTask(todo.id);
+                                  : updateAndRepeatTask(todo.id);
+                              deleteTask(todo.id);
                             } else if (direction ==
                                 DismissDirection.endToStart) {
                               //逆方向スワイプで、付与せず削除
@@ -172,15 +170,17 @@ class _TaskListPageState extends State<TaskListPage> {
 }
 
 Future<void> updateAndRepeatTask(String docId) async {
-  //それぞれのdocRef取得
-  final docRefUser = FirebaseFirestore.instance.collection('users').doc(docId);
-  //TODO:スワイプすると出てきてしまう：_TypeError (type 'Todo' is not a subtype of type 'String?')
+  //それぞれのdocRef取得（docRef VER）
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+  final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+  final userInfo = await docRefUser.get();
+
+  //タスクの方スタート
   final docRefTask =
       FirebaseFirestore.instance.collection('todoList').doc(docId);
 
   //タスク情報取得
   final taskInfo = await docRefTask.get();
-  //TODO:_TypeError (type 'Timestamp' is not a subtype of type 'DateTime') =>とりあえずVARにした。FINALでも怒られない。違いは？ぐぐれ。
   final dueDate = taskInfo.data()!["dueDate"] as Timestamp;
 
   //タスク処理＆UP
@@ -191,22 +191,21 @@ Future<void> updateAndRepeatTask(String docId) async {
   });
 
   //加算前ユーザー情報取得
-  final userInfo = await docRefUser.get();
   final intelligence = userInfo.data()!["intelligence"] as int;
   final care = userInfo.data()!["care"] as int;
   final power = userInfo.data()!["power"] as int;
   final skill = userInfo.data()!["skill"] as int;
   final patience = userInfo.data()!["patience"] as int;
-  final thanks = userInfo.data()!["thanks"] as int;
+  // final thanks = userInfo.data()!["thanks"] as int;
   // final total = userInfo.data()!["total"] as int;
 
   //PLUS用タスク情報取得
-  final intelligenceToAdd = userInfo.data()!["intelligence"] as int;
-  final careToAdd = userInfo.data()!["care"] as int;
-  final powerToAdd = userInfo.data()!["power"] as int;
-  final skillToAdd = userInfo.data()!["skill"] as int;
-  final patienceToAdd = userInfo.data()!["patience"] as int;
-  final thanksToAdd = userInfo.data()!["thanks"] as int;
+  final intelligenceToAdd = taskInfo.data()!["intelligence"] as int;
+  final careToAdd = taskInfo.data()!["care"] as int;
+  final powerToAdd = taskInfo.data()!["power"] as int;
+  final skillToAdd = taskInfo.data()!["skill"] as int;
+  final patienceToAdd = taskInfo.data()!["patience"] as int;
+  // final thanksToAdd = taskInfo.data()!["thanks"] as int;
   // final totalToAdd = userInfo.data()!["total"] as int;
 
   //PLUS処理＆UP
@@ -215,7 +214,7 @@ Future<void> updateAndRepeatTask(String docId) async {
   final powerUpdated = power + powerToAdd;
   final skillUpdated = skill + skillToAdd;
   final patienceUpdated = patience + patienceToAdd;
-  final thanksUpdated = thanks + thanksToAdd;
+  // final thanksUpdated = thanks + thanksToAdd;
   // final totalUpdated = total + totalToAdd;
 
   await docRefUser.update({
@@ -224,23 +223,9 @@ Future<void> updateAndRepeatTask(String docId) async {
     'power': powerUpdated,
     'skill': skillUpdated,
     'patience': patienceUpdated,
-    'thanks': thanksUpdated,
+    // 'thanks': thanksUpdated,
     // 'total': totalUpdated,
   });
-}
-
-Future<void> updateAndDeleteTask(docId) async {
-  // ユーザー情報取得
-  final docRefUser = FirebaseFirestore.instance.collection('users').doc(docId);
-  final docRefTask =
-      FirebaseFirestore.instance.collection('todoList').doc(docId.id);
-
-  await docRefTask.delete();
-
-  // await docRefUser.update({
-  //   "dueDate": ,
-  //   //得点変数をADDしてアップデート。
-  // });
 }
 
 Future<void> deleteTask(docId) async {

@@ -25,25 +25,6 @@ class TaskModel extends ChangeNotifier {
     });
   }
 
-// //dismissible更新中
-//   Future<void> updateTaskStatusAndPlaySound(int status, audioCache) async {
-//     await FirebaseFirestore.instance
-//         .collection("tasks")
-//         .doc(this.taskID)
-//         .update(
-//       {"task_status": status},
-//     );
-
-//     //undo機能
-//     // taskStatusUndoButton.value = this.taskID;
-
-//     if (status == 1) {
-//       //勝利により、POINT GET
-//       // await updateUserPoints(this.taskPoints);
-//     }
-
-//     newTaskInserted.value = await this.makeRepeat();
-//   }
 
 }
 
