@@ -19,6 +19,22 @@ class TaskListPage extends StatefulWidget {
 }
 
 class _TaskListPageState extends State<TaskListPage> {
+// TODO:こんぶんさんADVICEそっくりやろうとしたが、どうやら話が違うようだ。
+// そもそも、もう少しinitStateとかで何をしているのか、
+// 仕組みをよく理解していれば、ここも自分でできたかもしれない。
+// ので、もう一度ここをお聞きしたい。
+// それを通じて、今回の話を理解したい。
+
+//[VERBOSE-2:dart_vm_initializer.cc(41)] Unhandled Exception: A TaskModel was used after being disposed.
+//Once you have called dispose() on a TaskModel, it can no longer be used.
+
+// late TaskModel model;
+// @override
+//   void initState() {
+//     model = TaskModel(widget.taskmodel);
+//     super.initState();
+//   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -99,6 +115,9 @@ class _TaskListPageState extends State<TaskListPage> {
                         final todo = todoList[index];
                         return Dismissible(
                           key: UniqueKey(),
+                          //TODO:dismissed Dismissible widget is still part of the tree.
+                          //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
+                          //やはり、ValueKeyでは、エラーになってしまう。できれば仕組みを理解したい。
                           // key: ObjectKey(todoIndex
                           //     .id),
 
@@ -121,19 +140,31 @@ class _TaskListPageState extends State<TaskListPage> {
                             ),
                           ),
                           background: Container(
-                              color: const Color.fromRGBO(244, 67, 54, 1)),
+                            alignment: Alignment.centerLeft,
+                            color: Colors.green[200],
+                            child: const Padding(
+                                padding:
+                                    EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
+                                child:
+                                    Icon(Icons.tag_faces, color: Colors.white)),
+                          ),
+                          secondaryBackground: Container(
+                            alignment: Alignment.centerRight,
+                            color: const Color.fromRGBO(244, 67, 54, 1),
+                            child: const Padding(
+                              padding:
+                                  EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                              child: Icon(Icons.clear, color: Colors.white),
+                            ),
+                          ),
                           onDismissed: (direction) {
                             if (direction == DismissDirection.startToEnd) {
                               todo.repeatOption
-                                  ?
-                                  //repeatならUPDATEして日付更新。
-                                  updateAndRepeatTask(todo.id)
-                                  //falseならPOINT付与だけして、タスク削除
-                                  : updateAndRepeatTask(todo.id);
-                              deleteTask(todo.id);
+                                  ? updateAndRepeatTask(todo.id)
+                                  : updateAndDeleteTask(todo.id);
+                              //TODO:update...のあとに、続いてdeleteをやりたかったのだが、この書き方であっているのか。順番を守ってもらうためにはどうしたら良かったのか？
                             } else if (direction ==
                                 DismissDirection.endToStart) {
-                              //逆方向スワイプで、付与せず削除
                               deleteTask(todo.id);
                             } else {
                               debugPrint("Nothing");
@@ -141,9 +172,6 @@ class _TaskListPageState extends State<TaskListPage> {
                             setState(
                               () {},
                             );
-                            //TODO:dismissed Dismissible widget is still part of the tree.
-                            //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
-                            //99行目を変更して解決はしたのだが、仕組みを理解しておらぬ。ObjectKey, ValueKey。。。
                           },
                         );
                       },
@@ -226,6 +254,56 @@ Future<void> updateAndRepeatTask(String docId) async {
     // 'thanks': thanksUpdated,
     // 'total': totalUpdated,
   });
+}
+
+Future<void> updateAndDeleteTask(String docId) async {
+  //それぞれのdocRef取得（docRef VER）
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+  final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+  final userInfo = await docRefUser.get();
+
+  //タスクの方スタート
+  final docRefTask =
+      FirebaseFirestore.instance.collection('todoList').doc(docId);
+
+  final taskInfo = await docRefTask.get();
+
+  //加算前ユーザー情報取得
+  final intelligence = userInfo.data()!["intelligence"] as int;
+  final care = userInfo.data()!["care"] as int;
+  final power = userInfo.data()!["power"] as int;
+  final skill = userInfo.data()!["skill"] as int;
+  final patience = userInfo.data()!["patience"] as int;
+  // final thanks = userInfo.data()!["thanks"] as int;
+  // final total = userInfo.data()!["total"] as int;
+
+  //PLUS用タスク情報取得
+  final intelligenceToAdd = taskInfo.data()!["intelligence"] as int;
+  final careToAdd = taskInfo.data()!["care"] as int;
+  final powerToAdd = taskInfo.data()!["power"] as int;
+  final skillToAdd = taskInfo.data()!["skill"] as int;
+  final patienceToAdd = taskInfo.data()!["patience"] as int;
+  // final thanksToAdd = taskInfo.data()!["thanks"] as int;
+  // final totalToAdd = userInfo.data()!["total"] as int;
+
+  //PLUS処理＆UP
+  final intelligenceUpdated = intelligence + intelligenceToAdd;
+  final careUpdated = care + careToAdd;
+  final powerUpdated = power + powerToAdd;
+  final skillUpdated = skill + skillToAdd;
+  final patienceUpdated = patience + patienceToAdd;
+  // final thanksUpdated = thanks + thanksToAdd;
+  // final totalUpdated = total + totalToAdd;
+
+  await docRefUser.update({
+    'intelligence': intelligenceUpdated,
+    'care': careUpdated,
+    'power': powerUpdated,
+    'skill': skillUpdated,
+    'patience': patienceUpdated,
+  });
+
+  await docRefTask.delete();
 }
 
 Future<void> deleteTask(docId) async {

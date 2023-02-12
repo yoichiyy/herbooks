@@ -29,7 +29,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     super.initState();
   }
 
-  @override //TODO:buildメソッドなんだけどさ、単なるウィジェットじゃなくて、Statelessウィジェットだよ？いいね？
+  @override 
   //dart言語のはなし。クラスの継承。上に抽象的なクラス定義。そのメソッドを継承。
   //のりものクラス（一番上）→これを継承して、無知でたたくとか。追加トッピング。
   Widget build(BuildContext context) {

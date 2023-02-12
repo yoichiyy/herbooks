@@ -32,7 +32,7 @@ class Todo {
   String taskNameOfTodoClass = "";
   String id = "";
   bool repeatOption = true;
-  DateTime? dueDate; //TODO:これだけ nullableになっている意味？
+  DateTime? dueDate; 
   int intelligence = 0;
   int care = 0;
   int power = 0;
