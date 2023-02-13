@@ -9,16 +9,18 @@ import '../task_edit/create_task.dart';
 import '../task_edit/edit_task.dart';
 import 'task_model.dart';
 
-class TaskListPage extends StatefulWidget {
+class TaskListPage extends StatelessWidget {
+  const TaskListPage({super.key});
+
   // final Todo todo;
   // const TaskListPage(this.todo, {Key? key}) : super(key: key);
-  const TaskListPage({Key? key}) : super(key: key);
+//   const TaskListPage({Key? key}) : super(key: key);
 
-  @override
-  State<TaskListPage> createState() => _TaskListPageState();
-}
+//   @override
+//   State<TaskListPage> createState() => _TaskListPageState();
+// }
 
-class _TaskListPageState extends State<TaskListPage> {
+// class _TaskListPageState extends State<TaskListPage> {
 // TODO:こんぶんさんADVICEそっくりやろうとしたが、どうやら話が違うようだ。
 // そもそも、もう少しinitStateとかで何をしているのか、
 // 仕組みをよく理解していれば、ここも自分でできたかもしれない。
@@ -35,7 +37,6 @@ class _TaskListPageState extends State<TaskListPage> {
 //     super.initState();
 //   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,7 +52,9 @@ class _TaskListPageState extends State<TaskListPage> {
         //   return taskModel; //かえす。（createなので）
         // },
         //こういうことしていいのか？TODO:
-        create: (_) => TaskModel()..getTodoListRealtime()..getUserGraph(),
+        create: (_) => TaskModel()
+          ..getTodoListRealtime()
+          ..getUserGraph(),
         child: Scaffold(
           bottomNavigationBar: const BottomBar(currentIndex: 0),
           appBar: AppBar(
@@ -69,7 +72,7 @@ class _TaskListPageState extends State<TaskListPage> {
                     child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 100,
                       lineHeight: 14.0,
-                      percent: ,
+                      percent: model.paThanks! / 100,
                       center: const Text(
                         "Pa_Graph",
                         style: TextStyle(fontSize: 12.0),
@@ -89,7 +92,7 @@ class _TaskListPageState extends State<TaskListPage> {
                       lineHeight: 20.0,
                       leading: const Icon(Icons.pregnant_woman_rounded),
                       // trailing: const Text("右"),
-                      percent: 0.2,
+                      percent: model.maThanks! / 100,
                       center: const Text("Ma_Graph"),
                       barRadius: const Radius.circular(16),
                       progressColor: Colors.pink[100],
@@ -157,9 +160,9 @@ class _TaskListPageState extends State<TaskListPage> {
                             } else {
                               debugPrint("Nothing");
                             }
-                            setState(
-                              () {},
-                            );
+                            // setState(
+                            //   () {},
+                            // );
                           },
                         );
                       },

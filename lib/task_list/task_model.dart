@@ -26,28 +26,31 @@ class TaskModel extends ChangeNotifier {
     });
   }
 
-  Future<Map> getUserGraph() async {
-    // TODO: 一つのドキュメントを　クエリを使って取得する方法？
-    final _store = FirebaseFirestore.instance;
-    var PaData = await _store
-        .collection('users')
-        .where('name', isEqualTo: "ぱぱぱ")
-        .get();
-    
-    final popo = PaData.data()!["thanks"];
+  int? paThanks;
+  int? maThanks;
 
+  Future<void> getUserGraph() async {
+    // TODO: 一つのドキュメントを　クエリを使って取得する方法？
+    // final _store = FirebaseFirestore.instance;
+    // var PaData = await _store
+    //     .collection('users')
+    //     .where('name', isEqualTo: "ぱぱぱ")
+    //     .get();
+
+    // final popo = PaData.data()!["thanks"] ;
 
     //サードトライ
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
     final userInfo = await docRefUser.get();
-    final paThanks = userInfo.data()!["thanks"];
+    paThanks = userInfo.data()!["thanks"];
 
     final docRefUserSecond = await FirebaseFirestore.instance
         .collection('users')
         .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
         .get();
-    final maThanks = docRefUserSecond.data()!["thanks"];
+    maThanks = docRefUserSecond.data()![
+        "thanks"]; //ローカス変数を新規でつく・・・らないので、finalやめろ。このクラスで使ったやつを、使うから。共有するから。になる。
 
     //TODO:　これは…どうやって、task_listに変数を渡せばよかったか…。
     notifyListeners();
