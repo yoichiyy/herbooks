@@ -309,6 +309,32 @@ class _TaskCardState extends State<TaskCard> {
                           label: "$patience",
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Text("thanks"),
+                        ),
+                        Slider(
+                          onChanged: (value) {
+                            setState(() {
+                              thanks = value.toInt();
+                            });
+                          },
+                          value: thanks.toDouble(),
+                          max: 5,
+                          min: 0,
+                          activeColor: Colors.orange,
+                          inactiveColor: Colors.white,
+                          divisions: 5,
+                          label: "$thanks",
+                        ),
+                      ],
                     )
                   ], //children
                 ),
@@ -350,6 +376,7 @@ class _TaskCardState extends State<TaskCard> {
                     'skill': skill,
                     'patience': patience,
                     'repeatOption': repeatOption,
+                    'thanks': thanks,
                   });
                   _controller.clear();
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

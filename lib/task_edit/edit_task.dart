@@ -29,7 +29,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     super.initState();
   }
 
-  @override 
+  @override
   //dart言語のはなし。クラスの継承。上に抽象的なクラス定義。そのメソッドを継承。
   //のりものクラス（一番上）→これを継承して、無知でたたくとか。追加トッピング。
   Widget build(BuildContext context) {
@@ -136,7 +136,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     children: [
                       const Padding(
                         padding: EdgeInsets.all(4.0),
-                        child: Text("♡"),
+                        child: Text("心"),
                       ),
                       Slider(
                         onChanged: (value) {
@@ -229,6 +229,32 @@ class _EditTaskPageState extends State<EditTaskPage> {
                         inactiveColor: Colors.white,
                         divisions: 5,
                         label: "$model.todo.patience",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text("♡"),
+                      ),
+                      Slider(
+                        onChanged: (value) {
+                          setState(() {
+                            model.todo.thanks = value.toInt();
+                          });
+                        },
+                        value: model.todo.thanks.toDouble(),
+                        max: 5,
+                        min: 0,
+                        activeColor: Colors.pink[200],
+                        inactiveColor: Colors.white,
+                        divisions: 5,
+                        label: "$model.todo.thanks",
                       ),
                     ],
                   ),

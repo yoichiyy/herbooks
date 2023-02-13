@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '../edit_task/create_task.dart';
-import '../edit_task/edit_task.dart';
+import '../task_edit/create_task.dart';
+import '../task_edit/edit_task.dart';
 import 'task_model.dart';
 
 class TaskListPage extends StatefulWidget {
@@ -35,6 +35,7 @@ class _TaskListPageState extends State<TaskListPage> {
 //     super.initState();
 //   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,7 +50,8 @@ class _TaskListPageState extends State<TaskListPage> {
         //   taskModel.getTodoListRealtime(); //したものを、メソッドよんで、
         //   return taskModel; //かえす。（createなので）
         // },
-        create: (_) => TaskModel()..getTodoListRealtime(),
+        //こういうことしていいのか？TODO:
+        create: (_) => TaskModel()..getTodoListRealtime()..getUserGraph(),
         child: Scaffold(
           bottomNavigationBar: const BottomBar(currentIndex: 0),
           appBar: AppBar(
@@ -67,15 +69,15 @@ class _TaskListPageState extends State<TaskListPage> {
                     child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 100,
                       lineHeight: 14.0,
-                      percent: 0.5,
+                      percent: ,
                       center: const Text(
-                        "50.0%",
+                        "Pa_Graph",
                         style: TextStyle(fontSize: 12.0),
                       ),
-                      leading: const Icon(Icons.watch),
+                      leading: const Icon(Icons.rowing_outlined),
                       barRadius: const Radius.circular(16),
                       backgroundColor: Colors.grey,
-                      progressColor: Colors.blue,
+                      progressColor: Colors.blue[200],
                     ),
                   ),
                   Padding(
@@ -85,26 +87,12 @@ class _TaskListPageState extends State<TaskListPage> {
                       animation: true,
                       animationDuration: 1000,
                       lineHeight: 20.0,
-                      leading: const Icon(Icons.local_hospital_rounded),
+                      leading: const Icon(Icons.pregnant_woman_rounded),
                       // trailing: const Text("右"),
                       percent: 0.2,
-                      center: const Text("20.0%"),
+                      center: const Text("Ma_Graph"),
                       barRadius: const Radius.circular(16),
-                      progressColor: Colors.red,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width - 100,
-                      animation: true,
-                      lineHeight: 20.0,
-                      animationDuration: 2000,
-                      leading: const Icon(Icons.sunny),
-                      percent: 0.9,
-                      center: const Text("90.0%"),
-                      barRadius: const Radius.circular(16),
-                      progressColor: Colors.greenAccent,
+                      progressColor: Colors.pink[100],
                     ),
                   ),
                   Flexible(
@@ -224,7 +212,7 @@ Future<void> updateAndRepeatTask(String docId) async {
   final power = userInfo.data()!["power"] as int;
   final skill = userInfo.data()!["skill"] as int;
   final patience = userInfo.data()!["patience"] as int;
-  // final thanks = userInfo.data()!["thanks"] as int;
+  final thanks = userInfo.data()!["thanks"] as int;
   // final total = userInfo.data()!["total"] as int;
 
   //PLUS用タスク情報取得
@@ -233,7 +221,7 @@ Future<void> updateAndRepeatTask(String docId) async {
   final powerToAdd = taskInfo.data()!["power"] as int;
   final skillToAdd = taskInfo.data()!["skill"] as int;
   final patienceToAdd = taskInfo.data()!["patience"] as int;
-  // final thanksToAdd = taskInfo.data()!["thanks"] as int;
+  final thanksToAdd = taskInfo.data()!["thanks"] as int;
   // final totalToAdd = userInfo.data()!["total"] as int;
 
   //PLUS処理＆UP
@@ -242,7 +230,7 @@ Future<void> updateAndRepeatTask(String docId) async {
   final powerUpdated = power + powerToAdd;
   final skillUpdated = skill + skillToAdd;
   final patienceUpdated = patience + patienceToAdd;
-  // final thanksUpdated = thanks + thanksToAdd;
+  final thanksUpdated = thanks + thanksToAdd;
   // final totalUpdated = total + totalToAdd;
 
   await docRefUser.update({
@@ -251,7 +239,7 @@ Future<void> updateAndRepeatTask(String docId) async {
     'power': powerUpdated,
     'skill': skillUpdated,
     'patience': patienceUpdated,
-    // 'thanks': thanksUpdated,
+    'thanks': thanksUpdated,
     // 'total': totalUpdated,
   });
 }
@@ -274,7 +262,7 @@ Future<void> updateAndDeleteTask(String docId) async {
   final power = userInfo.data()!["power"] as int;
   final skill = userInfo.data()!["skill"] as int;
   final patience = userInfo.data()!["patience"] as int;
-  // final thanks = userInfo.data()!["thanks"] as int;
+  final thanks = userInfo.data()!["thanks"] as int;
   // final total = userInfo.data()!["total"] as int;
 
   //PLUS用タスク情報取得
@@ -283,7 +271,7 @@ Future<void> updateAndDeleteTask(String docId) async {
   final powerToAdd = taskInfo.data()!["power"] as int;
   final skillToAdd = taskInfo.data()!["skill"] as int;
   final patienceToAdd = taskInfo.data()!["patience"] as int;
-  // final thanksToAdd = taskInfo.data()!["thanks"] as int;
+  final thanksToAdd = taskInfo.data()!["thanks"] as int;
   // final totalToAdd = userInfo.data()!["total"] as int;
 
   //PLUS処理＆UP
@@ -292,7 +280,7 @@ Future<void> updateAndDeleteTask(String docId) async {
   final powerUpdated = power + powerToAdd;
   final skillUpdated = skill + skillToAdd;
   final patienceUpdated = patience + patienceToAdd;
-  // final thanksUpdated = thanks + thanksToAdd;
+  final thanksUpdated = thanks + thanksToAdd;
   // final totalUpdated = total + totalToAdd;
 
   await docRefUser.update({
@@ -301,6 +289,7 @@ Future<void> updateAndDeleteTask(String docId) async {
     'power': powerUpdated,
     'skill': skillUpdated,
     'patience': patienceUpdated,
+    'thanks': thanksUpdated,
   });
 
   await docRefTask.delete();

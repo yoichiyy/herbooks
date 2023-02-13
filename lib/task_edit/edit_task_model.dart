@@ -45,6 +45,7 @@ class EditTaskModel extends ChangeNotifier {
       'power': todo.power,
       'skill': todo.skill,
       'patience': todo.patience,
+      'thanks': todo.thanks,
     });
   }
 }

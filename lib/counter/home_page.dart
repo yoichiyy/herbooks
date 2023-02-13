@@ -582,7 +582,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             //void call back　または　function
                                             _confettiEventHuhu();
                                             // _controller.play(); // ココ！
-                                            model.bookNumRegister(1, "huhu");
+                                            model.thankRegister();
                                           },
                                         ),
                                       ),

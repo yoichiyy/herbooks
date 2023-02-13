@@ -208,6 +208,13 @@ class NumCountModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> thankRegister() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+    await docRefUser.update({"thanks": FieldValue.increment(1)});
+    notifyListeners();
+  }
+
   Future<void> bookNumRegister(booknum, musume) async {
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -245,7 +252,6 @@ class NumCountModel extends ChangeNotifier {
               },
           },
         ); //then
-
 
     // ここから、monthlyへの登録
     await FirebaseFirestore.instance

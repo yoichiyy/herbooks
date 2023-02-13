@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TaskModel extends ChangeNotifier {
@@ -25,14 +26,41 @@ class TaskModel extends ChangeNotifier {
     });
   }
 
+  Future<Map> getUserGraph() async {
+    // TODO: 一つのドキュメントを　クエリを使って取得する方法？
+    final _store = FirebaseFirestore.instance;
+    var PaData = await _store
+        .collection('users')
+        .where('name', isEqualTo: "ぱぱぱ")
+        .get();
+    
+    final popo = PaData.data()!["thanks"];
 
+
+    //サードトライ
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+    final userInfo = await docRefUser.get();
+    final paThanks = userInfo.data()!["thanks"];
+
+    final docRefUserSecond = await FirebaseFirestore.instance
+        .collection('users')
+        .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
+        .get();
+    final maThanks = docRefUserSecond.data()!["thanks"];
+
+    //TODO:　これは…どうやって、task_listに変数を渡せばよかったか…。
+    notifyListeners();
+    //2つの変数を返すのは、MAPを使うんだったよな。
+    // return {"paThanks": paThanks, "maThanks": maThanks};
+  }
 }
 
 class Todo {
   String taskNameOfTodoClass = "";
   String id = "";
   bool repeatOption = true;
-  DateTime? dueDate; 
+  DateTime? dueDate;
   int intelligence = 0;
   int care = 0;
   int power = 0;
@@ -59,7 +87,7 @@ class Todo {
     power = data['power'] as int;
     skill = data['skill'] as int;
     patience = data['patience'] as int;
-    // thanks = data['thanks'] as int;
+    thanks = data['thanks'] as int;
     // total = data['total'] as int;
     id = documentSnapshot.id;
   }
