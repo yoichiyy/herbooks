@@ -72,7 +72,7 @@ class TaskListPage extends StatelessWidget {
                     child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 100,
                       lineHeight: 14.0,
-                      percent: model.paThanks! / 100,
+                      percent: model.paThanks! / 100, //TODO:ここで、値が出るまで待ってもらう方法？
                       center: const Text(
                         "Pa_Graph",
                         style: TextStyle(fontSize: 12.0),
