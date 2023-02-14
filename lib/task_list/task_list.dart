@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
+import 'package:counter/user/user_Edits.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -51,7 +52,6 @@ class TaskListPage extends StatelessWidget {
         //   taskModel.getTodoListRealtime(); //したものを、メソッドよんで、
         //   return taskModel; //かえす。（createなので）
         // },
-        //こういうことしていいのか？TODO:
         create: (_) => TaskModel()
           ..getTodoListRealtime()
           ..getUserGraph(),
@@ -59,6 +59,23 @@ class TaskListPage extends StatelessWidget {
           bottomNavigationBar: const BottomBar(currentIndex: 0),
           appBar: AppBar(
             title: const Text('やること'),
+            actions: [
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 10.0),
+                  child: OutlinedButton(
+                    child: const Text('USER',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UsersEdits(),
+                        ),
+                      );
+                    },
+                  ))
+            ],
           ),
           body: Consumer<TaskModel>(
             builder: (context, model, child) {
@@ -71,11 +88,11 @@ class TaskListPage extends StatelessWidget {
                     padding: const EdgeInsets.all(15.0),
                     child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 100,
-                      lineHeight: 14.0,
-                      percent: model.paThanks! / 100, //TODO:ここで、値が出るまで待ってもらう方法？
-                      center: const Text(
-                        "Pa_Graph",
-                        style: TextStyle(fontSize: 12.0),
+                      lineHeight: 20.0,
+                      percent: model.paThanks / 100,
+                      center: Text(
+                        "Pa:${model.paThanks.toString()}",
+                        style: const TextStyle(fontSize: 12.0),
                       ),
                       leading: const Icon(Icons.rowing_outlined),
                       barRadius: const Radius.circular(16),
@@ -83,6 +100,8 @@ class TaskListPage extends StatelessWidget {
                       progressColor: Colors.blue[200],
                     ),
                   ),
+                  Text(
+                      "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: LinearPercentIndicator(
@@ -92,12 +111,16 @@ class TaskListPage extends StatelessWidget {
                       lineHeight: 20.0,
                       leading: const Icon(Icons.pregnant_woman_rounded),
                       // trailing: const Text("右"),
-                      percent: model.maThanks! / 100,
-                      center: const Text("Ma_Graph"),
+                      percent: model.maThanks / 100,
+                      center: Text(
+                        "Ma:${model.maThanks.toString()}",
+                      ),
                       barRadius: const Radius.circular(16),
                       progressColor: Colors.pink[100],
                     ),
                   ),
+                  Text(
+                      "知：${model.maIntelligence.toString()} 心：${model.maCare.toString()} 力：${model.maPower.toString()} 技：${model.maSkill.toString()} 忍：${model.maPatience.toString()}"),
                   Flexible(
                     child: ListView.builder(
                       shrinkWrap: true,

@@ -26,36 +26,44 @@ class TaskModel extends ChangeNotifier {
     });
   }
 
-  int? paThanks;
-  int? maThanks;
+  int paThanks = 0;
+  int paIntelligence = 0;
+  int paCare = 0;
+  int paPower = 0;
+  int paSkill = 0;
+  int paPatience = 0;
+
+  int maThanks = 0;
+  int maIntelligence = 0;
+  int maCare = 0;
+  int maPower = 0;
+  int maSkill = 0;
+  int maPatience = 0;
 
   Future<void> getUserGraph() async {
-    // TODO: 一つのドキュメントを　クエリを使って取得する方法？
-    // final _store = FirebaseFirestore.instance;
-    // var PaData = await _store
-    //     .collection('users')
-    //     .where('name', isEqualTo: "ぱぱぱ")
-    //     .get();
-
-    // final popo = PaData.data()!["thanks"] ;
-
-    //サードトライ
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
-    final userInfo = await docRefUser.get();
-    paThanks = userInfo.data()!["thanks"];
+    final paUserInfo = await docRefUser.get();
+    paThanks = paUserInfo.data()!["thanks"];
+    paIntelligence = paUserInfo.data()!['intelligence'] as int;
+    paCare = paUserInfo.data()!['care'] as int;
+    paPower = paUserInfo.data()!['power'] as int;
+    paSkill = paUserInfo.data()!['skill'] as int;
+    paPatience = paUserInfo.data()!['patience'] as int;
 
-    final docRefUserSecond = await FirebaseFirestore.instance
+    final maUserInfo = await FirebaseFirestore.instance
         .collection('users')
         .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
         .get();
-    maThanks = docRefUserSecond.data()![
+    maThanks = maUserInfo.data()![
         "thanks"]; //ローカス変数を新規でつく・・・らないので、finalやめろ。このクラスで使ったやつを、使うから。共有するから。になる。
+    maIntelligence = maUserInfo.data()!['intelligence'] as int;
+    maCare = maUserInfo.data()!['care'] as int;
+    maPower = maUserInfo.data()!['power'] as int;
+    maSkill = maUserInfo.data()!['skill'] as int;
+    maPatience = maUserInfo.data()!['patience'] as int;
 
-    //TODO:　これは…どうやって、task_listに変数を渡せばよかったか…。
     notifyListeners();
-    //2つの変数を返すのは、MAPを使うんだったよな。
-    // return {"paThanks": paThanks, "maThanks": maThanks};
   }
 }
 
