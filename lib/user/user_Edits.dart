@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/ui/pageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class UsersEdits extends StatefulWidget {
   const UsersEdits({Key? key}) : super(key: key);
@@ -73,8 +74,6 @@ class _UsersEditsState extends State<UsersEdits> {
                     //set:作成。もともとあったやつ、全部上書きされる。optionがある。merge trueにしたら。元あったフィールドはそのままになる。
                     //または、if ...をつかう。
 
-
-
                     //新しいコード andremoveuntilが多分正しい
                     await Navigator.push(
                       context,
@@ -87,89 +86,84 @@ class _UsersEditsState extends State<UsersEdits> {
                     print(e);
                   }
                 },
-              ))
+              ),)
         ],
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-          child: SingleChildScrollView(
-              reverse: true,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: bottomSpace),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 10.0),
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              bottom:
-                                  BorderSide(width: 1.0, color: Colors.grey))),
-                      child: Row(
-                        // 名前
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 40.0),
-                            child: Text('ユーザーID'),
-                          ),
-                          Flexible(
-                            child: TextField(
-                              autofocus: false,
-                              controller: _textContName,
-                              maxLines: 1,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                              // onChanged: (String? val) {
-                              //   if (val != null && val != '') {
-                              //     _editTextName = val;
-                              //   }
-                              // },
-                            ),
-                          )
-                        ],
+        child: SingleChildScrollView(
+          reverse: true,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: bottomSpace),
+            //Column
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 10.0),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(width: 1.0, color: Colors.grey))),
+                  child: Row(
+                    // 名前
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.0, bottom: 10.0, right: 40.0),
+                        child: Text('ユーザーID'),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 15.0, horizontal: 10.0),
-                      decoration: const BoxDecoration(
-                          border: Border(
-                              bottom:
-                                  BorderSide(width: 1.0, color: Colors.grey))),
-                      child: Row(
-                        // 自己紹介
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 40.0),
-                            child: Text('自己紹介（必須ではない）'),
+                      Flexible(
+                        child: TextField(
+                          autofocus: false,
+                          controller: _textContName,
+                          maxLines: 1,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
                           ),
-                          Flexible(
-                            child: TextField(
-                              autofocus: false,
-                              controller: _textContProf,
-                              maxLines: 2,
-                              minLines: 1,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                              // onChanged: (String? val) {
-                              //   if (val != null && val != '') {
-                              //     _editTextProf = val;
-                              //   }
-                              // },
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ))),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 10.0),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(width: 1.0, color: Colors.grey))),
+                  child: Row(
+                    // 自己紹介
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.0, bottom: 10.0, right: 40.0),
+                        child: Text('自己紹介（必須ではない）'),
+                      ),
+                      Flexible(
+                        child: TextField(
+                          autofocus: false,
+                          controller: _textContProf,
+                          maxLines: 2,
+                          minLines: 1,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+
+                
+              ],//children
+
+            ),//column
+          ),
+        ),
+      ),
     );
   }
 }

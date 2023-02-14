@@ -1,6 +1,6 @@
 import 'package:counter/counter_history/history_model_month.dart';
 import 'package:counter/counter_history/history_page_haru.dart';
-import 'package:counter/user_Edits.dart';
+import 'package:counter/user/user_Edits.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
