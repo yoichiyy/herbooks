@@ -175,7 +175,8 @@ class TaskListPage extends StatelessWidget {
                             if (direction == DismissDirection.startToEnd) {
                               todo.repeatOption
                                   ? updateAndRepeatTask(todo.id)
-                                  : updateAndDeleteTask(todo.id);
+                                  : updateAndDeleteTask(
+                                      todo.id); //..deleteTask(todo.id);
                               //TODO:update...のあとに、続いてdeleteをやりたかったのだが、この書き方であっているのか。順番を守ってもらうためにはどうしたら良かったのか？
                             } else if (direction ==
                                 DismissDirection.endToStart) {

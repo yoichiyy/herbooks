@@ -17,6 +17,7 @@ class NumCountModel extends ChangeNotifier {
   final uid = FirebaseAuth.instance.currentUser!.uid;
   final kakeiController = TextEditingController();
   final kakeiNoteController = TextEditingController();
+  final thankNoteController = TextEditingController();
   String graphStartDay = "";
   String graphGoalDay = ""; //変更されうるよ、という状態
   double remainPeriodPercent = 0;
@@ -209,9 +210,31 @@ class NumCountModel extends ChangeNotifier {
   }
 
   Future<void> thankRegister() async {
+    String uidCounterpart = "";
+    String? note = thankNoteController.text;
+    String time = DateTime.now().toString();
+    String name = "";
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+    if (uid == "NI7hic069bZSF6k2ZDOykEkJyRG2") {
+      uidCounterpart = "5B9YxMMw8VXjevtDLmXjTm0y2sq1";
+      name = "ぱぱ";
+    } else {
+      uidCounterpart = "NI7hic069bZSF6k2ZDOykEkJyRG2";
+      name = "まま";
+    }
+
+    final docRefUser =
+        FirebaseFirestore.instance.collection('users').doc(uidCounterpart);
     await docRefUser.update({"thanks": FieldValue.increment(1)});
+
+    final docRefUserForThankNote =
+        FirebaseFirestore.instance.collection('thanks').doc(time);
+    await docRefUserForThankNote.set({
+      "note": note,
+      "time": time,
+      "to": name,
+    });
+
     notifyListeners();
   }
 

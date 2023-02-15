@@ -3,19 +3,22 @@ import 'package:counter/counter_history/month_haru.dart';
 import 'package:counter/counter_history/month_yume.dart';
 import 'package:flutter/material.dart';
 
-class HomeCardWidgetBook extends StatelessWidget {
-  HomeCardWidgetBook(
+class HomeCardThank extends StatelessWidget {
+  HomeCardThank(
       {Key? key,
       required this.color,
       required this.title,
       required this.musume,
-      required this.buttonWidget})
+      required this.buttonWidget,
+      required this.child})
       : super(key: key);
 
   final Color color;
   final String title;
   String musume;
   final Widget buttonWidget;
+  final Widget child;
+
   final dailyCount =
       "${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, "0")}${DateTime.now().day.toString().padLeft(2, "0")}";
 
@@ -71,6 +74,9 @@ class HomeCardWidgetBook extends StatelessWidget {
               ),
               const SizedBox(
                 height: 12,
+              ),
+              Flexible(
+                child: Center(child: child),
               ),
               Flexible(
                 child: Center(child: buttonWidget),

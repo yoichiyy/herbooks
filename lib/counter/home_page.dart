@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
-import 'package:counter/counter/home_card_book%20.dart';
+import 'package:counter/counter/home_card_book.dart';
 import 'package:counter/counter/home_card_kakei.dart';
+import 'package:counter/counter/home_card_thank.dart';
 import 'package:counter/counter/num_count.dart';
 import 'package:counter/ui/api.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
@@ -550,11 +551,31 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
 
-                      //ゆめ
-                      HomeCardWidgetBook(
+                      //THANK
+                      HomeCardThank(
                         title: "ありがとうTODAY: ",
                         musume: "huhu",
                         color: Colors.yellow[100]!,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    controller: model.thankNoteController,
+                                    decoration: const InputDecoration(
+                                        hintText: "thank for what"),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                    height: 10,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                         buttonWidget: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -583,6 +604,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                             _confettiEventHuhu();
                                             // _controller.play(); // ココ！
                                             model.thankRegister();
+                                            setState(() {
+                                              model.thankNoteController.clear();
+                                            });
                                           },
                                         ),
                                       ),
@@ -618,17 +642,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: 10,
                                     height: 20,
                                   ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '$_tempCounterHuhu',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4,
-                                      ),
-                                    ],
+                                  // Column(
+                                  //   mainAxisAlignment: MainAxisAlignment.start,
+                                  //   children: [
+                                  Text(
+                                    '$_tempCounterHuhu',
+                                    style:
+                                        Theme.of(context).textTheme.headline4,
                                   ),
+                                  //   ],
+                                  // ),
                                   const SizedBox(
                                     width: 10,
                                     height: 20,
