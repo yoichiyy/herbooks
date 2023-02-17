@@ -4,6 +4,23 @@ import 'package:flutter/material.dart';
 
 class TaskModel extends ChangeNotifier {
   List<Todo> todoListFromModel = []; //日本語訳？：「リストです。Todoクラスで定義した３つの変数を使います。」
+  List<Thank> thankListFromModel = [];
+
+  void getThankList() {
+    final querySnapshots =
+        FirebaseFirestore.instance.collection('thanks').snapshots();
+
+    querySnapshots.listen((querySnapshot) {
+      final queryDocumentSnapshots = querySnapshot.docs;
+
+      final thankList =
+          queryDocumentSnapshots.map((doc) => Thank(doc)).toList();
+      thankList.sort((a, b) => a.time!.compareTo(b.time!));
+      thankListFromModel = thankList;
+
+      notifyListeners();
+    });
+  }
 
   void getTodoListRealtime() {
     final querySnapshots =
@@ -101,5 +118,19 @@ class Todo {
     thanks = data['thanks'] as int;
     // total = data['total'] as int;
     id = documentSnapshot.id;
+  }
+}
+
+class Thank {
+  DateTime? time;
+  String to = "";
+  String note = "";
+
+  Thank(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
+    final data = documentSnapshot.data() as Map<String, dynamic>;
+
+    time = (data['time'] as Timestamp?)?.toDate();
+    to = data["to"] as String;
+    note = data["note"] as String;
   }
 }

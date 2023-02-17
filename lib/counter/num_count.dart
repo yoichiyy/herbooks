@@ -211,8 +211,8 @@ class NumCountModel extends ChangeNotifier {
 
   Future<void> thankRegister() async {
     String uidCounterpart = "";
-    String? note = thankNoteController.text;
-    String time = DateTime.now().toString();
+    final note = thankNoteController.text;
+    final time = DateTime.now();
     String name = "";
     final uid = FirebaseAuth.instance.currentUser!.uid;
     if (uid == "NI7hic069bZSF6k2ZDOykEkJyRG2") {
@@ -228,7 +228,7 @@ class NumCountModel extends ChangeNotifier {
     await docRefUser.update({"thanks": FieldValue.increment(1)});
 
     final docRefUserForThankNote =
-        FirebaseFirestore.instance.collection('thanks').doc(time);
+        FirebaseFirestore.instance.collection('thanks').doc(time.toString());
     await docRefUserForThankNote.set({
       "note": note,
       "time": time,

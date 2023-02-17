@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counter/task_list/thank_list.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:counter/user/user_Edits.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,13 +65,13 @@ class TaskListPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 10.0),
                   child: OutlinedButton(
-                    child: const Text('USER',
+                    child: const Text('THANKS',
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const UsersEdits(),
+                          builder: (context) => const ThankList(),
                         ),
                       );
                     },
