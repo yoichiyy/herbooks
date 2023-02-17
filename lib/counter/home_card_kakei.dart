@@ -46,7 +46,7 @@ class HomeCardWidgetKakei extends StatelessWidget {
     );
   }
 }
-
+//TODO:android端末で、URLにアクセスできないと言われてしまう。
 void _openUrl() async {
   final url = Uri.parse('https://tinyurl.com/2d5c6cvc');
   if (await canLaunchUrl(url)) {

@@ -101,8 +101,11 @@ class TaskListPage extends StatelessWidget {
                     ),
                   ),
                   Text(
+                    
                       "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
                   Padding(
+                    
+
                     padding: const EdgeInsets.all(15.0),
                     child: LinearPercentIndicator(
                       width: MediaQuery.of(context).size.width - 100,
