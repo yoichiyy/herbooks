@@ -67,7 +67,7 @@ class TaskListPage extends StatelessWidget {
                     child: const Text('THANKS',
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
-                      await Navigator.push(
+                      await Navigator.push<void>(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const ThankList(),
@@ -143,7 +143,7 @@ class TaskListPage extends StatelessWidget {
                                 //     .id),
                                 child: InkWell(
                                   onTap: () async {
-                                    await Navigator.push(
+                                    await Navigator.push<void>(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>

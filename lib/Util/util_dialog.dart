@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class UtilDialog {
   void okDialog(BuildContext context, String title, String content) {
-    showDialog(
+    showDialog<CupertinoAlertDialog>(
         context: context,
         builder: (BuildContext context) {
           return Stack(
