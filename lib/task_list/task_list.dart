@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/task_list/thank_list.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
-import 'package:counter/user/user_Edits.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -82,122 +81,123 @@ class TaskListPage extends StatelessWidget {
             builder: (context, model, child) {
               final todoList = model.todoListFromModel;
 
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width - 100,
-                      lineHeight: 20.0,
-                      percent: model.paThanks / 100,
-                      center: Text(
-                        "Pa:${model.paThanks.toString()}",
-                        style: const TextStyle(fontSize: 12.0),
-                      ),
-                      leading: const Icon(Icons.rowing_outlined),
-                      barRadius: const Radius.circular(16),
-                      backgroundColor: Colors.grey,
-                      progressColor: Colors.blue[200],
-                    ),
-                  ),
-                  Text(
-                    
-                      "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
-                  Padding(
-                    
+              return model.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: LinearPercentIndicator(
+                            width: MediaQuery.of(context).size.width - 100,
+                            lineHeight: 20.0,
+                            percent: model.paThanks / 100,
+                            center: Text(
+                              "Pa:${model.paThanks.toString()}",
+                              style: const TextStyle(fontSize: 12.0),
+                            ),
+                            leading: const Icon(Icons.rowing_outlined),
+                            barRadius: const Radius.circular(16),
+                            backgroundColor: Colors.grey,
+                            progressColor: Colors.blue[200],
+                          ),
+                        ),
+                        Text(
+                            "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: LinearPercentIndicator(
+                            width: MediaQuery.of(context).size.width - 100,
+                            animation: true,
+                            animationDuration: 1000,
+                            lineHeight: 20.0,
+                            leading: const Icon(Icons.pregnant_woman_rounded),
+                            // trailing: const Text("右"),
+                            percent: model.maThanks / 100,
+                            center: Text(
+                              "Ma:${model.maThanks.toString()}",
+                            ),
+                            barRadius: const Radius.circular(16),
+                            progressColor: Colors.pink[100],
+                          ),
+                        ),
+                        Text(
+                            "知：${model.maIntelligence.toString()} 心：${model.maCare.toString()} 力：${model.maPower.toString()} 技：${model.maSkill.toString()} 忍：${model.maPatience.toString()}"),
+                        Flexible(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: todoList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final todo = todoList[index];
+                              return Dismissible(
+                                key: UniqueKey(),
+                                //TODO:dismissed Dismissible widget is still part of the tree.
+                                //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
+                                //やはり、ValueKeyでは、エラーになってしまう。できれば仕組みを理解したい。
+                                // key: ObjectKey(todoIndex
+                                //     .id),
 
-                    padding: const EdgeInsets.all(15.0),
-                    child: LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width - 100,
-                      animation: true,
-                      animationDuration: 1000,
-                      lineHeight: 20.0,
-                      leading: const Icon(Icons.pregnant_woman_rounded),
-                      // trailing: const Text("右"),
-                      percent: model.maThanks / 100,
-                      center: Text(
-                        "Ma:${model.maThanks.toString()}",
-                      ),
-                      barRadius: const Radius.circular(16),
-                      progressColor: Colors.pink[100],
-                    ),
-                  ),
-                  Text(
-                      "知：${model.maIntelligence.toString()} 心：${model.maCare.toString()} 力：${model.maPower.toString()} 技：${model.maSkill.toString()} 忍：${model.maPatience.toString()}"),
-                  Flexible(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: todoList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final todo = todoList[index];
-                        return Dismissible(
-                          key: UniqueKey(),
-                          //TODO:dismissed Dismissible widget is still part of the tree.
-                          //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
-                          //やはり、ValueKeyでは、エラーになってしまう。できれば仕組みを理解したい。
-                          // key: ObjectKey(todoIndex
-                          //     .id),
-
-                          // key: ValueKey(todo
-                          //     .id),
-                          child: InkWell(
-                            onTap: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditTaskPage(todo),
+                                // key: ValueKey(todo
+                                //     .id),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditTaskPage(todo),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                    child: ListTile(
+                                      title: Text(
+                                          '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
+                                    ),
+                                  ),
                                 ),
+                                background: Container(
+                                  alignment: Alignment.centerLeft,
+                                  color: Colors.green[200],
+                                  child: const Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          20.0, 0.0, 0.0, 0.0),
+                                      child: Icon(Icons.tag_faces,
+                                          color: Colors.white)),
+                                ),
+                                secondaryBackground: Container(
+                                  alignment: Alignment.centerRight,
+                                  color: const Color.fromRGBO(244, 67, 54, 1),
+                                  child: const Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        10.0, 0.0, 20.0, 0.0),
+                                    child:
+                                        Icon(Icons.clear, color: Colors.white),
+                                  ),
+                                ),
+                                onDismissed: (direction) async {
+                                  if (direction ==
+                                      DismissDirection.startToEnd) {
+                                    if (todo.repeatOption) {
+                                      await updateAndRepeatTask(todo.id);
+                                    } else {
+                                      await updateAndDeleteTask(todo.id);
+                                    }
+                                  } else if (direction ==
+                                      DismissDirection.endToStart) {
+                                    await deleteTask(todo.id);
+                                  } else {
+                                    debugPrint("Nothing");
+                                  }
+                                },
                               );
                             },
-                            child: Card(
-                              child: ListTile(
-                                title: Text(
-                                    '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
-                              ),
-                            ),
                           ),
-                          background: Container(
-                            alignment: Alignment.centerLeft,
-                            color: Colors.green[200],
-                            child: const Padding(
-                                padding:
-                                    EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-                                child:
-                                    Icon(Icons.tag_faces, color: Colors.white)),
-                          ),
-                          secondaryBackground: Container(
-                            alignment: Alignment.centerRight,
-                            color: const Color.fromRGBO(244, 67, 54, 1),
-                            child: const Padding(
-                              padding:
-                                  EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                              child: Icon(Icons.clear, color: Colors.white),
-                            ),
-                          ),
-                          onDismissed: (direction) {
-                            if (direction == DismissDirection.startToEnd) {
-                              todo.repeatOption
-                                  ? updateAndRepeatTask(todo.id)
-                                  : updateAndDeleteTask(
-                                      todo.id); //..deleteTask(todo.id);
-                              //TODO:update...のあとに、続いてdeleteをやりたかったのだが、この書き方であっているのか。順番を守ってもらうためにはどうしたら良かったのか？
-                            } else if (direction ==
-                                DismissDirection.endToStart) {
-                              deleteTask(todo.id);
-                            } else {
-                              debugPrint("Nothing");
-                            }
-                            // setState(
-                            //   () {},
-                            // );
-                          },
-                        );
-                      },
-                    ),
-                  )
-                ],
-              );
+                        )
+                      ],
+                    );
             },
           ),
           // ここから
@@ -205,7 +205,7 @@ class TaskListPage extends StatelessWidget {
             heroTag: "hero2",
             child: const Icon(Icons.egg_alt),
             onPressed: () {
-              Navigator.push(context,
+              Navigator.push<void>(context,
                   MaterialPageRoute(builder: (context) => const TaskCard()));
             },
           ),
@@ -326,7 +326,7 @@ Future<void> updateAndDeleteTask(String docId) async {
   await docRefTask.delete();
 }
 
-Future<void> deleteTask(docId) async {
+Future<void> deleteTask(String docId) async {
   // ユーザー情報取得
   await FirebaseFirestore.instance.collection('todoList').doc(docId).delete();
 }

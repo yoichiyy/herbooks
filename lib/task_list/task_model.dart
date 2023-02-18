@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class TaskModel extends ChangeNotifier {
   List<Todo> todoListFromModel = []; //日本語訳？：「リストです。Todoクラスで定義した３つの変数を使います。」
   List<Thank> thankListFromModel = [];
+  bool isLoading = true; //本当はプライベートにして、getter setter.ぽくわける。
 
   void getThankList() {
     final querySnapshots =
@@ -57,30 +58,45 @@ class TaskModel extends ChangeNotifier {
   int maSkill = 0;
   int maPatience = 0;
 
-  Future<void> getUserGraph() async {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
-    final paUserInfo = await docRefUser.get();
-    paThanks = paUserInfo.data()!["thanks"];
-    paIntelligence = paUserInfo.data()!['intelligence'] as int;
-    paCare = paUserInfo.data()!['care'] as int;
-    paPower = paUserInfo.data()!['power'] as int;
-    paSkill = paUserInfo.data()!['skill'] as int;
-    paPatience = paUserInfo.data()!['patience'] as int;
-
-    final maUserInfo = await FirebaseFirestore.instance
-        .collection('users')
-        .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
-        .get();
-    maThanks = maUserInfo.data()![
-        "thanks"]; //ローカス変数を新規でつく・・・らないので、finalやめろ。このクラスで使ったやつを、使うから。共有するから。になる。
-    maIntelligence = maUserInfo.data()!['intelligence'] as int;
-    maCare = maUserInfo.data()!['care'] as int;
-    maPower = maUserInfo.data()!['power'] as int;
-    maSkill = maUserInfo.data()!['skill'] as int;
-    maPatience = maUserInfo.data()!['patience'] as int;
-
+  void _startLoading() {
+    isLoading = true;
     notifyListeners();
+  }
+
+  void _endLoading() {
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getUserGraph() async {
+    _startLoading();
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final docRefUser =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+      final paUserInfo = await docRefUser.get();
+      paThanks = paUserInfo.data()!["thanks"];
+      paIntelligence = paUserInfo.data()!['intelligence'] as int;
+      paCare = paUserInfo.data()!['care'] as int;
+      paPower = paUserInfo.data()!['power'] as int;
+      paSkill = paUserInfo.data()!['skill'] as int;
+      paPatience = paUserInfo.data()!['patience'] as int;
+
+      final maUserInfo = await FirebaseFirestore.instance
+          .collection('users')
+          .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
+          .get();
+      maThanks = maUserInfo.data()![
+          "thanks"]; //ローカス変数を新規でつく・・・らないので、finalやめろ。このクラスで使ったやつを、使うから。共有するから。になる。
+      maIntelligence = maUserInfo.data()!['intelligence'] as int;
+      maCare = maUserInfo.data()!['care'] as int;
+      maPower = maUserInfo.data()!['power'] as int;
+      maSkill = maUserInfo.data()!['skill'] as int;
+      maPatience = maUserInfo.data()!['patience'] as int;
+    } finally {
+      //失敗しても、絶対これは呼ばれる。
+      _endLoading();
+    }
   }
 }
 
