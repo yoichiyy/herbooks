@@ -153,6 +153,9 @@ class TaskListPage extends StatelessWidget {
                                   },
                                   child: Card(
                                     child: ListTile(
+                                      tileColor: todo.user == "まま"
+                                          ? Colors.red[50]
+                                          : Colors.blue[50],
                                       title: Text(
                                           '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
                                     ),

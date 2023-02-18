@@ -37,10 +37,13 @@ class ThankList extends StatelessWidget {
                         return InkWell(
                           child: Card(
                             child: ListTile(
+                              tileColor: thanks.to == "ぱぱ"
+                                  ? Colors.red[50]
+                                  : Colors.blue[50],
                               title: Text(thanks.note),
                               subtitle: Text('to:${thanks.to}'),
                               trailing: Text(
-                                  '${thanks.time?.month}/${thanks.time?.day}'),
+                                  '${thanks.time?.month}/${thanks.time?.day}@${thanks.time?.hour}'),
                             ),
                           ),
                         );

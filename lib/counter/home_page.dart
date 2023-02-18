@@ -597,6 +597,32 @@ class _MyHomePageState extends State<MyHomePage> {
                                           heroTag: "hero5",
                                           child: const Icon(Icons.savings),
                                           onPressed: () {
+                                            if (model.thankNoteController.text
+                                                    .isEmpty ||
+                                                category.isEmpty) {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: const Text("Oops"),
+                                                    content: const Text(
+                                                        "thank for WHAT?"),
+                                                    actions: [
+                                                      TextButton(
+                                                        child: const Text('OK'),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                              return;
+                                            }
+
                                             incrementTempCounterHuhu();
                                             HapticFeedback
                                                 .mediumImpact(); // ココ！

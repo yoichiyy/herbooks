@@ -16,7 +16,7 @@ class TaskModel extends ChangeNotifier {
 
       final thankList =
           queryDocumentSnapshots.map((doc) => Thank(doc)).toList();
-      thankList.sort((a, b) => a.time!.compareTo(b.time!));
+      thankList.sort((a, b) => b.time!.compareTo(a.time!));
       thankListFromModel = thankList;
 
       notifyListeners();
@@ -112,6 +112,7 @@ class Todo {
   int patience = 0;
   int thanks = 0;
   int total = 0;
+  String user = "";
 
   Todo(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     // MEMO
@@ -132,6 +133,7 @@ class Todo {
     skill = data['skill'] as int;
     patience = data['patience'] as int;
     thanks = data['thanks'] as int;
+    user = data['user'] as String;
     // total = data['total'] as int;
     id = documentSnapshot.id;
   }
