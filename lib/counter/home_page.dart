@@ -598,14 +598,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                           child: const Icon(Icons.savings),
                                           onPressed: () {
                                             if (model.thankNoteController.text
-<<<<<<< HEAD
                                                 .isEmpty) {
                                               showDialog(
-=======
-                                                    .isEmpty ||
-                                                category.isEmpty) {
-                                              showDialog<AlertDialog>(
->>>>>>> 0dc2f60d1a332bf981960cd0a4a7feab002ac589
                                                 context: context,
                                                 barrierDismissible: true,
                                                 builder: (context) {
