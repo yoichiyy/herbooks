@@ -34,7 +34,7 @@ class MonthlyLogYume extends StatelessWidget {
                       title: Text("${historyData[index].count.toString()}冊"),
                       trailing: const Icon(Icons.more_vert),
                       onTap: () async {
-                        await Navigator.push(
+                        await Navigator.push<void>(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
@@ -54,7 +54,7 @@ class MonthlyLogYume extends StatelessWidget {
             heroTag: "hero3",
             child: const Icon(Icons.person_add_alt),
             onPressed: () {
-              Navigator.push(context,
+              Navigator.push<void>(context,
                   MaterialPageRoute(builder: (context) => const UsersEdits()));
             },
           ),

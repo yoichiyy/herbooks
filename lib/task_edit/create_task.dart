@@ -42,7 +42,8 @@ class _TaskCardState extends State<TaskCard> {
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              Navigator.pushReplacement(
+              //TODO:これであってるのか！？
+              Navigator.pushReplacement<MaterialPageRoute, TaskListPage>(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const TaskListPage(),
@@ -345,7 +346,7 @@ class _TaskCardState extends State<TaskCard> {
                 color: Colors.lightBlue.shade900,
                 onPressed: () async {
                   if (_controller.text.isEmpty) {
-                    showDialog(
+                    showDialog<AlertDialog>(
                       context: context, //FQ：contextは何の情報を渡している？一度デバッグで見られるかな？
                       builder: (context) {
                         return AlertDialog(
@@ -367,6 +368,7 @@ class _TaskCardState extends State<TaskCard> {
                   await FirebaseFirestore.instance
                       .collection('todoList') // コレクションID指定
                       .doc() // ドキュメントID自動生成
+                      //これは、どう書いたらよいのか。TODO:
                       .set({
                     'title': _controller.value.text, //stringを送る
                     'dueDate': _pickedDate, //本当はタイムスタンプ　「サーバー　タイムスタンプ」検索

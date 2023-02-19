@@ -7,7 +7,7 @@ class HistoryModel extends ChangeNotifier {
   // List<History> userList = [];
 
 
-  Future<void> fetchHistory(month) async {
+  Future<void> fetchHistory(String month) async {
     final snapShotHaru = await FirebaseFirestore.instance
         .collection('newCount')
         .where('musume', isEqualTo: "haru")

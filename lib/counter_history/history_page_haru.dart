@@ -35,7 +35,7 @@ class HistoryPageHaru extends StatelessWidget {
                       subtitle: Text(historyData[index].user.toString()),
                       trailing: const Icon(Icons.more_vert),
                       onTap: () async {
-                        await Navigator.push(
+                        await Navigator.push<void>(
                           context,
                           MaterialPageRoute(
                             builder: (context) => EditHistoryPage(historyIndex),
@@ -54,7 +54,7 @@ class HistoryPageHaru extends StatelessWidget {
             heroTag: "hero2",
             child: const Icon(Icons.person_add_alt),
             onPressed: () {
-              Navigator.push(context,
+              Navigator.push<void>(context,
                   MaterialPageRoute(builder: (context) => const UsersEdits()));
             },
           ),

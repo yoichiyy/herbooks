@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
   // const LoginPage({Key? key}) : super(key: key);
-    const LoginPage({super.key});//2.18以降
+  const LoginPage({super.key}); //2.18以降
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -68,9 +68,10 @@ class _LoginPageState extends State<LoginPage> {
 
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      await Navigator.of(context).pushReplacement(
+                      await Navigator.of(context)
+                          .pushReplacement<MaterialPageRoute, PageViewClass>(
                         MaterialPageRoute(builder: (context) {
-                          return PageViewClass();
+                          return const PageViewClass();
                         }),
                       );
                     } catch (e) {

@@ -56,7 +56,7 @@ class HomeCardWidgetBook extends StatelessWidget {
                       // style: Theme.of(context).textTheme.titleLarge,
                     ),
                     onPressed: () async {
-                      await Navigator.push(
+                      await Navigator.push<void>(
                         context,
                         MaterialPageRoute(
                           builder: (context) {

@@ -42,7 +42,7 @@ class _GoalSetting extends State<GoalSetting> {
             leading: IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.pushReplacement<MaterialPageRoute,MyHomePage>(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const MyHomePage(),
@@ -206,7 +206,7 @@ class _GoalSetting extends State<GoalSetting> {
                               await doc.update(insertObj);
 
                               //新しいコード andremoveuntilが多分正しい
-                              await Navigator.push(
+                              await Navigator.push<void>(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const MyHomePage(),

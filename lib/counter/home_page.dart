@@ -157,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child:
                         const Text('設定', style: TextStyle(color: Colors.white)),
                     onPressed: () async {
-                      await Navigator.push(
+                      await Navigator.push<void>(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const GoalSetting(),
@@ -290,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 FocusScope.of(context).unfocus();
                                 if (model.kakeiController.text.isEmpty ||
                                     category.isEmpty) {
-                                  showDialog(
+                                  showDialog<AlertDialog>(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
@@ -598,8 +598,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                           child: const Icon(Icons.savings),
                                           onPressed: () {
                                             if (model.thankNoteController.text
+<<<<<<< HEAD
                                                 .isEmpty) {
                                               showDialog(
+=======
+                                                    .isEmpty ||
+                                                category.isEmpty) {
+                                              showDialog<AlertDialog>(
+>>>>>>> 0dc2f60d1a332bf981960cd0a4a7feab002ac589
                                                 context: context,
                                                 barrierDismissible: true,
                                                 builder: (context) {

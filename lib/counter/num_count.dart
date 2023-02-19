@@ -238,10 +238,10 @@ class NumCountModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> bookNumRegister(booknum, musume) async {
+  Future<void> bookNumRegister(int booknum, String musume) async {
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    final userName = snapshot.data()!['name'];
+    final userName = snapshot.data()!['name'] as String;
 
     //
     await FirebaseFirestore.instance

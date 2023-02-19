@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class APIS {
-  static Future<void> addToSheet(amount, category, note) async {
+  static Future<void> addToSheet(
+      String amount, String category, String note) async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final dateString =
         "${DateTime.now().month}/${DateTime.now().day}(${DateTime.now().japaneseWeekday})";
 
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    final user = snapshot.data()!['name'];
+    final user = snapshot.data()!['name'] as String;
 
     //WEBデプロイしたURL
     String _url =
