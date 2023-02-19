@@ -146,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
       home: ChangeNotifierProvider<NumCountModel>(
         create: (_) => NumCountModel()..getGraphData(),
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: const Text("Ehon"),
             actions: [
@@ -598,8 +598,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           child: const Icon(Icons.savings),
                                           onPressed: () {
                                             if (model.thankNoteController.text
-                                                    .isEmpty ||
-                                                category.isEmpty) {
+                                                .isEmpty) {
                                               showDialog(
                                                 context: context,
                                                 barrierDismissible: true,
