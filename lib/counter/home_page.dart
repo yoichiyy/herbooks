@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:confetti/confetti.dart';
+import 'package:counter/battle/battle_page.dart';
 import 'package:counter/counter/home_card_book.dart';
 import 'package:counter/counter/home_card_kakei.dart';
 import 'package:counter/counter/home_card_thank.dart';
@@ -150,6 +151,21 @@ class _MyHomePageState extends State<MyHomePage> {
           appBar: AppBar(
             title: const Text("Ehon"),
             actions: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 10.0),
+                child: OutlinedButton(
+                  child: Image.asset('images/character_cthulhu_shoggoth.png'),
+                  onPressed: () async {
+                    await Navigator.push<void>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BattlePage(),
+                      ),
+                    );
+                  },
+                ),
+              ),
               Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 15.0, horizontal: 10.0),

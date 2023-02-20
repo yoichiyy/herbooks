@@ -61,20 +61,21 @@ class TaskListPage extends StatelessWidget {
             title: const Text('やること'),
             actions: [
               Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 15.0, horizontal: 10.0),
-                  child: OutlinedButton(
-                    child: const Text('THANKS',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      await Navigator.push<void>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ThankList(),
-                        ),
-                      );
-                    },
-                  ))
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 10.0),
+                child: OutlinedButton(
+                  child: const Text('THANKS',
+                      style: TextStyle(color: Colors.white)),
+                  onPressed: () async {
+                    await Navigator.push<void>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ThankList(),
+                      ),
+                    );
+                  },
+                ),
+              )
             ],
           ),
           body: Consumer<TaskModel>(
