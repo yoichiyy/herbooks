@@ -615,7 +615,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           onPressed: () {
                                             if (model.thankNoteController.text
                                                 .isEmpty) {
-                                              showDialog(
+                                              showDialog<AlertDialog>(
                                                 context: context,
                                                 barrierDismissible: true,
                                                 builder: (context) {

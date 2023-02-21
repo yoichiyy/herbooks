@@ -187,17 +187,17 @@ class NumCountModel extends ChangeNotifier {
   }
 
   //登録メソッド家計→絵本
-  Future<void> kakeiRegister(category) async {
+  Future<void> kakeiRegister(String category) async {
     int? amount = int.parse(kakeiController.text);
     String? note = kakeiNoteController.text;
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    final userName = snapshot.data()!['name'];
+    String userName = snapshot.data()!['name'];
 
     await FirebaseFirestore.instance
         .collection('kakei')
         .doc(dailyCount + userName)
-        .set({
+        .set(<String, dynamic>{
       'amount': amount,
       "date": dailyCount,
       "month": monthlyCount,
@@ -229,7 +229,7 @@ class NumCountModel extends ChangeNotifier {
 
     final docRefUserForThankNote =
         FirebaseFirestore.instance.collection('thanks').doc(time.toString());
-    await docRefUserForThankNote.set({
+    await docRefUserForThankNote.set(<String, dynamic>{
       "note": note,
       "time": time,
       "to": name,
@@ -263,7 +263,7 @@ class NumCountModel extends ChangeNotifier {
                     .collection('newCount')
                     .doc(dailyCount + uid + musume)
                     .set(
-                  {
+                  <String, dynamic>{
                     "date": dailyCount,
                     "month": monthlyCount,
                     "count": booknum,
@@ -296,7 +296,7 @@ class NumCountModel extends ChangeNotifier {
                     .collection('monthHistory')
                     .doc(monthlyCount + musume)
                     .set(
-                  {
+                  <String, dynamic>{
                     "monthId": monthlyCount,
                     "count": booknum,
                     "month": monthString,

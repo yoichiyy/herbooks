@@ -369,7 +369,8 @@ class _TaskCardState extends State<TaskCard> {
                       .collection('todoList') // コレクションID指定
                       .doc() // ドキュメントID自動生成
                       //これは、どう書いたらよいのか。TODO:
-                      .set({
+
+                      .set(<String, dynamic>{
                     'title': _controller.value.text, //stringを送る
                     'dueDate': _pickedDate, //本当はタイムスタンプ　「サーバー　タイムスタンプ」検索
                     'intelligence': intelligence,

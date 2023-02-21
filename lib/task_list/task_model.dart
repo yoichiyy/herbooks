@@ -114,6 +114,11 @@ class Todo {
   int total = 0;
   String user = "";
 
+  factory Todo.fromfirestore(
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
+    return Todo(documentSnapshot);
+  }
+  
   Todo(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     // MEMO
     //https://flutter.ctrnost.com/basic/interactive/form/datapicker/

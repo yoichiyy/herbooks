@@ -40,181 +40,173 @@ class TaskListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '絵本COUNTER_WEB版',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      //
-      home: ChangeNotifierProvider<TaskModel>(
-        // create: (_) {
-        //   final taskModel = TaskModel(); //インスタンス化して
-        //   taskModel.getTodoListRealtime(); //したものを、メソッドよんで、
-        //   return taskModel; //かえす。（createなので）
-        // },
-        create: (_) => TaskModel()
-          ..getTodoListRealtime()
-          ..getUserGraph(),
-        child: Scaffold(
-          bottomNavigationBar: const BottomBar(currentIndex: 0),
-          appBar: AppBar(
-            title: const Text('やること'),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 10.0),
-                child: OutlinedButton(
-                  child: const Text('THANKS',
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    await Navigator.push<void>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ThankList(),
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
-          body: Consumer<TaskModel>(
-            builder: (context, model, child) {
-              final todoList = model.todoListFromModel;
-
-              return model.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: LinearPercentIndicator(
-                            width: MediaQuery.of(context).size.width - 100,
-                            lineHeight: 20.0,
-                            percent: model.paThanks / 100,
-                            center: Text(
-                              "Pa:${model.paThanks.toString()}",
-                              style: const TextStyle(fontSize: 12.0),
-                            ),
-                            leading: const Icon(Icons.rowing_outlined),
-                            barRadius: const Radius.circular(16),
-                            backgroundColor: Colors.grey,
-                            progressColor: Colors.blue[200],
-                          ),
-                        ),
-                        Text(
-                            "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: LinearPercentIndicator(
-                            width: MediaQuery.of(context).size.width - 100,
-                            animation: true,
-                            animationDuration: 1000,
-                            lineHeight: 20.0,
-                            leading: const Icon(Icons.pregnant_woman_rounded),
-                            // trailing: const Text("右"),
-                            percent: model.maThanks / 100,
-                            center: Text(
-                              "Ma:${model.maThanks.toString()}",
-                            ),
-                            barRadius: const Radius.circular(16),
-                            progressColor: Colors.pink[100],
-                          ),
-                        ),
-                        Text(
-                            "知：${model.maIntelligence.toString()} 心：${model.maCare.toString()} 力：${model.maPower.toString()} 技：${model.maSkill.toString()} 忍：${model.maPatience.toString()}"),
-                        Flexible(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: todoList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final todo = todoList[index];
-                              return Dismissible(
-                                key: UniqueKey(),
-                                //TODO:dismissed Dismissible widget is still part of the tree.
-                                //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
-                                //やはり、ValueKeyでは、エラーになってしまう。できれば仕組みを理解したい。
-                                // key: ObjectKey(todoIndex
-                                //     .id),
-
-                                // key: ValueKey(todo
-                                //     .id),
-                                child: InkWell(
-                                  onTap: () async {
-                                    await Navigator.push<void>(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditTaskPage(todo),
-                                      ),
-                                    );
-                                  },
-                                  child: Card(
-                                    child: ListTile(
-                                      tileColor: todo.user == "まま"
-                                          ? Colors.red[50]
-                                          : Colors.blue[50],
-                                      title: Text(
-                                          '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
-                                    ),
-                                  ),
-                                ),
-                                background: Container(
-                                  alignment: Alignment.centerLeft,
-                                  color: Colors.green[200],
-                                  child: const Padding(
-                                      padding: EdgeInsets.fromLTRB(
-                                          20.0, 0.0, 0.0, 0.0),
-                                      child: Icon(Icons.tag_faces,
-                                          color: Colors.white)),
-                                ),
-                                secondaryBackground: Container(
-                                  alignment: Alignment.centerRight,
-                                  color: const Color.fromRGBO(244, 67, 54, 1),
-                                  child: const Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        10.0, 0.0, 20.0, 0.0),
-                                    child:
-                                        Icon(Icons.clear, color: Colors.white),
-                                  ),
-                                ),
-                                onDismissed: (direction) async {
-                                  if (direction ==
-                                      DismissDirection.startToEnd) {
-                                    if (todo.repeatOption) {
-                                      await updateAndRepeatTask(todo.id);
-                                    } else {
-                                      await updateAndDeleteTask(todo.id);
-                                    }
-                                  } else if (direction ==
-                                      DismissDirection.endToStart) {
-                                    await deleteTask(todo.id);
-                                  } else {
-                                    debugPrint("Nothing");
-                                  }
-                                },
-                              );
-                            },
-                          ),
-                        )
-                      ],
-                    );
-            },
-          ),
-          // ここから
-          floatingActionButton: FloatingActionButton(
-            heroTag: "hero2",
-            child: const Icon(Icons.egg_alt),
-            onPressed: () {
-              Navigator.push<void>(context,
-                  MaterialPageRoute(builder: (context) => const TaskCard()));
-            },
-          ),
-          // ここまで
+    return ChangeNotifierProvider<TaskModel>(
+      // create: (_) {
+      //   final taskModel = TaskModel(); //インスタンス化して
+      //   taskModel.getTodoListRealtime(); //したものを、メソッドよんで、
+      //   return taskModel; //かえす。（createなので）
+      // },
+      create: (_) => TaskModel()
+        ..getTodoListRealtime()
+        ..getUserGraph(),
+      child: Scaffold(
+        bottomNavigationBar: const BottomBar(currentIndex: 0),
+        appBar: AppBar(
+          title: const Text('やること'),
+          actions: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+              child: OutlinedButton(
+                child:
+                    const Text('THANKS', style: TextStyle(color: Colors.white)),
+                onPressed: () async {
+                  await Navigator.push<void>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ThankList(),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
+        body: Consumer<TaskModel>(
+          builder: (context, model, child) {
+            final todoList = model.todoListFromModel;
+
+            return model.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: LinearPercentIndicator(
+                          width: MediaQuery.of(context).size.width - 100,
+                          lineHeight: 20.0,
+                          percent: model.paThanks / 100,
+                          center: Text(
+                            "Pa:${model.paThanks.toString()}",
+                            style: const TextStyle(fontSize: 12.0),
+                          ),
+                          leading: const Icon(Icons.rowing_outlined),
+                          barRadius: const Radius.circular(16),
+                          backgroundColor: Colors.grey,
+                          progressColor: Colors.blue[200],
+                        ),
+                      ),
+                      Text(
+                          "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: LinearPercentIndicator(
+                          width: MediaQuery.of(context).size.width - 100,
+                          animation: true,
+                          animationDuration: 1000,
+                          lineHeight: 20.0,
+                          leading: const Icon(Icons.pregnant_woman_rounded),
+                          // trailing: const Text("右"),
+                          percent: model.maThanks / 100,
+                          center: Text(
+                            "Ma:${model.maThanks.toString()}",
+                          ),
+                          barRadius: const Radius.circular(16),
+                          progressColor: Colors.pink[100],
+                        ),
+                      ),
+                      Text(
+                          "知：${model.maIntelligence.toString()} 心：${model.maCare.toString()} 力：${model.maPower.toString()} 技：${model.maSkill.toString()} 忍：${model.maPatience.toString()}"),
+                      Flexible(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: todoList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final todo = todoList[index];
+                            return Dismissible(
+                              // key: UniqueKey(),
+                              //TODO:dismissed Dismissible widget is still part of the tree.
+                              //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
+                              //やはり、ValueKeyでは、エラーになってしまう。できれば仕組みを理解したい。
+                              // key: ObjectKey(todoIndex
+                              //     .id),
+
+                              key: ValueKey(todo.id),
+                              child: InkWell(
+                                onTap: () async {
+                                  await Navigator.push<void>(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditTaskPage(todo),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  child: ListTile(
+                                    tileColor: todo.user == "まま"
+                                        ? Colors.red[50]
+                                        : Colors.blue[50],
+                                    title: Text(
+                                        '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
+                                  ),
+                                ),
+                              ),
+                              background: Container(
+                                alignment: Alignment.centerLeft,
+                                color: Colors.green[200],
+                                child: const Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        20.0, 0.0, 0.0, 0.0),
+                                    child: Icon(Icons.tag_faces,
+                                        color: Colors.white)),
+                              ),
+                              secondaryBackground: Container(
+                                alignment: Alignment.centerRight,
+                                color: const Color.fromRGBO(244, 67, 54, 1),
+                                child: const Padding(
+                                  padding:
+                                      EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                                  child: Icon(Icons.clear, color: Colors.white),
+                                ),
+                              ),
+                              onDismissed: (direction) async {
+                                todoList.remove(todo);
+                                if (direction == DismissDirection.startToEnd) {
+                                  if (todo.repeatOption) {
+                                    await updateAndRepeatTask(todo.id);
+                                  } else {
+                                    await updateAndDeleteTask(todo.id);
+                                  }
+                                } else if (direction ==
+                                    DismissDirection.endToStart) {
+                                  todoList.remove(todo);
+
+                                  // await deleteTask(todo.id);
+                                } else {
+                                  debugPrint("Nothing");
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  );
+          },
+        ),
+        // ここから
+        floatingActionButton: FloatingActionButton(
+          heroTag: "hero2",
+          child: const Icon(Icons.egg_alt),
+          onPressed: () {
+            Navigator.push<void>(context,
+                MaterialPageRoute(builder: (context) => const TaskCard()));
+          },
+        ),
+        // ここまで
       ),
     );
   }

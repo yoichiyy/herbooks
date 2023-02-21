@@ -46,7 +46,7 @@ class _UsersEditsState extends State<UsersEdits> {
               child: const Text('保存', style: TextStyle(color: Colors.white)),
               onPressed: () async {
                 User? user = FirebaseAuth.instance.currentUser;
-                Map<String, dynamic> insertObj = {
+                Map<String, dynamic> insertObj = <String, dynamic>{
                   'id': user!.uid,
                   'name': _textContName.text,
                   'note': _textContProf.text,
@@ -74,7 +74,7 @@ class _UsersEditsState extends State<UsersEdits> {
                   //または、if ...をつかう。
 
                   //新しいコード andremoveuntilが多分正しい
-                  await Navigator.push(
+                  await Navigator.push<MaterialPageRoute>(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const PageViewClass(),

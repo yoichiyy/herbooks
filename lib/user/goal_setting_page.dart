@@ -1,10 +1,8 @@
-import 'package:counter/counter/home_card_kakei.dart';
-import 'package:counter/counter/num_count.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:counter/counter/home_page.dart';
+import 'package:counter/counter/num_count.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class GoalSetting extends StatefulWidget {
@@ -42,7 +40,7 @@ class _GoalSetting extends State<GoalSetting> {
             leading: IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                Navigator.pushReplacement<MaterialPageRoute,MyHomePage>(
+                Navigator.pushReplacement<MaterialPageRoute, MyHomePage>(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const MyHomePage(),
@@ -192,7 +190,8 @@ class _GoalSetting extends State<GoalSetting> {
                                           _challengePeriodController.text)));
 
                               // User? user = FirebaseAuth.instance.currentUser;
-                              Map<String, dynamic> insertObj = {
+                              Map<String, dynamic> insertObj =
+                                  <String, dynamic>{
                                 // 'id': user!.uid,
                                 'goal_sassu_toRead': goalSassuToRead,
                                 'goal_sassu_sum': goalSassuSum,
