@@ -22,7 +22,7 @@ class TaskListPage extends StatelessWidget {
 // }
 
 // class _TaskListPageState extends State<TaskListPage> {
-// TODO:こんぶんさんADVICEそっくりやろうとしたが、どうやら話が違うようだ。
+//こんぶんさんADVICEそっくりやろうとしたが、どうやら話が違うようだ。
 // そもそも、もう少しinitStateとかで何をしているのか、
 // 仕組みをよく理解していれば、ここも自分でできたかもしれない。
 // ので、もう一度ここをお聞きしたい。
@@ -128,12 +128,8 @@ class TaskListPage extends StatelessWidget {
                             final todo = todoList[index];
                             return Dismissible(
                               // key: UniqueKey(),
-                              //TODO:dismissed Dismissible widget is still part of the tree.
-                              //Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
-                              //やはり、ValueKeyでは、エラーになってしまう。できれば仕組みを理解したい。
                               // key: ObjectKey(todoIndex
                               //     .id),
-
                               key: ValueKey(todo.id),
                               child: InkWell(
                                 onTap: () async {
