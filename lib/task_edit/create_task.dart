@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../task_list/task_list.dart';
@@ -26,6 +27,7 @@ class _TaskCardState extends State<TaskCard> {
   int patience = 0;
   int thanks = 0;
   int total = 0;
+  final uid = FirebaseAuth.instance.currentUser!.uid;
   DateTime _pickedDate = DateTime.now();
   bool repeatOption = true;
   final snackBar = const SnackBar(
@@ -42,7 +44,6 @@ class _TaskCardState extends State<TaskCard> {
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              //TODO:これであってるのか！？
               Navigator.pushReplacement<MaterialPageRoute, TaskListPage>(
                   context,
                   MaterialPageRoute(
@@ -347,7 +348,7 @@ class _TaskCardState extends State<TaskCard> {
                 onPressed: () async {
                   if (_controller.text.isEmpty) {
                     showDialog<AlertDialog>(
-                      context: context, //FQ：contextは何の情報を渡している？一度デバッグで見られるかな？
+                      context: context,
                       builder: (context) {
                         return AlertDialog(
                           title: const Text("Oops"),
@@ -365,11 +366,15 @@ class _TaskCardState extends State<TaskCard> {
                     );
                     return;
                   } //if
-                  await FirebaseFirestore.instance
-                      .collection('todoList') // コレクションID指定
-                      .doc() // ドキュメントID自動生成
-                      //これは、どう書いたらよいのか。TODO:
+                  final snapshot = await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uid)
+                      .get();
+                  String userName = snapshot.data()!['name'];
 
+                  await FirebaseFirestore.instance
+                      .collection('todoList')
+                      .doc()
                       .set(<String, dynamic>{
                     'title': _controller.value.text, //stringを送る
                     'dueDate': _pickedDate, //本当はタイムスタンプ　「サーバー　タイムスタンプ」検索
@@ -380,6 +385,7 @@ class _TaskCardState extends State<TaskCard> {
                     'patience': patience,
                     'repeatOption': repeatOption,
                     'thanks': thanks,
+                    'user': userName,
                   });
                   _controller.clear();
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -83,14 +83,42 @@ class TaskListPage extends StatelessWidget {
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      //monster Graph
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: LinearPercentIndicator(
                           width: MediaQuery.of(context).size.width - 100,
                           lineHeight: 20.0,
-                          percent: model.paThanks / 100,
+                          percent: model.monsterHp / 100,
                           center: Text(
-                            "Pa:${model.paThanks.toString()}",
+                            "HP:${model.monsterHp.toString()}",
+                            style: const TextStyle(fontSize: 12.0),
+                          ),
+                          leading: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: Image.asset(
+                                'images/character_cthulhu_shoggoth.png'),
+                          ),
+                          barRadius: const Radius.circular(16),
+                          backgroundColor: Colors.grey,
+                          progressColor: Colors.blue[200],
+                        ),
+                      ),
+                      SizedBox(
+                          height: 150,
+                          width: 150,
+                          child: Image.asset(
+                              'images/character_cthulhu_shoggoth.png')),
+
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: LinearPercentIndicator(
+                          width: MediaQuery.of(context).size.width - 100,
+                          lineHeight: 20.0,
+                          percent: model.paHp / 100,
+                          center: Text(
+                            "Pa:${model.paHp.toString()}",
                             style: const TextStyle(fontSize: 12.0),
                           ),
                           leading: const Icon(Icons.rowing_outlined),
@@ -100,7 +128,7 @@ class TaskListPage extends StatelessWidget {
                         ),
                       ),
                       Text(
-                          "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
+                          "知${model.paIntelligence.toString()}  心${model.paCare.toString()}  力${model.paPower.toString()}  技${model.paSkill.toString()}  忍${model.paPatience.toString()}  ♡${model.paThanks.toString()}"),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: LinearPercentIndicator(
@@ -110,16 +138,16 @@ class TaskListPage extends StatelessWidget {
                           lineHeight: 20.0,
                           leading: const Icon(Icons.pregnant_woman_rounded),
                           // trailing: const Text("右"),
-                          percent: model.maThanks / 100,
+                          percent: model.maHp / 100,
                           center: Text(
-                            "Ma:${model.maThanks.toString()}",
+                            "Ma:${model.maHp.toString()}",
                           ),
                           barRadius: const Radius.circular(16),
                           progressColor: Colors.pink[100],
                         ),
                       ),
                       Text(
-                          "知：${model.maIntelligence.toString()} 心：${model.maCare.toString()} 力：${model.maPower.toString()} 技：${model.maSkill.toString()} 忍：${model.maPatience.toString()}"),
+                          "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
                       Flexible(
                         child: ListView.builder(
                           shrinkWrap: true,
@@ -213,8 +241,11 @@ Future<void> updateAndRepeatTask(String docId) async {
   final uid = FirebaseAuth.instance.currentUser!.uid;
   final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
   final userInfo = await docRefUser.get();
+  final docRefMonster =
+      FirebaseFirestore.instance.collection('monsters').doc("1slime");
+  final monsterInfo = await docRefMonster.get();
 
-  //タスクの方スタート
+  //1.タスクの方スタート
   final docRefTask =
       FirebaseFirestore.instance.collection('todoList').doc(docId);
 
@@ -229,6 +260,7 @@ Future<void> updateAndRepeatTask(String docId) async {
     "dueDate": dueDateAsTimeStamp,
   });
 
+  //2.ユーザーの処理スタート
   //加算前ユーザー情報取得
   final intelligence = userInfo.data()!["intelligence"] as int;
   final care = userInfo.data()!["care"] as int;
@@ -236,7 +268,6 @@ Future<void> updateAndRepeatTask(String docId) async {
   final skill = userInfo.data()!["skill"] as int;
   final patience = userInfo.data()!["patience"] as int;
   final thanks = userInfo.data()!["thanks"] as int;
-  // final total = userInfo.data()!["total"] as int;
 
   //PLUS用タスク情報取得
   final intelligenceToAdd = taskInfo.data()!["intelligence"] as int;
@@ -245,7 +276,6 @@ Future<void> updateAndRepeatTask(String docId) async {
   final skillToAdd = taskInfo.data()!["skill"] as int;
   final patienceToAdd = taskInfo.data()!["patience"] as int;
   final thanksToAdd = taskInfo.data()!["thanks"] as int;
-  // final totalToAdd = userInfo.data()!["total"] as int;
 
   //PLUS処理＆UP
   final intelligenceUpdated = intelligence + intelligenceToAdd;
@@ -254,7 +284,6 @@ Future<void> updateAndRepeatTask(String docId) async {
   final skillUpdated = skill + skillToAdd;
   final patienceUpdated = patience + patienceToAdd;
   final thanksUpdated = thanks + thanksToAdd;
-  // final totalUpdated = total + totalToAdd;
 
   await docRefUser.update({
     'intelligence': intelligenceUpdated,
@@ -263,7 +292,20 @@ Future<void> updateAndRepeatTask(String docId) async {
     'skill': skillUpdated,
     'patience': patienceUpdated,
     'thanks': thanksUpdated,
-    // 'total': totalUpdated,
+  });
+
+  //3.monsterへの攻撃
+  //加算前情報取得
+  final monsterHp = monsterInfo.data()!["hp"] as int;
+
+  //PLUS用情報取得
+  // final damageToMonster =  とりあえずTASKのTHANKSPOINT（thanksToAdd）にしておく。
+
+  //PLUS処理＆UP
+  final monsterHpUpdated = monsterHp - thanksToAdd;
+
+  await docRefMonster.update({
+    'hp': monsterHpUpdated,
   });
 }
 

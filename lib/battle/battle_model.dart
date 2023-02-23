@@ -1,80 +1,80 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/material.dart';
 
-class BattleModel extends ChangeNotifier {
-  List<Todo> actionListFromBattleModel = []; //日本語訳？：「リストです。Todoクラスで定義した３つの変数を使います。」
-  bool isLoading = true; //本当はプライベートにして、getter setter.ぽくわける。
+// class BattleModel extends ChangeNotifier {
+//   List<Todo> actionListFromBattleModel = []; //日本語訳？：「リストです。Todoクラスで定義した３つの変数を使います。」
+//   bool isLoading = true; //本当はプライベートにして、getter setter.ぽくわける。
 
-  void getThankList() {
-    final querySnapshots =
-        FirebaseFirestore.instance.collection('thanks').snapshots();
+//   void getThankList() {
+//     final querySnapshots =
+//         FirebaseFirestore.instance.collection('thanks').snapshots();
 
-    querySnapshots.listen((querySnapshot) {
-      final queryDocumentSnapshots = querySnapshot.docs;
+//     querySnapshots.listen((querySnapshot) {
+//       final queryDocumentSnapshots = querySnapshot.docs;
 
-      final actionList =
-          queryDocumentSnapshots.map((doc) => Thank(doc)).toList();
-      actionList.sort((a, b) => b.time!.compareTo(a.time!));
-      actionListFromBattleModel = actionList;
+//       final actionList =
+//           queryDocumentSnapshots.map((doc) => Thank(doc)).toList();
+//       actionList.sort((a, b) => b.time!.compareTo(a.time!));
+//       actionListFromBattleModel = actionList;
 
-      notifyListeners();
-    });
-  }
+//       notifyListeners();
+//     });
+//   }
 
-  void getTodoListRealtime() {
-    final querySnapshots =
-        FirebaseFirestore.instance.collection('todoList').snapshots();
+//   void getTodoListRealtime() {
+//     final querySnapshots =
+//         FirebaseFirestore.instance.collection('todoList').snapshots();
 
-    //↑は、collectionをまるっと。↓は、データ４つ、かな？
-    //F質問：querySnapshotsはコレクション全体で、下のqueryDocumentSnapshotsも、docs、と書いてあるので、同じくデータ４つのように見える。
-    querySnapshots.listen((querySnapshot) {
-      //future型の"いとこ"→stream型。listenで、
-      final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
+//     //↑は、collectionをまるっと。↓は、データ４つ、かな？
+//     //F質問：querySnapshotsはコレクション全体で、下のqueryDocumentSnapshotsも、docs、と書いてあるので、同じくデータ４つのように見える。
+//     querySnapshots.listen((querySnapshot) {
+//       //future型の"いとこ"→stream型。listenで、
+//       final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
 
-      //Todoクラスのコンストラクタに、idも追加した。これでTodo(doc)をリスト変換したtodoListには、idという変数もできました。
-      final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
+//       //Todoクラスのコンストラクタに、idも追加した。これでTodo(doc)をリスト変換したtodoListには、idという変数もできました。
+//       final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
 
-      //並べ替えて、最後にリストをtodoListというリストの箱に詰め替えてる
-      todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-      todoListFromModel = todoList;
+//       //並べ替えて、最後にリストをtodoListというリストの箱に詰め替えてる
+//       todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+//       todoListFromModel = todoList;
 
-      notifyListeners();
-    });
-  }
+//       notifyListeners();
+//     });
+//   }
 
-  int monsterOffense = 0;
-  int monsterDefense = 0;
-  int monsterSubayasa = 0;
-  int monsterHp = 0;
+//   int monsterOffense = 0;
+//   int monsterDefense = 0;
+//   int monsterSubayasa = 0;
+//   int monsterHp = 0;
 
-  void _startLoading() {
-    isLoading = true;
-    notifyListeners();
-  }
+//   void _startLoading() {
+//     isLoading = true;
+//     notifyListeners();
+//   }
 
-  void _endLoading() {
-    isLoading = false;
-    notifyListeners();
-  }
+//   void _endLoading() {
+//     isLoading = false;
+//     notifyListeners();
+//   }
 
-  Future<void> getMonsterInfo() async {
-    _startLoading();
-    try {
-      final docRefMonsters =
-          FirebaseFirestore.instance.collection('monsters').doc("1slime");
-      final monsterInfo = await docRefMonsters.get();
-      monsterOffense = monsterInfo.data()!["offense"] as int;
-      monsterDefense = monsterInfo.data()!['defense'] as int;
-      monsterSubayasa = monsterInfo.data()!['subayasa'] as int;
-      monsterHp = monsterInfo.data()!['hp'] as int;
+//   Future<void> getMonsterInfo() async {
+//     _startLoading();
+//     try {
+//       final docRefMonsters =
+//           FirebaseFirestore.instance.collection('monsters').doc("1slime");
+//       final monsterInfo = await docRefMonsters.get();
+//       monsterOffense = monsterInfo.data()!["offense"] as int;
+//       monsterDefense = monsterInfo.data()!['defense'] as int;
+//       monsterSubayasa = monsterInfo.data()!['subayasa'] as int;
+//       monsterHp = monsterInfo.data()!['hp'] as int;
 
-    } finally {
-      //失敗しても、絶対これは呼ばれる。
-      _endLoading();
-    }
-  }
-}
+//     } finally {
+//       //失敗しても、絶対これは呼ばれる。
+//       _endLoading();
+//     }
+//   }
+// }
 
 // class Battle {
 //   String taskNameOfTodoClass = "";

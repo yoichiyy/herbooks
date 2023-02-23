@@ -50,6 +50,7 @@ class TaskModel extends ChangeNotifier {
   int paPower = 0;
   int paSkill = 0;
   int paPatience = 0;
+  int paHp = 0;
 
   int maThanks = 0;
   int maIntelligence = 0;
@@ -57,6 +58,14 @@ class TaskModel extends ChangeNotifier {
   int maPower = 0;
   int maSkill = 0;
   int maPatience = 0;
+  int maHp = 0;
+
+  int monsterOffense = 0;
+  int monsterHp = 0;
+  String monsterAbility = "";
+  int monsterAEffect = 0;
+  String monsterName = "";
+  String monsterId = "";
 
   void _startLoading() {
     isLoading = true;
@@ -71,6 +80,7 @@ class TaskModel extends ChangeNotifier {
   Future<void> getUserGraph() async {
     _startLoading();
     try {
+      //pa Data
       final uid = FirebaseAuth.instance.currentUser!.uid;
       final docRefUser =
           FirebaseFirestore.instance.collection('users').doc(uid);
@@ -81,7 +91,9 @@ class TaskModel extends ChangeNotifier {
       paPower = paUserInfo.data()!['power'] as int;
       paSkill = paUserInfo.data()!['skill'] as int;
       paPatience = paUserInfo.data()!['patience'] as int;
+      paHp = paUserInfo.data()!['hp'] as int;
 
+      //ma Data
       final maUserInfo = await FirebaseFirestore.instance
           .collection('users')
           .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
@@ -93,6 +105,20 @@ class TaskModel extends ChangeNotifier {
       maPower = maUserInfo.data()!['power'] as int;
       maSkill = maUserInfo.data()!['skill'] as int;
       maPatience = maUserInfo.data()!['patience'] as int;
+      maHp = maUserInfo.data()!['hp'] as int;
+
+      //monster Data
+      final monsterInfo = await FirebaseFirestore.instance
+          .collection('monsters')
+          .doc("1slime")
+          .get();
+      monsterOffense = monsterInfo.data()!['offense'] as int;
+      monsterHp = monsterInfo.data()!['hp'] as int;
+      monsterAbility = monsterInfo.data()!['ability'] as String;
+      monsterAEffect = monsterInfo.data()!['a_effect'] as int;
+      monsterName = monsterInfo.data()!['name'] as String;
+      monsterId = monsterInfo
+          .id; //TODO: taskmodel120 ... 168行目との違いが微妙。Todo, Thankクラスをあえて作った意味？GetUserGraphでは、クラスを作ってないで、「グローバル？」のエリアに書いている。（これも正しい用語でなんというのだろうか。）
     } finally {
       //失敗しても、絶対これは呼ばれる。
       _endLoading();
@@ -118,7 +144,7 @@ class Todo {
       DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     return Todo(documentSnapshot);
   }
-  
+
   Todo(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     // MEMO
     //https://flutter.ctrnost.com/basic/interactive/form/datapicker/

@@ -56,9 +56,6 @@ class _UsersEditsState extends State<UsersEdits> {
                   'skill': 0,
                   'patience': 0,
                   'thanks': 0,
-                  'valid': true,
-                  'created_at': FieldValue.serverTimestamp(),
-                  'modified_at': FieldValue.serverTimestamp()
                 };
                 //firebaseauth、ユーザーの情報を司っている。メアド（＝＞ユニーク）とパスワードとか。方法いろいろ提供してる。
                 //ユーザー情報が毎回setされるということか？UPdateはされない？したければ、SETではなくUPDATEにすればよいだけだろう。

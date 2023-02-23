@@ -47,6 +47,7 @@ class BattlePage extends StatelessWidget {
                     : Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
+                          //monster Graph
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: LinearPercentIndicator(
