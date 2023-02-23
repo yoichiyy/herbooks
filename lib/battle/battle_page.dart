@@ -14,12 +14,12 @@ class BattlePage extends StatelessWidget {
     return MaterialApp(
       title: '戦闘画面',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange, //TODO:orange[700]ができない理由？まずググって。
       ),
       //
       home: ChangeNotifierProvider<TaskModel>(
         create: (_) => TaskModel()
-          ..getTodoListRealtime()
+          // ..getTodoListRealtime()
           ..getUserGraph(),
         child: Scaffold(
           appBar: AppBar(
@@ -38,7 +38,7 @@ class BattlePage extends StatelessWidget {
           body: SingleChildScrollView(
             child: Consumer<TaskModel>(
               builder: (context, model, child) {
-                final todoList = model.todoListFromModel;
+                List<String> actionList = ["こうげき", "ぼうぎょ", "にげる"];
 
                 return model.isLoading
                     ? const Center(
@@ -63,8 +63,69 @@ class BattlePage extends StatelessWidget {
                               progressColor: Colors.blue[200],
                             ),
                           ),
-                          Text(
-                              "知：${model.paIntelligence.toString()} 心：${model.paCare.toString()} 力：${model.paPower.toString()} 技：${model.paSkill.toString()} 忍：${model.paPatience.toString()}"),
+                          SizedBox(
+                              height: 200,
+                              width: 200,
+                              child: Image.asset(
+                                  'images/character_cthulhu_shoggoth.png')),
+                          Flexible(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: actionList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final todo = actionList[index];
+                                return Dismissible(
+                                  key: UniqueKey(),
+                                  child: InkWell(
+                                    child: Card(
+                                      child: ListTile(
+                                        tileColor: Colors.green[100],
+                                        title: Text(todo),
+                                      ),
+                                    ),
+                                  ),
+                                  background: Container(
+                                    alignment: Alignment.centerLeft,
+                                    color: Colors.green[200],
+                                    child: const Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            20.0, 0.0, 0.0, 0.0),
+                                        child: Icon(Icons.tag_faces,
+                                            color: Colors.white)),
+                                  ),
+                                  // secondaryBackground: Container(
+                                  //   alignment: Alignment.centerRight,
+                                  //   color: const Color.fromRGBO(244, 67, 54, 1),
+                                  //   child: const Padding(
+                                  //     padding: EdgeInsets.fromLTRB(
+                                  //         10.0, 0.0, 20.0, 0.0),
+                                  //     child: Icon(Icons.clear,
+                                  //         color: Colors.white),
+                                  //   ),
+                                  // ),
+                                  onDismissed: (direction) async {
+                                    debugPrint("nothing");
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: LinearPercentIndicator(
+                              width: MediaQuery.of(context).size.width - 100,
+                              lineHeight: 20.0,
+                              percent: model.paThanks / 100,
+                              center: Text(
+                                "Pa:${model.paThanks.toString()}",
+                                style: const TextStyle(fontSize: 12.0),
+                              ),
+                              leading: const Icon(Icons.rowing_outlined),
+                              barRadius: const Radius.circular(16),
+                              backgroundColor: Colors.grey,
+                              progressColor: Colors.blue[200],
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: LinearPercentIndicator(
@@ -82,54 +143,6 @@ class BattlePage extends StatelessWidget {
                               progressColor: Colors.pink[100],
                             ),
                           ),
-                          Text(
-                              "知：${model.maIntelligence.toString()} 心：${model.maCare.toString()} 力：${model.maPower.toString()} 技：${model.maSkill.toString()} 忍：${model.maPatience.toString()}"),
-                          Image.asset('images/character_cthulhu_shoggoth.png'),
-                          Flexible(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: todoList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final todo = todoList[index];
-                                return Dismissible(
-                                  key: UniqueKey(),
-                                  child: InkWell(
-                                    child: Card(
-                                      child: ListTile(
-                                        tileColor: todo.user == "まま"
-                                            ? Colors.red[50]
-                                            : Colors.blue[50],
-                                        title: Text(
-                                            '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
-                                      ),
-                                    ),
-                                  ),
-                                  background: Container(
-                                    alignment: Alignment.centerLeft,
-                                    color: Colors.green[200],
-                                    child: const Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            20.0, 0.0, 0.0, 0.0),
-                                        child: Icon(Icons.tag_faces,
-                                            color: Colors.white)),
-                                  ),
-                                  secondaryBackground: Container(
-                                    alignment: Alignment.centerRight,
-                                    color: const Color.fromRGBO(244, 67, 54, 1),
-                                    child: const Padding(
-                                      padding: EdgeInsets.fromLTRB(
-                                          10.0, 0.0, 20.0, 0.0),
-                                      child: Icon(Icons.clear,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                  onDismissed: (direction) async {
-                                    await updateAndRepeatTask(todo.id);
-                                  },
-                                );
-                              },
-                            ),
-                          )
                         ],
                       );
               },
