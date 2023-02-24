@@ -51,6 +51,7 @@ class TaskModel extends ChangeNotifier {
   int paSkill = 0;
   int paPatience = 0;
   int paHp = 0;
+  int paHpMax = 0;
 
   int maThanks = 0;
   int maIntelligence = 0;
@@ -59,12 +60,14 @@ class TaskModel extends ChangeNotifier {
   int maSkill = 0;
   int maPatience = 0;
   int maHp = 0;
+  int maHpMax = 0;
 
   int monsterOffense = 0;
   int monsterHp = 0;
   String monsterAbility = "";
   int monsterAEffect = 0;
   String monsterName = "";
+  int monsterHpMax = 0;
   String monsterId = "";
 
   void _startLoading() {
@@ -92,6 +95,7 @@ class TaskModel extends ChangeNotifier {
       paSkill = paUserInfo.data()!['skill'] as int;
       paPatience = paUserInfo.data()!['patience'] as int;
       paHp = paUserInfo.data()!['hp'] as int;
+      paHpMax = paUserInfo.data()!['maxhp'] as int;
 
       //ma Data
       final maUserInfo = await FirebaseFirestore.instance
@@ -106,6 +110,7 @@ class TaskModel extends ChangeNotifier {
       maSkill = maUserInfo.data()!['skill'] as int;
       maPatience = maUserInfo.data()!['patience'] as int;
       maHp = maUserInfo.data()!['hp'] as int;
+      maHpMax = maUserInfo.data()!['maxhp'] as int;
 
       //monster Data
       final monsterInfo = await FirebaseFirestore.instance
@@ -117,12 +122,191 @@ class TaskModel extends ChangeNotifier {
       monsterAbility = monsterInfo.data()!['ability'] as String;
       monsterAEffect = monsterInfo.data()!['a_effect'] as int;
       monsterName = monsterInfo.data()!['name'] as String;
+      monsterHpMax = monsterInfo.data()!['maxhp'] as int;
       monsterId = monsterInfo
           .id; //TODO: taskmodel120 ... 168行目との違いが微妙。Todo, Thankクラスをあえて作った意味？GetUserGraphでは、クラスを作ってないで、「グローバル？」のエリアに書いている。（これも正しい用語でなんというのだろうか。）
     } finally {
       //失敗しても、絶対これは呼ばれる。
       _endLoading();
     }
+  } //getUserGraph
+
+  Future<void> updateAndRepeatTask(String docId) async {
+    //それぞれのdocRef取得（docRef VER）
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+    final userInfo = await docRefUser.get();
+    final docRefMonster =
+        FirebaseFirestore.instance.collection('monsters').doc("1slime");
+    final monsterInfo = await docRefMonster.get();
+
+    //1.タスクの方スタート
+    final docRefTask =
+        FirebaseFirestore.instance.collection('todoList').doc(docId);
+
+    //タスク情報取得
+    final taskInfo = await docRefTask.get();
+    final dueDate = taskInfo.data()!["dueDate"] as Timestamp;
+
+    //タスク処理＆UP
+    final dueDateUpdated = dueDate.toDate().add(const Duration(days: 1));
+    final dueDateAsTimeStamp = Timestamp.fromDate(dueDateUpdated);
+    await docRefTask.update({
+      "dueDate": dueDateAsTimeStamp,
+    });
+
+    //2.ユーザーの処理スタート
+    //加算前ユーザー情報取得
+    final intelligence = userInfo.data()!["intelligence"] as int;
+    final care = userInfo.data()!["care"] as int;
+    final power = userInfo.data()!["power"] as int;
+    final skill = userInfo.data()!["skill"] as int;
+    final patience = userInfo.data()!["patience"] as int;
+    final thanks = userInfo.data()!["thanks"] as int;
+
+    //PLUS用タスク情報取得
+    final intelligenceToAdd = taskInfo.data()!["intelligence"] as int;
+    final careToAdd = taskInfo.data()!["care"] as int;
+    final powerToAdd = taskInfo.data()!["power"] as int;
+    final skillToAdd = taskInfo.data()!["skill"] as int;
+    final patienceToAdd = taskInfo.data()!["patience"] as int;
+    final thanksToAdd = taskInfo.data()!["thanks"] as int;
+
+    //PLUS処理＆UP
+    final intelligenceUpdated = intelligence + intelligenceToAdd;
+    final careUpdated = care + careToAdd;
+    final powerUpdated = power + powerToAdd;
+    final skillUpdated = skill + skillToAdd;
+    final patienceUpdated = patience + patienceToAdd;
+    final thanksUpdated = thanks + thanksToAdd;
+
+    await docRefUser.update({
+      'intelligence': intelligenceUpdated,
+      'care': careUpdated,
+      'power': powerUpdated,
+      'skill': skillUpdated,
+      'patience': patienceUpdated,
+      'thanks': thanksUpdated,
+    });
+
+    //3.monsterへの攻撃
+    //加算前情報取得
+    final monsterHp = monsterInfo.data()!["hp"] as int;
+
+    //PLUS用情報取得
+    // final damageToMonster =  とりあえずTASKのTHANKSPOINT（thanksToAdd）にしておく。
+
+    //PLUS処理＆UP
+    final monsterHpUpdated = monsterHp - thanksToAdd;
+
+    await docRefMonster.update({
+      'hp': monsterHpUpdated,
+    });
+
+    notifyListeners();
+    //TODO:どうすれば、メソッド実行直後に、グラフ再描画してくれる？
+    //このnotifyListenは意味がないみたい。
+    //tasklist239に、getUserGraphを実行させると、動きがあったようだ。これがベストの方法だろうか？
+  }
+
+  Future<void> updateAndDeleteTask(String docId) async {
+    //それぞれのdocRef取得（docRef VER）
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+    final userInfo = await docRefUser.get();
+    final docRefMonster =
+        FirebaseFirestore.instance.collection('monsters').doc("1slime");
+    final monsterInfo = await docRefMonster.get();
+
+    //1.タスクの方スタート
+    final docRefTask =
+        FirebaseFirestore.instance.collection('todoList').doc(docId);
+
+    //タスク情報取得
+    final taskInfo = await docRefTask.get();
+    final dueDate = taskInfo.data()!["dueDate"] as Timestamp;
+
+    //タスク処理＆UP
+    final dueDateUpdated = dueDate.toDate().add(const Duration(days: 1));
+    final dueDateAsTimeStamp = Timestamp.fromDate(dueDateUpdated);
+    await docRefTask.update({
+      "dueDate": dueDateAsTimeStamp,
+    });
+
+    //2.ユーザーの処理スタート
+    //加算前ユーザー情報取得
+    final intelligence = userInfo.data()!["intelligence"] as int;
+    final care = userInfo.data()!["care"] as int;
+    final power = userInfo.data()!["power"] as int;
+    final skill = userInfo.data()!["skill"] as int;
+    final patience = userInfo.data()!["patience"] as int;
+    final thanks = userInfo.data()!["thanks"] as int;
+
+    //PLUS用タスク情報取得
+    final intelligenceToAdd = taskInfo.data()!["intelligence"] as int;
+    final careToAdd = taskInfo.data()!["care"] as int;
+    final powerToAdd = taskInfo.data()!["power"] as int;
+    final skillToAdd = taskInfo.data()!["skill"] as int;
+    final patienceToAdd = taskInfo.data()!["patience"] as int;
+    final thanksToAdd = taskInfo.data()!["thanks"] as int;
+
+    //PLUS処理＆UP
+    final intelligenceUpdated = intelligence + intelligenceToAdd;
+    final careUpdated = care + careToAdd;
+    final powerUpdated = power + powerToAdd;
+    final skillUpdated = skill + skillToAdd;
+    final patienceUpdated = patience + patienceToAdd;
+    final thanksUpdated = thanks + thanksToAdd;
+
+    await docRefUser.update({
+      'intelligence': intelligenceUpdated,
+      'care': careUpdated,
+      'power': powerUpdated,
+      'skill': skillUpdated,
+      'patience': patienceUpdated,
+      'thanks': thanksUpdated,
+    });
+
+    //3.monsterへの攻撃
+    //加算前情報取得
+    final monsterHp = monsterInfo.data()!["hp"] as int;
+
+    //PLUS用情報取得
+    // final damageToMonster =  とりあえずTASKのTHANKSPOINT（thanksToAdd）にしておく。
+
+    //PLUS処理＆UP
+    final monsterHpUpdated = monsterHp - thanksToAdd;
+
+    await docRefMonster.update({
+      'hp': monsterHpUpdated,
+    });
+
+    await docRefTask.delete();
+
+    notifyListeners();
+  }
+
+  Future<void> monsterAttack(String docId) async {
+    //それぞれのdocRef取得（docRef VER）
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+    final userInfo = await docRefUser.get();
+    final docRefMonster =
+        FirebaseFirestore.instance.collection('monsters').doc("1slime");
+    final monsterInfo = await docRefMonster.get();
+
+       //2.ユーザーの処理スタート
+    //攻撃される前のユーザー情報取得
+    final hpBefore = userInfo.data()!["hp"] as int;
+    //ダメージto be added
+    final damageToUser = monsterInfo.data()!["offense"] as int;
+    //UPDATE情報 → UPする
+    final hpUpdated = hpBefore - damageToUser;
+    await docRefUser.update({
+      'hp': hpUpdated,
+    });
+
+
   }
 }
 

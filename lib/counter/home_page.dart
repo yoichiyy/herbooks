@@ -347,7 +347,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           MediaQuery.of(context).size.height /
                                                   2 -
                                               50),
-                                ));
+                                ),);
                               },
                               child: const Text(
                                 "登録",
