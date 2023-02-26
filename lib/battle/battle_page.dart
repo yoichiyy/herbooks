@@ -14,7 +14,7 @@ class BattlePage extends StatelessWidget {
     return MaterialApp(
       title: '戦闘画面',
       theme: ThemeData(
-        primarySwatch: Colors.orange, //TODO:orange[700]ができない理由？まずググって。
+        primarySwatch: Colors.orange, 
       ),
       //
       home: ChangeNotifierProvider<TaskModel>(
@@ -60,7 +60,7 @@ class BattlePage extends StatelessWidget {
                               ),
                               leading: const Icon(Icons.rowing_outlined),
                               barRadius: const Radius.circular(16),
-                              backgroundColor: Colors.grey,
+                              backgroundColor: Colors.orange[700],
                               progressColor: Colors.blue[200],
                             ),
                           ),

@@ -3,6 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TaskModel extends ChangeNotifier {
+
+//Model ... クラス。TODOとか、THANKとか
+//MVVM
+//View..スクリーンtaskList.dart
+//ViewModel ...VIEWの状態ちをもたせたクラス TaskModel。
+
+
   List<Todo> todoListFromModel = []; //日本語訳？：「リストです。Todoクラスで定義した３つの変数を使います。」
   List<Thank> thankListFromModel = [];
   bool isLoading = true; //本当はプライベートにして、getter setter.ぽくわける。
@@ -202,8 +209,10 @@ class TaskModel extends ChangeNotifier {
     await docRefMonster.update({
       'hp': monsterHpUpdated,
     });
-
+    //
     notifyListeners();
+ 
+
     //TODO:どうすれば、メソッド実行直後に、グラフ再描画してくれる？
     //このnotifyListenは意味がないみたい。
     //tasklist239に、getUserGraphを実行させると、動きがあったようだ。これがベストの方法だろうか？
@@ -305,6 +314,8 @@ class TaskModel extends ChangeNotifier {
     await docRefUser.update({
       'hp': hpUpdated,
     });
+
+
 
 
   }

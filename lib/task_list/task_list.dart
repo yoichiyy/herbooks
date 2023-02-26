@@ -85,23 +85,32 @@ class TaskListPage extends StatelessWidget {
                       //monster Graph
                       Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 100,
-                          lineHeight: 20.0,
-                          percent: model.monsterHp / model.monsterHpMax,
-                          center: Text(
-                            "HP:${model.monsterHp.toString()}",
-                            style: const TextStyle(fontSize: 12.0),
-                          ),
-                          leading: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: Image.asset(
-                                'images/character_cthulhu_shoggoth.png'),
-                          ),
-                          barRadius: const Radius.circular(16),
-                          backgroundColor: Colors.grey,
-                          progressColor: Colors.blue[200],
+                        child: StreamBuilder<Object>(//ここモンスタークラスにする
+                          stream: null,
+                          //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
+                          
+
+
+                          builder: (context, snapshot) {
+                            return LinearPercentIndicator(
+                              width: MediaQuery.of(context).size.width - 100,
+                              lineHeight: 20.0,
+                              percent: model.monsterHp / model.monsterHpMax,
+                              center: Text(
+                                "HP:${model.monsterHp.toString()}",
+                                style: const TextStyle(fontSize: 12.0),
+                              ),
+                              leading: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: Image.asset(
+                                    'images/character_cthulhu_shoggoth.png'),
+                              ),
+                              barRadius: const Radius.circular(16),
+                              backgroundColor: Colors.grey,
+                              progressColor: Colors.blue[200],
+                            );
+                          }
                         ),
                       ),
                       SizedBox(
