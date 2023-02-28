@@ -82,43 +82,42 @@ class TaskListPage extends StatelessWidget {
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      //monster Graph
-                      Padding(
+                      
+                      Padding(//monster Graph
                         padding: const EdgeInsets.all(15.0),
-                        child: StreamBuilder<Object>(//ここモンスタークラスにする
-                          stream: null,
-                          //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
-                          
+                        child: StreamBuilder<Object>(
+                            //ここモンスタークラスにする
+                            stream: null,
+                            //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
 
-
-                          builder: (context, snapshot) {
-                            return LinearPercentIndicator(
-                              width: MediaQuery.of(context).size.width - 100,
-                              lineHeight: 20.0,
-                              percent: model.monsterHp / model.monsterHpMax,
-                              center: Text(
-                                "HP:${model.monsterHp.toString()}",
-                                style: const TextStyle(fontSize: 12.0),
-                              ),
-                              leading: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: Image.asset(
-                                    'images/character_cthulhu_shoggoth.png'),
-                              ),
-                              barRadius: const Radius.circular(16),
-                              backgroundColor: Colors.grey,
-                              progressColor: Colors.blue[200],
-                            );
-                          }
-                        ),
+                            builder: (context, snapshot) {
+                              return LinearPercentIndicator(
+                                width: MediaQuery.of(context).size.width - 100,
+                                lineHeight: 20.0,
+                                percent: model.monsterHp / model.monsterHpMax,
+                                center: Text(
+                                  "HP:${model.monsterHp.toString()}",
+                                  style: const TextStyle(fontSize: 12.0),
+                                ),
+                                animation: true,
+                                animationDuration: 1000,
+                                leading: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: Image.asset(
+                                      'images/shoggoth.png'),
+                                ),
+                                barRadius: const Radius.circular(16),
+                                backgroundColor: Colors.grey,
+                                progressColor: Colors.blue[200],
+                              );
+                            }),
                       ),
-                      SizedBox(
+                      SizedBox(//Monster Pic
                           height: 150,
                           width: 150,
                           child: Image.asset(
                               'images/character_cthulhu_shoggoth.png')),
-
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: LinearPercentIndicator(
@@ -129,6 +128,8 @@ class TaskListPage extends StatelessWidget {
                             "Pa:${model.paHp.toString()}",
                             style: const TextStyle(fontSize: 12.0),
                           ),
+                          animation: true,
+                          animationDuration: 1000,
                           leading: const Icon(Icons.rowing_outlined),
                           barRadius: const Radius.circular(16),
                           backgroundColor: Colors.grey,
@@ -141,8 +142,6 @@ class TaskListPage extends StatelessWidget {
                         padding: const EdgeInsets.all(15.0),
                         child: LinearPercentIndicator(
                           width: MediaQuery.of(context).size.width - 100,
-                          animation: true,
-                          animationDuration: 1000,
                           lineHeight: 20.0,
                           leading: const Icon(Icons.pregnant_woman_rounded),
                           // trailing: const Text("右"),
@@ -150,6 +149,8 @@ class TaskListPage extends StatelessWidget {
                           center: Text(
                             "Ma:${model.maHp.toString()}",
                           ),
+                          animation: true,
+                          animationDuration: 1000,
                           barRadius: const Radius.circular(16),
                           progressColor: Colors.pink[100],
                         ),
@@ -168,6 +169,8 @@ class TaskListPage extends StatelessWidget {
                               //A TaskModel was used after being disposed.
                               // E/flutter (29527): Once you have called dispose() on a TaskModel, it can no longer be used.
 
+
+                              //ValueKeyで解決。materialを取り除いたらOKになった。
                               // key: UniqueKey(),
                               // key: ObjectKey(todoIndex
                               //     .id),
@@ -287,3 +290,4 @@ Future<void> deleteTask(String docId) async {
   // ユーザー情報取得
   await FirebaseFirestore.instance.collection('todoList').doc(docId).delete();
 }
+

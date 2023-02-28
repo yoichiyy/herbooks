@@ -34,10 +34,15 @@ class TaskModel extends ChangeNotifier {
     final querySnapshots =
         FirebaseFirestore.instance.collection('todoList').snapshots();
 
-    //↑は、collectionをまるっと。↓は、データ４つ、かな？
-    //F質問：querySnapshotsはコレクション全体で、下のqueryDocumentSnapshotsも、docs、と書いてあるので、同じくデータ４つのように見える。
+    //TODO: どの部分でクエリもしくはIF？したらよいか？は、以下の疑問を解決すれば、自ずとわかるだろう。
+    
     querySnapshots.listen((querySnapshot) {
-      //future型の"いとこ"→stream型。listenで、
+      //TODO:Data.forEach(e)的なことをしている？
+      //でも、"shotS"が全体だとすると、"shot"は何？（この下にshot.docsがドキュメント全部、とメモがあるので、また混乱）
+
+      //TODO: true? →森川「Listenを使うことで、取得されるデータがstream型（future型の"いとこ"）になる。」
+      //（Listenとは一言で、何するメソッド？）
+      //新聞購読の喩えがわかりやすかった＝＞新しい情報が投入されるたびに「その部分だけ」／「全部のデータ」を流してくれるということか？（どっち？）
       final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
 
       //Todoクラスのコンストラクタに、idも追加した。これでTodo(doc)をリスト変換したtodoListには、idという変数もできました。
@@ -344,6 +349,11 @@ class Todo {
     // MEMO
     //https://flutter.ctrnost.com/basic/interactive/form/datapicker/
     //コンストラクタ
+
+    // 引数うけとるの自由に定義可能。
+    // ドキュメントsnapshotがないと、todoインスタンスはっつくれない。
+    // 613のは、データさえ揃っていれば、作ることができる。
+
     //ジェネリクスを使ってもよい：genelics... mapもこの概念つかってる。
     //マップの中で使ってるかたを、後から決めれる仕組み。
     //キャスト。解釈するため。前半：fireのdoc.
