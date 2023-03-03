@@ -68,7 +68,7 @@ class BattlePage extends StatelessWidget {
                               height: 200,
                               width: 200,
                               child: Image.asset(
-                                  'images/character_cthulhu_shoggoth.png')),
+                                  'images/shoggoth.png')),
                           Flexible(
                             child: ListView.builder(
                               shrinkWrap: true,

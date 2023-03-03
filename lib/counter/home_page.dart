@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 15.0, horizontal: 10.0),
                 child: OutlinedButton(
-                  child: Image.asset('images/character_cthulhu_shoggoth.png'),
+                  child: Image.asset('images/shoggoth.png'),
                   onPressed: () async {
                     await Navigator.push<void>(
                       context,

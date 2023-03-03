@@ -47,7 +47,7 @@ class _TaskCardState extends State<TaskCard> {
               Navigator.pushReplacement<MaterialPageRoute, TaskListPage>(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const TaskListPage(),
+                    builder: (context) => TaskListPage(),
                   ));
             },
           ),

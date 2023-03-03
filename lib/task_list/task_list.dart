@@ -1,35 +1,33 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/task_list/thank_list.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
-
 import '../task_edit/create_task.dart';
 import '../task_edit/edit_task.dart';
 import 'task_model.dart';
 
 class TaskListPage extends StatelessWidget {
-  const TaskListPage({super.key});
+  TaskListPage({super.key});
+  final player = AudioPlayer();
+  
 
+  //こんぶんさんADVICEそっくりやろうとしたが、どうやら話が違うようだ。
   // final Todo todo;
   // const TaskListPage(this.todo, {Key? key}) : super(key: key);
 //   const TaskListPage({Key? key}) : super(key: key);
-
 //   @override
 //   State<TaskListPage> createState() => _TaskListPageState();
 // }
-
 // class _TaskListPageState extends State<TaskListPage> {
-//こんぶんさんADVICEそっくりやろうとしたが、どうやら話が違うようだ。
 // そもそも、もう少しinitStateとかで何をしているのか、
 // 仕組みをよく理解していれば、ここも自分でできたかもしれない。
 // ので、もう一度ここをお聞きしたい。
 // それを通じて、今回の話を理解したい。
-
 //[VERBOSE-2:dart_vm_initializer.cc(41)] Unhandled Exception: A TaskModel was used after being disposed.
 //Once you have called dispose() on a TaskModel, it can no longer be used.
-
 // late TaskModel model;
 // @override
 //   void initState() {
@@ -73,8 +71,9 @@ class TaskListPage extends StatelessWidget {
         ),
         body: Consumer<TaskModel>(
           builder: (context, model, child) {
-            final todoList = model.todoListFromModel;
-
+            final todoListOverDue = model.todoListFromModelToday;
+            final todoListToday = model.todoListFromModelToday;
+            final todoListAfterToday = model.todoListFromModelOverDue;
             return model.isLoading
                 ? const Center(
                     child: CircularProgressIndicator(),
@@ -82,10 +81,11 @@ class TaskListPage extends StatelessWidget {
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      
-                      Padding(//monster Graph
+                      Padding(
+                        //monster Graph
                         padding: const EdgeInsets.all(15.0),
                         child: StreamBuilder<Object>(
+                            //TODO:ここ、次のTODOどうにかしないと。
                             //ここモンスタークラスにする
                             stream: null,
                             //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
@@ -104,8 +104,7 @@ class TaskListPage extends StatelessWidget {
                                 leading: SizedBox(
                                   width: 20,
                                   height: 20,
-                                  child: Image.asset(
-                                      'images/shoggoth.png'),
+                                  child: Image.asset('images/shoggoth.png'),
                                 ),
                                 barRadius: const Radius.circular(16),
                                 backgroundColor: Colors.grey,
@@ -113,11 +112,17 @@ class TaskListPage extends StatelessWidget {
                               );
                             }),
                       ),
-                      SizedBox(//Monster Pic
-                          height: 150,
-                          width: 150,
-                          child: Image.asset(
-                              'images/character_cthulhu_shoggoth.png')),
+                      SizedBox(
+                        //Monster Pic
+                        height: 150,
+                        width: 150,
+                        child: GestureDetector(
+                          //TODO:
+                          // onTap: player.setSource(AssetSource('sounds/coin.wav')),
+                          onTap: player.play(DeviceFileSource("audio/sample.mp3")),
+                          child: Image.asset('images/shoggoth.png'),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: LinearPercentIndicator(
@@ -159,16 +164,16 @@ class TaskListPage extends StatelessWidget {
                           "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
                       Flexible(
                         child: ListView.builder(
+                          //TODO:3つのリストを結合することが無理なら、ListView.builder以下を３つ同じものを並べる他ないか？
                           shrinkWrap: true,
-                          itemCount: todoList.length,
+                          itemCount: todoListOverDue.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final todo = todoList[index];
+                            final todo = todoListOverDue[index];
                             return Dismissible(
                               //TODO:このエラーにしょっちゅう見舞われる…
                               //いつ、disposeされているのか、仕組みがまだ見えていないので、その流れをお聞きしたい。
                               //A TaskModel was used after being disposed.
                               // E/flutter (29527): Once you have called dispose() on a TaskModel, it can no longer be used.
-
 
                               //ValueKeyで解決。materialを取り除いたらOKになった。
                               // key: UniqueKey(),
@@ -213,7 +218,7 @@ class TaskListPage extends StatelessWidget {
                                 ),
                               ),
                               onDismissed: (direction) async {
-                                todoList.remove(todo);
+                                todoListOverDue.remove(todo);
                                 if (direction == DismissDirection.startToEnd) {
                                   if (todo.repeatOption) {
                                     await model.updateAndRepeatTask(todo.id);
@@ -256,7 +261,7 @@ class TaskListPage extends StatelessWidget {
                                   await model.getUserGraph();
                                 } else if (direction ==
                                     DismissDirection.endToStart) {
-                                  todoList.remove(todo);
+                                  todoListOverDue.remove(todo);
 
                                   // await deleteTask(todo.id);
                                 } else {
@@ -291,3 +296,17 @@ Future<void> deleteTask(String docId) async {
   await FirebaseFirestore.instance.collection('todoList').doc(docId).delete();
 }
 
+Widget bar(String title) {
+  return Container(
+    child: Center(
+        child: Text(
+      title, //共通化して、関数を利用した
+      style: const TextStyle(color: Colors.white),
+    )),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(5),
+      color: Colors.grey,
+    ),
+    constraints: const BoxConstraints.expand(height: 50),
+  );
+}

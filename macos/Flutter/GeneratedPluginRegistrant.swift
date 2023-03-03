@@ -10,7 +10,7 @@ import cloud_firestore
 import firebase_auth
 import firebase_core
 import flutter_native_timezone
-import path_provider_macos
+import path_provider_foundation
 import shared_preferences_macos
 import url_launcher_macos
 

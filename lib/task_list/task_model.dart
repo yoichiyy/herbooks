@@ -3,14 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TaskModel extends ChangeNotifier {
-
 //Model ... クラス。TODOとか、THANKとか
 //MVVM
 //View..スクリーンtaskList.dart
 //ViewModel ...VIEWの状態ちをもたせたクラス TaskModel。
 
+//日本語訳「リストです。Todoクラスで定義した３つの変数を使います。」
+  List<Todo> todoListFromModelOverDue = [];
+  List<Todo> todoListFromModelToday = [];
+  List<Todo> todoListFromModelAfterToday = [];
 
-  List<Todo> todoListFromModel = []; //日本語訳？：「リストです。Todoクラスで定義した３つの変数を使います。」
   List<Thank> thankListFromModel = [];
   bool isLoading = true; //本当はプライベートにして、getter setter.ぽくわける。
 
@@ -19,6 +21,7 @@ class TaskModel extends ChangeNotifier {
         FirebaseFirestore.instance.collection('thanks').snapshots();
 
     querySnapshots.listen((querySnapshot) {
+      //ここでクエリ使ってみる。まずは、「過去のタスク」を取得してみる。
       final queryDocumentSnapshots = querySnapshot.docs;
 
       final thankList =
@@ -31,12 +34,23 @@ class TaskModel extends ChangeNotifier {
   }
 
   void getTodoListRealtime() {
-    final querySnapshots =
-        FirebaseFirestore.instance.collection('todoList').snapshots();
+    final _now = DateTime.now();
+    DateTime _next = _now.add(const Duration(days: 1));
+    _next = DateTime(_next.year, _next.month, _next.day, 0, 0, 0);
 
-    //TODO: どの部分でクエリもしくはIF？したらよいか？は、以下の疑問を解決すれば、自ずとわかるだろう。
-    
-    querySnapshots.listen((querySnapshot) {
+    //TODO:果たしてこの方法（同じquerySnapShot攻撃を3回繰り返している。）で良いのか
+    //もう少しスマートな方法はないのか。
+
+    //過去
+    final querySnapshotsOverDue = FirebaseFirestore.instance
+        .collection('todoList')
+        .where(
+          "dueDate",
+          isLessThan: _now,
+        )
+        .snapshots();
+
+    querySnapshotsOverDue.listen((querySnapshot) {
       //TODO:Data.forEach(e)的なことをしている？
       //でも、"shotS"が全体だとすると、"shot"は何？（この下にshot.docsがドキュメント全部、とメモがあるので、また混乱）
 
@@ -44,14 +58,48 @@ class TaskModel extends ChangeNotifier {
       //（Listenとは一言で、何するメソッド？）
       //新聞購読の喩えがわかりやすかった＝＞新しい情報が投入されるたびに「その部分だけ」／「全部のデータ」を流してくれるということか？（どっち？）
       final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
+      final todoList = queryDocumentSnapshots
+          .map((doc) => Todo(doc))
+          .toList(); //Todoクラスのコンストラクタに、idも追加
+      todoList.sort((a, b) => a.dueDate!
+          .compareTo(b.dueDate!)); //並べ替えて、最後にリストをtodoListというリストの箱に詰め替えてる
+      todoListFromModelOverDue = todoList;
+      notifyListeners();
+    });
 
-      //Todoクラスのコンストラクタに、idも追加した。これでTodo(doc)をリスト変換したtodoListには、idという変数もできました。
+    //今日のタスクリスト
+    final querySnapshotsToday = FirebaseFirestore.instance
+        .collection('todoList')
+        .where(
+          "dueDate",
+          isGreaterThanOrEqualTo: _now,
+          isLessThan: _next,
+        )
+        .snapshots();
+        //TODO:タイムゾーン アメリカのが取得されるのはどう直す？
+
+    querySnapshotsToday.listen((querySnapshot) {
+      final queryDocumentSnapshots = querySnapshot.docs;
       final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-
-      //並べ替えて、最後にリストをtodoListというリストの箱に詰め替えてる
       todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-      todoListFromModel = todoList;
+      todoListFromModelToday = todoList;
+      notifyListeners();
+    });
 
+    //明日以降のタスクリスト
+    final querySnapshotsAfterToday = FirebaseFirestore.instance
+        .collection('todoList')
+        .where(
+          "dueDate",
+          isGreaterThan: _next,
+        )
+        .snapshots();
+
+    querySnapshotsAfterToday.listen((querySnapshot) {
+      final queryDocumentSnapshots = querySnapshot.docs;
+      final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
+      todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+      todoListFromModelAfterToday = todoList;
       notifyListeners();
     });
   }
@@ -216,7 +264,6 @@ class TaskModel extends ChangeNotifier {
     });
     //
     notifyListeners();
- 
 
     //TODO:どうすれば、メソッド実行直後に、グラフ再描画してくれる？
     //このnotifyListenは意味がないみたい。
@@ -309,7 +356,7 @@ class TaskModel extends ChangeNotifier {
         FirebaseFirestore.instance.collection('monsters').doc("1slime");
     final monsterInfo = await docRefMonster.get();
 
-       //2.ユーザーの処理スタート
+    //2.ユーザーの処理スタート
     //攻撃される前のユーザー情報取得
     final hpBefore = userInfo.data()!["hp"] as int;
     //ダメージto be added
@@ -319,10 +366,6 @@ class TaskModel extends ChangeNotifier {
     await docRefUser.update({
       'hp': hpUpdated,
     });
-
-
-
-
   }
 }
 

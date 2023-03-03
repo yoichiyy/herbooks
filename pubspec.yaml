@@ -22,7 +22,7 @@ dependencies:
   shared_preferences: ^2.0.5
   flutter_datetime_picker: ^1.5.1
   confetti: ^0.7.0
-  audioplayers: ^1.1.1
+  audioplayers: ^3.0.1
   #flutter_local_notifications: ^12.0.4
   flutter_native_timezone: ^2.0.0
   # rxdart: ^0.27.7
@@ -46,8 +46,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/character_cthulhu_shoggoth.png
-
+    - images/
+    - lib/assets
 
 flutter_icons:
   android: true 
