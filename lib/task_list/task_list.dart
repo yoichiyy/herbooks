@@ -121,6 +121,14 @@ class TaskListPage extends StatelessWidget {
                           // onTap: player.setSource(AssetSource('sounds/coin.wav')),
                           // onTap: await player.play(DeviceFileSource("audio/sample.mp3")),
                           
+                          //TODO: setStateで、サイズボックスのサイズを変更したい。
+                          //だが、Provider(notifyListenersと、Consumerちゃん)を使っている。この２つは相性が悪いようだ。
+                          //具体的には、以前setStateを別の場所で使ったところ、このエラーが出た。
+                          //だから、「いさぎよく」Provider一本に絞った経緯あり。
+                          //でも、onTapで、画像のサイズを変更したり、音を出したりする方法として、setState以外に、
+                          //Providerの、モデルクラスになにか書いて…といことはできるのか？　
+
+
                           child: Image.asset('images/shoggoth.png'),
                         ),
                       ),
