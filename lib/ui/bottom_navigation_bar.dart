@@ -38,7 +38,7 @@ class BottomBar extends StatelessWidget {
       onTap: (index) {
         if (index == 0) {
           Navigator.of(context).push<void>(
-              MaterialPageRoute(builder: (context) => const TaskListPage()));
+              MaterialPageRoute(builder: (context) => TaskListPage()));
         }
 
         if (index == 1) {

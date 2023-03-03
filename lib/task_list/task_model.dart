@@ -53,7 +53,6 @@ class TaskModel extends ChangeNotifier {
     querySnapshotsOverDue.listen((querySnapshot) {
       //TODO:Data.forEach(e)的なことをしている？
       //でも、"shotS"が全体だとすると、"shot"は何？（この下にshot.docsがドキュメント全部、とメモがあるので、また混乱）
-
       //TODO: true? →森川「Listenを使うことで、取得されるデータがstream型（future型の"いとこ"）になる。」
       //（Listenとは一言で、何するメソッド？）
       //新聞購読の喩えがわかりやすかった＝＞新しい情報が投入されるたびに「その部分だけ」／「全部のデータ」を流してくれるということか？（どっち？）
@@ -76,7 +75,7 @@ class TaskModel extends ChangeNotifier {
           isLessThan: _next,
         )
         .snapshots();
-        //TODO:タイムゾーン アメリカのが取得されるのはどう直す？
+    //TODO:タイムゾーン アメリカのが取得されるのはどう直す？
 
     querySnapshotsToday.listen((querySnapshot) {
       final queryDocumentSnapshots = querySnapshot.docs;
@@ -183,8 +182,7 @@ class TaskModel extends ChangeNotifier {
       monsterAEffect = monsterInfo.data()!['a_effect'] as int;
       monsterName = monsterInfo.data()!['name'] as String;
       monsterHpMax = monsterInfo.data()!['maxhp'] as int;
-      monsterId = monsterInfo
-          .id; //TODO: taskmodel120 ... 168行目との違いが微妙。Todo, Thankクラスをあえて作った意味？GetUserGraphでは、クラスを作ってないで、「グローバル？」のエリアに書いている。（これも正しい用語でなんというのだろうか。）
+      monsterId = monsterInfo.id;
     } finally {
       //失敗しても、絶対これは呼ばれる。
       _endLoading();
@@ -265,9 +263,6 @@ class TaskModel extends ChangeNotifier {
     //
     notifyListeners();
 
-    //TODO:どうすれば、メソッド実行直後に、グラフ再描画してくれる？
-    //このnotifyListenは意味がないみたい。
-    //tasklist239に、getUserGraphを実行させると、動きがあったようだ。これがベストの方法だろうか？
   }
 
   Future<void> updateAndDeleteTask(String docId) async {

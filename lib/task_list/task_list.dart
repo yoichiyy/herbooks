@@ -116,10 +116,11 @@ class TaskListPage extends StatelessWidget {
                         //Monster Pic
                         height: 150,
                         width: 150,
-                        child: GestureDetector(
-                          //TODO:
+                        child: GestureDetector (
+                          //TODO:audioPlayer簡単そうで、なぜかうまくいかぬ。
                           // onTap: player.setSource(AssetSource('sounds/coin.wav')),
-                          onTap: player.play(DeviceFileSource("audio/sample.mp3")),
+                          // onTap: await player.play(DeviceFileSource("audio/sample.mp3")),
+                          
                           child: Image.asset('images/shoggoth.png'),
                         ),
                       ),
