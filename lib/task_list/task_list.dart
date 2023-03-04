@@ -71,12 +71,13 @@ class TaskListPage extends StatelessWidget {
         ),
         body: Consumer<TaskModel>(
           builder: (context, model, child) {
-            final todoListOverDue = model.todoListFromModelToday;
+            final todoListOverDue = model.todoListFromModelOverDue;
             final todoListToday = model.todoListFromModelToday;
-            final todoListAfterToday = model.todoListFromModelOverDue;
-            final list1 = ["a", "b", "c"];
-            final list2 = ["あ", "い", "cう"];
-            final list3 = ["a1", "b2", "c3"];
+            final todoListAfterToday = model.todoListFromModelAfterToday;
+            // final list1 = ["1", "2", "3"];
+            final list1 = model.todoListFromModelOverDue;
+            final list2 = ["あ", "い", "う", "え"];
+            final list3 = ["a", "b", "c", "d", "e"];
 
             return model.isLoading
                 ? const Center(
@@ -168,132 +169,251 @@ class TaskListPage extends StatelessWidget {
                       ),
                       Text(
                           "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
+                      //テスト中ListView.builder
                       Flexible(
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemCount:
                               list1.length + list2.length + list3.length + 3,
                           itemBuilder: (context, index) {
+                            final todo = todoListOverDue[index];
                             if (index == 0) {
-                              return const Text("bar1");
+                              return bar("期限切れ");
                             }
                             if (1 <= index && index <= list1.length) {
-                              return Text(list1[index - 1]);
+                              // return Text(list1[index - 1]); //期限切れ bar1つ分差し引く
+                              return Dismissible(
+                                key: ValueKey(todo.id),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await Navigator.push<void>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditTaskPage(todo),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                    child: ListTile(
+                                      tileColor: todo.user == "まま"
+                                          ? Colors.red[50]
+                                          : Colors.blue[50],
+                                      title: Text(
+                                          '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
+                                    ),
+                                  ),
+                                ),
+                                background: Container(
+                                  alignment: Alignment.centerLeft,
+                                  color: Colors.green[200],
+                                  child: const Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          20.0, 0.0, 0.0, 0.0),
+                                      child: Icon(Icons.tag_faces,
+                                          color: Colors.white)),
+                                ),
+                                secondaryBackground: Container(
+                                  alignment: Alignment.centerRight,
+                                  color: const Color.fromRGBO(244, 67, 54, 1),
+                                  child: const Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        10.0, 0.0, 20.0, 0.0),
+                                    child:
+                                        Icon(Icons.clear, color: Colors.white),
+                                  ),
+                                ),
+                                onDismissed: (direction) async {
+                                  todoListOverDue.remove(todo);
+                                  if (direction ==
+                                      DismissDirection.startToEnd) {
+                                    if (todo.repeatOption) {
+                                      await model.updateAndRepeatTask(todo.id);
+                                    } else {
+                                      await model.updateAndDeleteTask(todo.id);
+                                    }
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content:
+                                            Text('モンスターに${todo.thanks}のダメージ！'),
+                                        behavior: SnackBarBehavior.floating,
+                                        duration:
+                                            const Duration(milliseconds: 2000),
+                                        margin: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    2 -
+                                                50),
+                                      ),
+                                    ); //messenger
+                                    //モンスターこうげき
+                                    await model.monsterAttack(todo.id);
+                                    //messenger
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            '${model.monsterOffense}のダメージを受けた！'),
+                                        behavior: SnackBarBehavior.floating,
+                                        duration:
+                                            const Duration(milliseconds: 2000),
+                                        margin: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    2 -
+                                                50),
+                                      ),
+                                    ); //snackbar
+                                    await model.getUserGraph();
+                                  } else if (direction ==
+                                      DismissDirection.endToStart) {
+                                    todoListOverDue.remove(todo);
+
+                                    // await deleteTask(todo.id);
+                                  } else {
+                                    debugPrint("Nothing");
+                                  }
+                                },
+                              );
                             }
-                            return const Text("その他");
+                            if (index == list1.length + 1) {
+                              return bar("今日");
+                            }
+                            if (list1.length + 2 <= index &&
+                                index <= list1.length + list2.length + 1) {
+                              return Text(list2[index -
+                                  2 -
+                                  list1.length]); //今日のリスト　bar2つ分差し引く
+                            }
+                            if (index == list1.length + list2.length + 2) {
+                              return bar("明日以降");
+                            }
+                            if (list1.length + 2 <= index &&
+                                index <=
+                                    list1.length +
+                                        list2.length +
+                                        list3.length +
+                                        2) {
+                              return Text(list3[index -
+                                  3 -
+                                  list1.length -
+                                  list2.length]); //明日以降　bar3つ分差し引く
+                            }
+                            return const SizedBox(); //これいらないんだが。TODO:
                           },
                         ),
                       ),
-                      Flexible(
-                        child: ListView.builder(
-                          //TODO:3つのリストを結合することが無理なら、ListView.builder以下を３つ同じものを並べる他ないか？
-                          shrinkWrap: true,
-                          itemCount: todoListOverDue.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final todo = todoListOverDue[index];
-                            return Dismissible(
-                              //TODO:このエラーにしょっちゅう見舞われる…
-                              //いつ、disposeされているのか、仕組みがまだ見えていないので、その流れをお聞きしたい。
-                              //A TaskModel was used after being disposed.
-                              // E/flutter (29527): Once you have called dispose() on a TaskModel, it can no longer be used.
+                      //稼働中、工事予定のListView.builder
+                      // Flexible(
+                      //   child: ListView.builder(
+                      //     shrinkWrap: true,
+                      //     itemCount: todoListOverDue.length,
+                      //     itemBuilder: (BuildContext context, int index) {
+                      //       final todo = todoListOverDue[index];
+                      //       return Dismissible(
+                      //         //TODO:このエラーにしょっちゅう見舞われる…
+                      //         //いつ、disposeされているのか、仕組みがまだ見えていないので、その流れをお聞きしたい。
+                      //         //A TaskModel was used after being disposed.
+                      //         // E/flutter (29527): Once you have called dispose() on a TaskModel, it can no longer be used.
 
-                              //ValueKeyで解決。materialを取り除いたらOKになった。
-                              // key: UniqueKey(),
-                              // key: ObjectKey(todoIndex
-                              //     .id),
-                              key: ValueKey(todo.id),
-                              child: InkWell(
-                                onTap: () async {
-                                  await Navigator.push<void>(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditTaskPage(todo),
-                                    ),
-                                  );
-                                },
-                                child: Card(
-                                  child: ListTile(
-                                    tileColor: todo.user == "まま"
-                                        ? Colors.red[50]
-                                        : Colors.blue[50],
-                                    title: Text(
-                                        '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
-                                  ),
-                                ),
-                              ),
-                              background: Container(
-                                alignment: Alignment.centerLeft,
-                                color: Colors.green[200],
-                                child: const Padding(
-                                    padding: EdgeInsets.fromLTRB(
-                                        20.0, 0.0, 0.0, 0.0),
-                                    child: Icon(Icons.tag_faces,
-                                        color: Colors.white)),
-                              ),
-                              secondaryBackground: Container(
-                                alignment: Alignment.centerRight,
-                                color: const Color.fromRGBO(244, 67, 54, 1),
-                                child: const Padding(
-                                  padding:
-                                      EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                                  child: Icon(Icons.clear, color: Colors.white),
-                                ),
-                              ),
-                              onDismissed: (direction) async {
-                                todoListOverDue.remove(todo);
-                                if (direction == DismissDirection.startToEnd) {
-                                  if (todo.repeatOption) {
-                                    await model.updateAndRepeatTask(todo.id);
-                                  } else {
-                                    await model.updateAndDeleteTask(todo.id);
-                                  }
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content:
-                                          Text('モンスターに${todo.thanks}のダメージ！'),
-                                      behavior: SnackBarBehavior.floating,
-                                      duration:
-                                          const Duration(milliseconds: 2000),
-                                      margin: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                                      .size
-                                                      .height /
-                                                  2 -
-                                              50),
-                                    ),
-                                  ); //messenger
-                                  //モンスターこうげき
-                                  await model.monsterAttack(todo.id);
-                                  //messenger
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          '${model.monsterOffense}のダメージを受けた！'),
-                                      behavior: SnackBarBehavior.floating,
-                                      duration:
-                                          const Duration(milliseconds: 2000),
-                                      margin: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                                      .size
-                                                      .height /
-                                                  2 -
-                                              50),
-                                    ),
-                                  ); //snackbar
-                                  await model.getUserGraph();
-                                } else if (direction ==
-                                    DismissDirection.endToStart) {
-                                  todoListOverDue.remove(todo);
+                      //         //ValueKeyで解決。materialを取り除いたらOKになった。
+                      //         // key: UniqueKey(),
+                      //         // key: ObjectKey(todoIndex
+                      //         //     .id),
+                      //         key: ValueKey(todo.id),
+                      //         child: InkWell(
+                      //           onTap: () async {
+                      //             await Navigator.push<void>(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                 builder: (context) => EditTaskPage(todo),
+                      //               ),
+                      //             );
+                      //           },
+                      //           child: Card(
+                      //             child: ListTile(
+                      //               tileColor: todo.user == "まま"
+                      //                   ? Colors.red[50]
+                      //                   : Colors.blue[50],
+                      //               title: Text(
+                      //                   '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //         background: Container(
+                      //           alignment: Alignment.centerLeft,
+                      //           color: Colors.green[200],
+                      //           child: const Padding(
+                      //               padding: EdgeInsets.fromLTRB(
+                      //                   20.0, 0.0, 0.0, 0.0),
+                      //               child: Icon(Icons.tag_faces,
+                      //                   color: Colors.white)),
+                      //         ),
+                      //         secondaryBackground: Container(
+                      //           alignment: Alignment.centerRight,
+                      //           color: const Color.fromRGBO(244, 67, 54, 1),
+                      //           child: const Padding(
+                      //             padding:
+                      //                 EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                      //             child: Icon(Icons.clear, color: Colors.white),
+                      //           ),
+                      //         ),
+                      //         onDismissed: (direction) async {
+                      //           todoListOverDue.remove(todo);
+                      //           if (direction == DismissDirection.startToEnd) {
+                      //             if (todo.repeatOption) {
+                      //               await model.updateAndRepeatTask(todo.id);
+                      //             } else {
+                      //               await model.updateAndDeleteTask(todo.id);
+                      //             }
+                      //             ScaffoldMessenger.of(context).showSnackBar(
+                      //               SnackBar(
+                      //                 content:
+                      //                     Text('モンスターに${todo.thanks}のダメージ！'),
+                      //                 behavior: SnackBarBehavior.floating,
+                      //                 duration:
+                      //                     const Duration(milliseconds: 2000),
+                      //                 margin: EdgeInsets.only(
+                      //                     bottom: MediaQuery.of(context)
+                      //                                 .size
+                      //                                 .height /
+                      //                             2 -
+                      //                         50),
+                      //               ),
+                      //             ); //messenger
+                      //             //モンスターこうげき
+                      //             await model.monsterAttack(todo.id);
+                      //             //messenger
+                      //             ScaffoldMessenger.of(context).showSnackBar(
+                      //               SnackBar(
+                      //                 content: Text(
+                      //                     '${model.monsterOffense}のダメージを受けた！'),
+                      //                 behavior: SnackBarBehavior.floating,
+                      //                 duration:
+                      //                     const Duration(milliseconds: 2000),
+                      //                 margin: EdgeInsets.only(
+                      //                     bottom: MediaQuery.of(context)
+                      //                                 .size
+                      //                                 .height /
+                      //                             2 -
+                      //                         50),
+                      //               ),
+                      //             ); //snackbar
+                      //             await model.getUserGraph();
+                      //           } else if (direction ==
+                      //               DismissDirection.endToStart) {
+                      //             todoListOverDue.remove(todo);
 
-                                  // await deleteTask(todo.id);
-                                } else {
-                                  debugPrint("Nothing");
-                                }
-                              },
-                            );
-                          },
-                        ),
-                      )
+                      //             // await deleteTask(todo.id);
+                      //           } else {
+                      //             debugPrint("Nothing");
+                      //           }
+                      //         },
+                      //       );//dismissible
+                      //     },
+                      //   ),
+                      // )//工事予定Flexible
                     ],
                   );
           },
