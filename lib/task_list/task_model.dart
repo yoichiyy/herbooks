@@ -33,21 +33,32 @@ class TaskModel extends ChangeNotifier {
     });
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> todoListQuerySnapshot({
+    required Query<Map<String, dynamic>> Function(
+      Query<Map<String, dynamic>> query,
+    )
+        queryBuilder,
+  }) {
+    final collectionReference =
+        FirebaseFirestore.instance.collection('todoList');
+    // final query = collectionReference.where("dueDate", isLessThan: _now);
+    final query = queryBuilder(collectionReference);
+    return query.snapshots();
+  }
+
   void getTodoListRealtime() {
     final _now = DateTime.now();
     DateTime _next = _now.add(const Duration(days: 1));
     _next = DateTime(_next.year, _next.month, _next.day, 0, 0, 0);
 
-    //TODO:果たしてこの方法（同じquerySnapShot攻撃を3回繰り返している。）で良いのか
-    //もう少しスマートな方法はないのか。
+    final kigengire = todoListQuerySnapshot(
+        queryBuilder: (query) => query.where("dueDate", isLessThan: _now));
+        //「whereをつける」という作業を関数化。
 
     //過去
     final querySnapshotsOverDue = FirebaseFirestore.instance
         .collection('todoList')
-        .where(
-          "dueDate",
-          isLessThan: _now,
-        )
+        .where("dueDate", isLessThan: _now)
         .snapshots();
 
     querySnapshotsOverDue.listen((querySnapshot) {
@@ -262,7 +273,6 @@ class TaskModel extends ChangeNotifier {
     });
     //
     notifyListeners();
-
   }
 
   Future<void> updateAndDeleteTask(String docId) async {

@@ -5,6 +5,7 @@ import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+
 import '../task_edit/create_task.dart';
 import '../task_edit/edit_task.dart';
 import 'task_model.dart';
@@ -12,7 +13,6 @@ import 'task_model.dart';
 class TaskListPage extends StatelessWidget {
   TaskListPage({super.key});
   final player = AudioPlayer();
-  
 
   //こんぶんさんADVICEそっくりやろうとしたが、どうやら話が違うようだ。
   // final Todo todo;
@@ -74,6 +74,10 @@ class TaskListPage extends StatelessWidget {
             final todoListOverDue = model.todoListFromModelToday;
             final todoListToday = model.todoListFromModelToday;
             final todoListAfterToday = model.todoListFromModelOverDue;
+            final list1 = ["a", "b", "c"];
+            final list2 = ["あ", "い", "cう"];
+            final list3 = ["a1", "b2", "c3"];
+
             return model.isLoading
                 ? const Center(
                     child: CircularProgressIndicator(),
@@ -112,23 +116,16 @@ class TaskListPage extends StatelessWidget {
                               );
                             }),
                       ),
-                      SizedBox(
-                        //Monster Pic
-                        height: 150,
-                        width: 150,
-                        child: GestureDetector (
-                          //TODO:audioPlayer簡単そうで、なぜかうまくいかぬ。
-                          // onTap: player.setSource(AssetSource('sounds/coin.wav')),
-                          // onTap: await player.play(DeviceFileSource("audio/sample.mp3")),
-                          
-                          //TODO: setStateで、サイズボックスのサイズを変更したい。
-                          //だが、Provider(notifyListenersと、Consumerちゃん)を使っている。この２つは相性が悪いようだ。
-                          //具体的には、以前setStateを別の場所で使ったところ、このエラーが出た。
-                          //だから、「いさぎよく」Provider一本に絞った経緯あり。
-                          //でも、onTapで、画像のサイズを変更したり、音を出したりする方法として、setState以外に、
-                          //Providerの、モデルクラスになにか書いて…といことはできるのか？　
-
-
+                      GestureDetector(
+                        //monsterのステートフルを作る。
+                        onTap: () async {
+                          await player.setSource(AssetSource('sword.mp3'));
+                          debugPrint("なってるはず");
+                        },
+                        child: SizedBox(
+                          //Monster Pic
+                          height: 150,
+                          width: 150,
                           child: Image.asset('images/shoggoth.png'),
                         ),
                       ),
@@ -171,6 +168,22 @@ class TaskListPage extends StatelessWidget {
                       ),
                       Text(
                           "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
+                      Flexible(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount:
+                              list1.length + list2.length + list3.length + 3,
+                          itemBuilder: (context, index) {
+                            if (index == 0) {
+                              return const Text("bar1");
+                            }
+                            if (1 <= index && index <= list1.length) {
+                              return Text(list1[index - 1]);
+                            }
+                            return const Text("その他");
+                          },
+                        ),
+                      ),
                       Flexible(
                         child: ListView.builder(
                           //TODO:3つのリストを結合することが無理なら、ListView.builder以下を３つ同じものを並べる他ないか？
