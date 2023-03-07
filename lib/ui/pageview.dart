@@ -9,18 +9,18 @@ class PageViewClass extends StatelessWidget {
 
 //変数であった。final。中身が変わる。 pagesというメソッドにした（getter)。「Javaゲッター　dartゲッター」
   List<Widget> get pages => [
-         TaskListPage(),
+        TaskListPage(),
         const MyHomePage(),
         const AllHistory(),
       ];
 
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController(initialPage: 1);
+    final PageController controller = PageController(initialPage: 0);
 
     return PageView(
       controller: controller,
-      children:  <Widget>[
+      children: <Widget>[
         Center(
           child: TaskListPage(),
         ),

@@ -129,49 +129,49 @@ class TaskListPage extends StatelessWidget {
                           child: Image.asset('images/shoggoth.png'),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 100,
-                          lineHeight: 20.0,
-                          percent: model.paHp / model.paHpMax,
-                          center: Text(
-                            "Pa:${model.paHp.toString()}",
-                            style: const TextStyle(fontSize: 12.0),
-                          ),
-                          animation: true,
-                          animationDuration: 1000,
-                          leading: const Icon(Icons.rowing_outlined),
-                          barRadius: const Radius.circular(16),
-                          backgroundColor: Colors.grey,
-                          progressColor: Colors.blue[200],
-                        ),
-                      ),
-                      Text(
-                          "知${model.paIntelligence.toString()}  心${model.paCare.toString()}  力${model.paPower.toString()}  技${model.paSkill.toString()}  忍${model.paPatience.toString()}  ♡${model.paThanks.toString()}"),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 100,
-                          lineHeight: 20.0,
-                          leading: const Icon(Icons.pregnant_woman_rounded),
-                          // trailing: const Text("右"),
-                          percent: model.maHp / model.maHpMax,
-                          center: Text(
-                            "Ma:${model.maHp.toString()}",
-                          ),
-                          animation: true,
-                          animationDuration: 1000,
-                          barRadius: const Radius.circular(16),
-                          progressColor: Colors.pink[100],
-                        ),
-                      ),
-                      Text(
-                          "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(15.0),
+                      //   child: LinearPercentIndicator(
+                      //     width: MediaQuery.of(context).size.width - 100,
+                      //     lineHeight: 20.0,
+                      //     percent: model.paHp / model.paHpMax,
+                      //     center: Text(
+                      //       "Pa:${model.paHp.toString()}",
+                      //       style: const TextStyle(fontSize: 12.0),
+                      //     ),
+                      //     animation: true,
+                      //     animationDuration: 1000,
+                      //     leading: const Icon(Icons.rowing_outlined),
+                      //     barRadius: const Radius.circular(16),
+                      //     backgroundColor: Colors.grey,
+                      //     progressColor: Colors.blue[200],
+                      //   ),
+                      // ),
+                      // Text(
+                      //     "知${model.paIntelligence.toString()}  心${model.paCare.toString()}  力${model.paPower.toString()}  技${model.paSkill.toString()}  忍${model.paPatience.toString()}  ♡${model.paThanks.toString()}"),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(15.0),
+                      //   child: LinearPercentIndicator(
+                      //     width: MediaQuery.of(context).size.width - 100,
+                      //     lineHeight: 20.0,
+                      //     leading: const Icon(Icons.pregnant_woman_rounded),
+                      //     // trailing: const Text("右"),
+                      //     percent: model.maHp / model.maHpMax,
+                      //     center: Text(
+                      //       "Ma:${model.maHp.toString()}",
+                      //     ),
+                      //     animation: true,
+                      //     animationDuration: 1000,
+                      //     barRadius: const Radius.circular(16),
+                      //     progressColor: Colors.pink[100],
+                      //   ),
+                      // ),
+                      // Text(
+                      //     "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
                       //テスト中ListView.builder
                       Flexible(
                         child: CustomScrollView(slivers: [
-                          SliverToBoxAdapter(child: bar("期限切れ")),
+                          // SliverToBoxAdapter(child: bar("期限切れ")),
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
                               childCount: todoListOverDue.length,
@@ -180,24 +180,24 @@ class TaskListPage extends StatelessWidget {
                               },
                             ),
                           ),
-                          SliverToBoxAdapter(child: bar("今日")),
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              childCount: todoListToday.length,
-                              (context, index) {
-                                return TaskChan(todoListToday);
-                              },
-                            ),
-                          ),
-                          SliverToBoxAdapter(child: bar("明日以降")),
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              childCount: todoListAfterToday.length,
-                              (context, index) {
-                                return TaskChan(todoListAfterToday);
-                              },
-                            ),
-                          ),
+                          // SliverToBoxAdapter(child: bar("今日")),
+                          // SliverList(
+                          //   delegate: SliverChildBuilderDelegate(
+                          //     childCount: todoListToday.length,
+                          //     (context, index) {
+                          //       return TaskChan(todoListToday);
+                          //     },
+                          //   ),
+                          // ),
+                          // SliverToBoxAdapter(child: bar("明日以降")),
+                          // SliverList(
+                          //   delegate: SliverChildBuilderDelegate(
+                          //     childCount: todoListAfterToday.length,
+                          //     (context, index) {
+                          //       return TaskChan(todoListAfterToday);
+                          //     },
+                          //   ),
+                          // ),
                         ]),
                       ),
                     ],
