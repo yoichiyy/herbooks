@@ -94,7 +94,6 @@ class TaskListPage extends StatelessWidget {
                             //ここモンスタークラスにする
                             stream: null,
                             //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
-
                             builder: (context, snapshot) {
                               return LinearPercentIndicator(
                                 width: MediaQuery.of(context).size.width - 100,
@@ -205,7 +204,6 @@ class TaskListPage extends StatelessWidget {
                   );
           },
         ),
-        // ここから
         floatingActionButton: FloatingActionButton(
           heroTag: "hero2",
           child: const Icon(Icons.egg_alt),
@@ -214,7 +212,6 @@ class TaskListPage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const TaskCard()));
           },
         ),
-        // ここまで
       ),
     );
   }
@@ -231,6 +228,7 @@ class TaskChan extends StatelessWidget {
       child: Consumer<TaskModel>(
         builder: (context, model, child) {
           return Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Flexible(
                 child: ListView.builder(
@@ -289,7 +287,8 @@ class TaskChan extends StatelessWidget {
                               duration: const Duration(milliseconds: 2000),
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height / 2 - 50),
+                                      MediaQuery.of(context).size.height / 2 -
+                                          50),
                             ),
                           ); //messenger
                           //モンスターこうげき
@@ -297,12 +296,14 @@ class TaskChan extends StatelessWidget {
                           //messenger
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('${model.monsterOffense}のダメージを受けた！'),
+                              content:
+                                  Text('${model.monsterOffense}のダメージを受けた！'),
                               behavior: SnackBarBehavior.floating,
                               duration: const Duration(milliseconds: 2000),
                               margin: EdgeInsets.only(
                                   bottom:
-                                      MediaQuery.of(context).size.height / 2 - 50),
+                                      MediaQuery.of(context).size.height / 2 -
+                                          50),
                             ),
                           ); //snackbar
                           await model.getUserGraph();
