@@ -62,11 +62,6 @@ class TaskModel extends ChangeNotifier {
         .snapshots();
 
     querySnapshotsOverDue.listen((querySnapshot) {
-      //TODO:Data.forEach(e)的なことをしている？
-      //でも、"shotS"が全体だとすると、"shot"は何？（この下にshot.docsがドキュメント全部、とメモがあるので、また混乱）
-      //TODO: true? →森川「Listenを使うことで、取得されるデータがstream型（future型の"いとこ"）になる。」
-      //（Listenとは一言で、何するメソッド？）
-      //新聞購読の喩えがわかりやすかった＝＞新しい情報が投入されるたびに「その部分だけ」／「全部のデータ」を流してくれるということか？（どっち？）
       final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
       final todoList = queryDocumentSnapshots
           .map((doc) => Todo(doc))

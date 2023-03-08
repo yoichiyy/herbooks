@@ -4,7 +4,6 @@ import 'package:counter/task_edit/edit_task.dart';
 import 'package:counter/task_list/thank_list.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../task_edit/create_task.dart';
@@ -74,10 +73,6 @@ class TaskListPage extends StatelessWidget {
             final todoListOverDue = model.todoListFromModelOverDue;
             final todoListToday = model.todoListFromModelToday;
             final todoListAfterToday = model.todoListFromModelAfterToday;
-            // final list1 = ["1", "2", "3"];
-            // final list1 = model.todoListFromModelOverDue;
-            // final list2 = ["あ", "い", "う", "え"];
-            // final list3 = ["a", "b", "c", "d", "e"];
 
             return model.isLoading
                 ? const Center(
@@ -86,49 +81,49 @@ class TaskListPage extends StatelessWidget {
                 : Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Padding(
-                        //monster Graph
-                        padding: const EdgeInsets.all(15.0),
-                        child: StreamBuilder<Object>(
-                            //TODO:ここ、次のTODOどうにかしないと。
-                            //ここモンスタークラスにする
-                            stream: null,
-                            //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
-                            builder: (context, snapshot) {
-                              return LinearPercentIndicator(
-                                width: MediaQuery.of(context).size.width - 100,
-                                lineHeight: 20.0,
-                                percent: model.monsterHp / model.monsterHpMax,
-                                center: Text(
-                                  "HP:${model.monsterHp.toString()}",
-                                  style: const TextStyle(fontSize: 12.0),
-                                ),
-                                animation: true,
-                                animationDuration: 1000,
-                                leading: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: Image.asset('images/shoggoth.png'),
-                                ),
-                                barRadius: const Radius.circular(16),
-                                backgroundColor: Colors.grey,
-                                progressColor: Colors.blue[200],
-                              );
-                            }),
-                      ),
-                      GestureDetector(
-                        //monsterのステートフルを作る。
-                        onTap: () async {
-                          await player.setSource(AssetSource('sword.mp3'));
-                          debugPrint("なってるはず");
-                        },
-                        child: SizedBox(
-                          //Monster Pic
-                          height: 150,
-                          width: 150,
-                          child: Image.asset('images/shoggoth.png'),
-                        ),
-                      ),
+                      // Padding(
+                      //   //monster Graph
+                      //   padding: const EdgeInsets.all(15.0),
+                      //   child: StreamBuilder<Object>(
+                      //       //TODO:ここ、次のTODOどうにかしないと。
+                      //       //ここモンスタークラスにする
+                      //       stream: null,
+                      //       //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
+                      //       builder: (context, snapshot) {
+                      //         return LinearPercentIndicator(
+                      //           width: MediaQuery.of(context).size.width - 100,
+                      //           lineHeight: 20.0,
+                      //           percent: model.monsterHp / model.monsterHpMax,
+                      //           center: Text(
+                      //             "HP:${model.monsterHp.toString()}",
+                      //             style: const TextStyle(fontSize: 12.0),
+                      //           ),
+                      //           animation: true,
+                      //           animationDuration: 1000,
+                      //           leading: SizedBox(
+                      //             width: 20,
+                      //             height: 20,
+                      //             child: Image.asset('images/shoggoth.png'),
+                      //           ),
+                      //           barRadius: const Radius.circular(16),
+                      //           backgroundColor: Colors.grey,
+                      //           progressColor: Colors.blue[200],
+                      //         );
+                      //       }),
+                      // ),
+                      // GestureDetector(
+                      //   //monsterのステートフルを作る。
+                      //   onTap: () async {
+                      //     await player.setSource(AssetSource('sword.mp3'));
+                      //     debugPrint("なってるはず");
+                      //   },
+                      //   child: SizedBox(
+                      //     //Monster Pic
+                      //     height: 150,
+                      //     width: 150,
+                      //     child: Image.asset('images/shoggoth.png'),
+                      //   ),
+                      // ),
                       // Padding(
                       //   padding: const EdgeInsets.all(15.0),
                       //   child: LinearPercentIndicator(
@@ -174,30 +169,30 @@ class TaskListPage extends StatelessWidget {
                           SliverToBoxAdapter(child: bar("期限切れ")),
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
-                              childCount: todoListOverDue.length,
+                              childCount: 1,
                               (context, index) {
-                                return TaskChan(todoListOverDue);
+                                return TaskChan(model, todoListOverDue);
                               },
                             ),
                           ),
-                          // SliverToBoxAdapter(child: bar("今日")),
-                          // SliverList(
-                          //   delegate: SliverChildBuilderDelegate(
-                          //     childCount: todoListToday.length,
-                          //     (context, index) {
-                          //       return TaskChan(todoListToday);
-                          //     },
-                          //   ),
-                          // ),
-                          // SliverToBoxAdapter(child: bar("明日以降")),
-                          // SliverList(
-                          //   delegate: SliverChildBuilderDelegate(
-                          //     childCount: todoListAfterToday.length,
-                          //     (context, index) {
-                          //       return TaskChan(todoListAfterToday);
-                          //     },
-                          //   ),
-                          // ),
+                          SliverToBoxAdapter(child: bar("今日")),
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              childCount: 1,
+                              (context, index) {
+                                return TaskChan(model, todoListToday);
+                              },
+                            ),
+                          ),
+                          SliverToBoxAdapter(child: bar("明日以降")),
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              childCount: 1,
+                              (context, index) {
+                                return TaskChan(model, todoListAfterToday);
+                              },
+                            ),
+                          ),
                         ]),
                       ),
                     ],
@@ -218,19 +213,23 @@ class TaskListPage extends StatelessWidget {
 }
 
 class TaskChan extends StatelessWidget {
-  const TaskChan(this.listFromParent, {super.key});
+  const TaskChan(this.model, this.listFromParent, {super.key});
+  final TaskModel model; //this.modelと、この行を追加したTODO:
   final List<Todo> listFromParent;
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TaskModel>(
-      create: (_) => TaskModel()..getTodoListRealtime(),
+    return ChangeNotifierProvider<TaskModel>.value(
+      value: TaskModel()
+        ..getTodoListRealtime(), //.valueをつけ、create:()=>の代わりにvalueにしたTODO:
+      //それでもなお、UniqueKey()を使用している時に、afterdisposedのエラーが右スワイプで出る
+      //上位クラスでも、同じ処理をしたところ、同じエラーだが、反応は変わった。(313 await model.getUserGraphのブレークポイントで止まるようになった)
+
       child: Consumer<TaskModel>(
         builder: (context, model, child) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              //ここのflexibleを外しても、何も変わらない。//TODO:
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -238,7 +237,9 @@ class TaskChan extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final todo = listFromParent[index];
                   return Dismissible(
-                    key: ValueKey(todo.id),
+                    key: UniqueKey(),
+                    //ValueKeyを使うと、dismissed widget is still part of the treeが出てくる。UniqueKeyにすると出て来ない。TODO:
+                    //dismissibleと、providerが問題に関係していると思うが、一度基礎的な部分も（それぞれの仕組み？）学び直した方がよさそう。
                     child: InkWell(
                       onTap: () async {
                         await Navigator.push<void>(
@@ -277,41 +278,43 @@ class TaskChan extends StatelessWidget {
                       listFromParent.remove(todo);
                       if (direction == DismissDirection.startToEnd) {
                         if (todo.repeatOption) {
-                          await model.updateAndRepeatTask(todo.id);
+                          await model.updateAndRepeatTask(
+                              todo.id); //repeat Trueなら、日付＋１してタスク情報更新される
                         } else {
-                          await model.updateAndDeleteTask(todo.id);
+                          await model.updateAndDeleteTask(
+                              todo.id); //repeat Falseなら削除される
                         }
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('モンスターに${todo.thanks}のダメージ！'),
-                            behavior: SnackBarBehavior.floating,
-                            duration: const Duration(milliseconds: 2000),
-                            margin: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).size.height / 2 -
-                                    50),
-                          ),
-                        ); //messenger
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text('モンスターに${todo.thanks}のダメージ！'),
+                        //     behavior: SnackBarBehavior.floating,
+                        //     duration: const Duration(milliseconds: 2000),
+                        //     margin: EdgeInsets.only(
+                        //         bottom: MediaQuery.of(context).size.height / 2 -
+                        //             50),
+                        //   ),
+                        // );
                         //モンスターこうげき
-                        await model.monsterAttack(todo.id);
-                        //messenger
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${model.monsterOffense}のダメージを受けた！'),
-                            behavior: SnackBarBehavior.floating,
-                            duration: const Duration(milliseconds: 2000),
-                            margin: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).size.height / 2 -
-                                    50),
-                          ),
-                        ); //snackbar
-                        await model.getUserGraph();
+                        // await model.monsterAttack(todo.id);
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //     content: Text('${model.monsterOffense}のダメージを受けた！'),
+                        //     behavior: SnackBarBehavior.floating,
+                        //     duration: const Duration(milliseconds: 2000),
+                        //     margin: EdgeInsets.only(
+                        //         bottom: MediaQuery.of(context).size.height / 2 -
+                        //             50),
+                        //   ),
+                        // ); //snackbar
+                        await model
+                            .getUserGraph(); //ScaffoldMessengerは表示実行されるが、これは実行されなかった。
                       } else if (direction == DismissDirection.endToStart) {
-                        listFromParent.remove(todo);
-
-                        // await deleteTask(todo.id);
-                      } else {
-                        debugPrint("Nothing");
+                        // listFromParent.remove(todo); //謎のメソッド。書いた記憶がない。
+                        await deleteTask(todo.id);
                       }
+                      // else {
+                      //   debugPrint("Nothing");
+                      // }
                     },
                   ); //dismissible
                 },
