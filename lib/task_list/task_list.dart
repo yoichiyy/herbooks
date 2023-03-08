@@ -171,7 +171,7 @@ class TaskListPage extends StatelessWidget {
                       //テスト中ListView.builder
                       Flexible(
                         child: CustomScrollView(slivers: [
-                          // SliverToBoxAdapter(child: bar("期限切れ")),
+                          SliverToBoxAdapter(child: bar("期限切れ")),
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
                               childCount: todoListOverDue.length,
@@ -230,94 +230,91 @@ class TaskChan extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: listFromParent.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final todo = listFromParent[index];
-                    return Dismissible(
-                      key: ValueKey(todo.id),
-                      child: InkWell(
-                        onTap: () async {
-                          await Navigator.push<void>(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditTaskPage(todo),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          child: ListTile(
-                            tileColor: todo.user == "まま"
-                                ? Colors.red[50]
-                                : Colors.blue[50],
-                            title: Text(
-                                '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
+              //ここのflexibleを外しても、何も変わらない。//TODO:
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: listFromParent.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final todo = listFromParent[index];
+                  return Dismissible(
+                    key: ValueKey(todo.id),
+                    child: InkWell(
+                      onTap: () async {
+                        await Navigator.push<void>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditTaskPage(todo),
                           ),
-                        ),
-                      ),
-                      background: Container(
-                        alignment: Alignment.centerLeft,
-                        color: Colors.green[200],
-                        child: const Padding(
-                            padding: EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
-                            child: Icon(Icons.tag_faces, color: Colors.white)),
-                      ),
-                      secondaryBackground: Container(
-                        alignment: Alignment.centerRight,
-                        color: const Color.fromRGBO(244, 67, 54, 1),
-                        child: const Padding(
-                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
-                          child: Icon(Icons.clear, color: Colors.white),
-                        ),
-                      ),
-                      onDismissed: (direction) async {
-                        listFromParent.remove(todo);
-                        if (direction == DismissDirection.startToEnd) {
-                          if (todo.repeatOption) {
-                            await model.updateAndRepeatTask(todo.id);
-                          } else {
-                            await model.updateAndDeleteTask(todo.id);
-                          }
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('モンスターに${todo.thanks}のダメージ！'),
-                              behavior: SnackBarBehavior.floating,
-                              duration: const Duration(milliseconds: 2000),
-                              margin: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).size.height / 2 -
-                                          50),
-                            ),
-                          ); //messenger
-                          //モンスターこうげき
-                          await model.monsterAttack(todo.id);
-                          //messenger
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text('${model.monsterOffense}のダメージを受けた！'),
-                              behavior: SnackBarBehavior.floating,
-                              duration: const Duration(milliseconds: 2000),
-                              margin: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).size.height / 2 -
-                                          50),
-                            ),
-                          ); //snackbar
-                          await model.getUserGraph();
-                        } else if (direction == DismissDirection.endToStart) {
-                          listFromParent.remove(todo);
-
-                          // await deleteTask(todo.id);
-                        } else {
-                          debugPrint("Nothing");
-                        }
+                        );
                       },
-                    ); //dismissible
-                  },
-                ), //工事予定Flexible
+                      child: Card(
+                        child: ListTile(
+                          tileColor: todo.user == "まま"
+                              ? Colors.red[50]
+                              : Colors.blue[50],
+                          title: Text(
+                              '${todo.taskNameOfTodoClass}　${todo.dueDate?.month}/${todo.dueDate?.day}  ${todo.dueDate?.hour}時'),
+                        ),
+                      ),
+                    ),
+                    background: Container(
+                      alignment: Alignment.centerLeft,
+                      color: Colors.green[200],
+                      child: const Padding(
+                          padding: EdgeInsets.fromLTRB(20.0, 0.0, 0.0, 0.0),
+                          child: Icon(Icons.tag_faces, color: Colors.white)),
+                    ),
+                    secondaryBackground: Container(
+                      alignment: Alignment.centerRight,
+                      color: const Color.fromRGBO(244, 67, 54, 1),
+                      child: const Padding(
+                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 0.0),
+                        child: Icon(Icons.clear, color: Colors.white),
+                      ),
+                    ),
+                    onDismissed: (direction) async {
+                      listFromParent.remove(todo);
+                      if (direction == DismissDirection.startToEnd) {
+                        if (todo.repeatOption) {
+                          await model.updateAndRepeatTask(todo.id);
+                        } else {
+                          await model.updateAndDeleteTask(todo.id);
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('モンスターに${todo.thanks}のダメージ！'),
+                            behavior: SnackBarBehavior.floating,
+                            duration: const Duration(milliseconds: 2000),
+                            margin: EdgeInsets.only(
+                                bottom: MediaQuery.of(context).size.height / 2 -
+                                    50),
+                          ),
+                        ); //messenger
+                        //モンスターこうげき
+                        await model.monsterAttack(todo.id);
+                        //messenger
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${model.monsterOffense}のダメージを受けた！'),
+                            behavior: SnackBarBehavior.floating,
+                            duration: const Duration(milliseconds: 2000),
+                            margin: EdgeInsets.only(
+                                bottom: MediaQuery.of(context).size.height / 2 -
+                                    50),
+                          ),
+                        ); //snackbar
+                        await model.getUserGraph();
+                      } else if (direction == DismissDirection.endToStart) {
+                        listFromParent.remove(todo);
+
+                        // await deleteTask(todo.id);
+                      } else {
+                        debugPrint("Nothing");
+                      }
+                    },
+                  ); //dismissible
+                },
               ),
             ],
           );
