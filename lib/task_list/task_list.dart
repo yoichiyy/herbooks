@@ -24,7 +24,6 @@ class TaskListPage extends StatelessWidget {
 // そもそも、もう少しinitStateとかで何をしているのか、
 // 仕組みをよく理解していれば、ここも自分でできたかもしれない。
 // ので、もう一度ここをお聞きしたい。
-// それを通じて、今回の話を理解したい。
 //[VERBOSE-2:dart_vm_initializer.cc(41)] Unhandled Exception: A TaskModel was used after being disposed.
 //Once you have called dispose() on a TaskModel, it can no longer be used.
 // late TaskModel model;
@@ -332,13 +331,24 @@ Future<void> deleteTask(String docId) async {
   await FirebaseFirestore.instance.collection('todoList').doc(docId).delete();
 }
 
-Widget bar(String title) {
+Widget bar(String title ) {
+  // build(BuildContext context),
   return Container(
-    child: Center(
-        child: Text(
-      title, //共通化して、関数を利用した
-      style: const TextStyle(color: Colors.white),
-    )),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title, //共通化して、関数を利用した
+          style: const TextStyle(color: Colors.white),
+        ),
+        TextButton(
+          child:const Text("+"),
+          onPressed:() {
+            Navigator.push<void>(context,//TODO: クラスを継承していないこのBARウィジェットに、どうナビゲーターを実装？！
+                MaterialPageRoute(builder: (context) => const TaskCard()));
+          }, )
+      ],
+    ),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(5),
       color: Colors.grey,
