@@ -8,13 +8,19 @@ class TaskModel extends ChangeNotifier {
 //View..スクリーンtaskList.dart
 //ViewModel ...VIEWの状態ちをもたせたクラス TaskModel。
 
+  @override
+  void dispose() {
+    print("おはよう");
+    super.dispose();
+  }
+
 //日本語訳「リストです。Todoクラスで定義した３つの変数を使います。」
   List<Todo> todoListFromModelOverDue = [];
   List<Todo> todoListFromModelToday = [];
   List<Todo> todoListFromModelAfterToday = [];
 
   List<Thank> thankListFromModel = [];
-  bool isLoading = true; //本当はプライベートにして、getter setter.ぽくわける。
+  bool isLoading = false; //本当はプライベートにして、getter setter.ぽくわける。
 
   void getThankList() {
     final querySnapshots =
@@ -53,7 +59,7 @@ class TaskModel extends ChangeNotifier {
 
     final kigengire = todoListQuerySnapshot(
         queryBuilder: (query) => query.where("dueDate", isLessThan: _now));
-        //「whereをつける」という作業を関数化。
+    //「whereをつける」という作業を関数化。
 
     //過去
     final querySnapshotsOverDue = FirebaseFirestore.instance
@@ -83,13 +89,15 @@ class TaskModel extends ChangeNotifier {
         .snapshots();
     //TODO:タイムゾーン アメリカのが取得されるのはどう直す？
 
-    querySnapshotsToday.listen((querySnapshot) {
-      final queryDocumentSnapshots = querySnapshot.docs;
-      final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-      todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-      todoListFromModelToday = todoList;
-      notifyListeners();
-    });
+    // querySnapshotsToday.listen((querySnapshot) {
+    //   final queryDocumentSnapshots = querySnapshot.docs;
+    //   final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
+    //   todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+    //   todoListFromModelToday = todoList;
+    //   notifyListeners();//koko！
+    // });
+
+    //タスクモデルを、しぼる。
 
     //明日以降のタスクリスト
     final querySnapshotsAfterToday = FirebaseFirestore.instance
@@ -135,18 +143,18 @@ class TaskModel extends ChangeNotifier {
   int monsterHpMax = 0;
   String monsterId = "";
 
-  void _startLoading() {
-    isLoading = true;
-    notifyListeners();
-  }
+  // void _startLoading() {
+  //   isLoading = true;
+  //   notifyListeners();
+  // }
 
-  void _endLoading() {
-    isLoading = false;
-    notifyListeners();
-  }
+  // void _endLoading() {
+  //   isLoading = false;
+  //   notifyListeners();
+  // }
 
   Future<void> getUserGraph() async {
-    _startLoading();
+    // _startLoading();
     try {
       //pa Data
       final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -191,7 +199,7 @@ class TaskModel extends ChangeNotifier {
       monsterId = monsterInfo.id;
     } finally {
       //失敗しても、絶対これは呼ばれる。
-      _endLoading();
+      // _endLoading();
     }
   } //getUserGraph
 
