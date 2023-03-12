@@ -10,7 +10,7 @@ class TaskModel extends ChangeNotifier {
 
   @override
   void dispose() {
-    print("おはよう");
+    debugPrint("おはよう");
     super.dispose();
   }
 
@@ -39,6 +39,10 @@ class TaskModel extends ChangeNotifier {
     });
   }
 
+//こうすけさん授業2月末くらい：動画みないと思い出せぬ。特に最初の部分なにをやっているのか。
+//たしか、クエリ文をカスタマイズするためのものだった。
+//クエリ文を共通項でくくって、今日、過去、未来3種類のクエリを一発で作るメソッド…を作るためのメソッドだたと思う。
+  //「whereをつける」という作業を関数化。←これが正解。下で使ってる。
   Stream<QuerySnapshot<Map<String, dynamic>>> todoListQuerySnapshot({
     required Query<Map<String, dynamic>> Function(
       Query<Map<String, dynamic>> query,
@@ -67,16 +71,16 @@ class TaskModel extends ChangeNotifier {
         .where("dueDate", isLessThan: _now)
         .snapshots();
 
-    querySnapshotsOverDue.listen((querySnapshot) {
-      final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
-      final todoList = queryDocumentSnapshots
-          .map((doc) => Todo(doc))
-          .toList(); //Todoクラスのコンストラクタに、idも追加
-      todoList.sort((a, b) => a.dueDate!
-          .compareTo(b.dueDate!)); //並べ替えて、最後にリストをtodoListというリストの箱に詰め替えてる
-      todoListFromModelOverDue = todoList;
-      notifyListeners();
-    });
+    // querySnapshotsOverDue.listen((querySnapshot) {
+    //   final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
+    //   final todoList = queryDocumentSnapshots
+    //       .map((doc) => Todo(doc))
+    //       .toList(); //Todoクラスのコンストラクタに、idも追加
+    //   todoList.sort((a, b) => a.dueDate!
+    //       .compareTo(b.dueDate!)); //並べ替えて、最後にリストをtodoListというリストの箱に詰め替えてる
+    //   todoListFromModelOverDue = todoList;
+    //   notifyListeners();
+    // });
 
     //今日のタスクリスト
     final querySnapshotsToday = FirebaseFirestore.instance
@@ -87,17 +91,14 @@ class TaskModel extends ChangeNotifier {
           isLessThan: _next,
         )
         .snapshots();
-    //TODO:タイムゾーン アメリカのが取得されるのはどう直す？
 
     // querySnapshotsToday.listen((querySnapshot) {
     //   final queryDocumentSnapshots = querySnapshot.docs;
     //   final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
     //   todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
     //   todoListFromModelToday = todoList;
-    //   notifyListeners();//koko！
+    //   notifyListeners(); //koko！
     // });
-
-    //タスクモデルを、しぼる。
 
     //明日以降のタスクリスト
     final querySnapshotsAfterToday = FirebaseFirestore.instance
@@ -108,13 +109,13 @@ class TaskModel extends ChangeNotifier {
         )
         .snapshots();
 
-    querySnapshotsAfterToday.listen((querySnapshot) {
-      final queryDocumentSnapshots = querySnapshot.docs;
-      final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-      todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-      todoListFromModelAfterToday = todoList;
-      notifyListeners();
-    });
+    // querySnapshotsAfterToday.listen((querySnapshot) {
+    //   final queryDocumentSnapshots = querySnapshot.docs;
+    //   final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
+    //   todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+    //   todoListFromModelAfterToday = todoList;
+    //   notifyListeners();
+    // });
   }
 
   int paThanks = 0;
@@ -143,18 +144,18 @@ class TaskModel extends ChangeNotifier {
   int monsterHpMax = 0;
   String monsterId = "";
 
-  // void _startLoading() {
-  //   isLoading = true;
-  //   notifyListeners();
-  // }
+  void _startLoading() {
+    isLoading = true;
+    notifyListeners();
+  }
 
-  // void _endLoading() {
-  //   isLoading = false;
-  //   notifyListeners();
-  // }
+  void _endLoading() {
+    isLoading = false;
+    notifyListeners();
+  }
 
   Future<void> getUserGraph() async {
-    // _startLoading();
+    _startLoading();
     try {
       //pa Data
       final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -199,7 +200,7 @@ class TaskModel extends ChangeNotifier {
       monsterId = monsterInfo.id;
     } finally {
       //失敗しても、絶対これは呼ばれる。
-      // _endLoading();
+      _endLoading();
     }
   } //getUserGraph
 
