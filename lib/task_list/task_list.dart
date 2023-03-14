@@ -4,209 +4,196 @@ import 'package:counter/task_edit/edit_task.dart';
 import 'package:counter/task_list/thank_list.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../task_edit/create_task.dart';
 import 'task_model.dart';
 
-class TaskListPage extends StatelessWidget {
-  TaskListPage({super.key});
+class TaskListPage extends StatefulWidget {
+  const TaskListPage({super.key});
+
+  @override
+  State<TaskListPage> createState() => _TaskListPageState();
+}
+
+class _TaskListPageState extends State<TaskListPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<TaskModel>().getTodoListRealtime();
+  }
+
   final player = AudioPlayer();
 
   //ADVICE dispose×factory×lateの話
-  // final Todo todo;
-  // const TaskListPage(this.todo, {Key? key}) : super(key: key);
-//   const TaskListPage({Key? key}) : super(key: key);
-//   @override
-//   State<TaskListPage> createState() => _TaskListPageState();
-// }
-// class _TaskListPageState extends State<TaskListPage> {
-// そもそも、もう少しinitStateとかで何をしているのか、
-// 仕組みをよく理解していれば、ここも自分でできたかもしれない。
-// ので、もう一度ここをお聞きしたい。
-//[VERBOSE-2:dart_vm_initializer.cc(41)] Unhandled Exception: A TaskModel was used after being disposed.
-//Once you have called dispose() on a TaskModel, it can no longer be used.
-// late TaskModel model;
-// @override
-//   void initState() {
-//     model = TaskModel(widget.taskmodel);
-//     super.initState();
-//   }
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<TaskModel>(
-            create: (_) => TaskModel()
-              ..getTodoListRealtime()
-              ..getUserGraph()),
-      ],
-      child: Scaffold(
-        bottomNavigationBar: const BottomBar(currentIndex: 0),
-        appBar: AppBar(
-          title: const Text('やること'),
-          actions: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-              child: OutlinedButton(
-                child:
-                    const Text('THANKS', style: TextStyle(color: Colors.white)),
-                onPressed: () async {
-                  await Navigator.push<void>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ThankList(),
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
-        body: Consumer<TaskModel>(
-          builder: (context, model, child) {
-            final todoListOverDue = model.todoListFromModelOverDue;
-            final todoListToday = model.todoListFromModelToday;
-            final todoListAfterToday = model.todoListFromModelAfterToday;
-
-            return model.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        //monster Graph
-                        padding: const EdgeInsets.all(15.0),
-                        child: StreamBuilder<Object>(
-                            //TODO:ここ、次のTODOどうにかしないと。
-                            //ここモンスタークラスにする
-                            stream: null,
-                            //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
-                            builder: (context, snapshot) {
-                              return LinearPercentIndicator(
-                                width: MediaQuery.of(context).size.width - 100,
-                                lineHeight: 20.0,
-                                percent: model.monsterHp / model.monsterHpMax,
-                                center: Text(
-                                  "HP:${model.monsterHp.toString()}",
-                                  style: const TextStyle(fontSize: 12.0),
-                                ),
-                                animation: true,
-                                animationDuration: 1000,
-                                leading: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: Image.asset('images/shoggoth.png'),
-                                ),
-                                barRadius: const Radius.circular(16),
-                                backgroundColor: Colors.grey,
-                                progressColor: Colors.blue[200],
-                              );
-                            }),
-                      ),
-                      GestureDetector(
-                        //monsterのステートフルを作る。
-                        onTap: () async {
-                          await player.setSource(AssetSource('sword.mp3'));
-                          debugPrint("なってるはず");
-                        },
-                        child: SizedBox(
-                          //Monster Pic
-                          height: 150,
-                          width: 150,
-                          child: Image.asset('images/shoggoth.png'),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 100,
-                          lineHeight: 20.0,
-                          percent: model.paHp / model.paHpMax,
-                          center: Text(
-                            "Pa:${model.paHp.toString()}",
-                            style: const TextStyle(fontSize: 12.0),
-                          ),
-                          animation: true,
-                          animationDuration: 1000,
-                          leading: const Icon(Icons.rowing_outlined),
-                          barRadius: const Radius.circular(16),
-                          backgroundColor: Colors.grey,
-                          progressColor: Colors.blue[200],
-                        ),
-                      ),
-                      Text(
-                          "知${model.paIntelligence.toString()}  心${model.paCare.toString()}  力${model.paPower.toString()}  技${model.paSkill.toString()}  忍${model.paPatience.toString()}  ♡${model.paThanks.toString()}"),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 100,
-                          lineHeight: 20.0,
-                          leading: const Icon(Icons.pregnant_woman_rounded),
-                          // trailing: const Text("右"),
-                          percent: model.maHp / model.maHpMax,
-                          center: Text(
-                            "Ma:${model.maHp.toString()}",
-                          ),
-                          animation: true,
-                          animationDuration: 1000,
-                          barRadius: const Radius.circular(16),
-                          progressColor: Colors.pink[100],
-                        ),
-                      ),
-                      Text(
-                          "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
-                      // テスト中ListView.builder
-                      Flexible(
-                        child: CustomScrollView(slivers: [
-                          SliverToBoxAdapter(child: bar("期限切れ")),
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              childCount: 1,
-                              (context, index) {
-                                return TaskChan(todoListOverDue);
-                              },
-                            ),
-                          ),
-                          SliverToBoxAdapter(child: bar("今日")),
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              childCount: 1,
-                              (context, index) {
-                                return TaskChan(todoListToday);
-                              },
-                            ),
-                          ),
-                          SliverToBoxAdapter(child: bar("明日以降")),
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              childCount: 1,
-                              (context, index) {
-                                return TaskChan(todoListAfterToday);
-                              },
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ],
-                  );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          heroTag: "hero2",
-          child: const Icon(Icons.egg_alt),
-          onPressed: () {
-            Navigator.push<void>(context,
-                MaterialPageRoute(builder: (context) => const TaskCard()));
-          },
-        ),
+    return Scaffold(
+      bottomNavigationBar: const BottomBar(currentIndex: 0),
+      appBar: AppBar(
+        title: const Text('やること'),
+        actions: [
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+            child: OutlinedButton(
+              child:
+                  const Text('THANKS', style: TextStyle(color: Colors.white)),
+              onPressed: () async {
+                await Navigator.push<void>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ThankList(),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
       ),
-      // ),
+      body: Consumer<TaskModel>(
+        builder: (context, model, child) {
+          // model.getTodoListRealtime();
+          // model.getUserGraph();
+
+          final todoListOverDue = model.todoListFromModelOverDue;
+          final todoListToday = model.todoListFromModelToday;
+          final todoListAfterToday = model.todoListFromModelAfterToday;
+
+          return model.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Padding(
+                      //monster Graph
+                      padding: EdgeInsets.all(15.0),
+                      // child: StreamBuilder<Object>(
+                      //     //TODO:ここ、次のTODOどうにかしないと。
+                      //     //ここモンスタークラスにする
+                      //     stream: null,
+                      //     //repositoryパターン。外部のデータにアクセスするとき。firestoreとか。レポジトリ層
+                      //     builder: (context, snapshot) {
+                      //       // return LinearPercentIndicator(
+                      //       //   width: MediaQuery.of(context).size.width - 100,
+                      //       //   lineHeight: 20.0,
+                      //       //   percent: model.monsterHp / model.monsterHpMax,
+                      //       //   center: Text(
+                      //       //     "HP:${model.monsterHp.toString()}",
+                      //       //     style: const TextStyle(fontSize: 12.0),
+                      //       //   ),
+                      //       //   animation: true,
+                      //       //   animationDuration: 1000,
+                      //       //   leading: SizedBox(
+                      //       //     width: 20,
+                      //       //     height: 20,
+                      //       //     child: Image.asset('images/shoggoth.png'),
+                      //       //   ),
+                      //       //   barRadius: const Radius.circular(16),
+                      //       //   backgroundColor: Colors.grey,
+                      //       //   progressColor: Colors.blue[200],
+                      //       // );
+                      //     }),
+                    ),
+                    GestureDetector(
+                      //monsterのステートフルを作る。
+                      onTap: () async {
+                        await player.setSource(AssetSource('sword.mp3'));
+                        debugPrint("なってるはず");
+                      },
+                      child: SizedBox(
+                        //Monster Pic
+                        height: 150,
+                        width: 150,
+                        child: Image.asset('images/shoggoth.png'),
+                      ),
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(15.0),
+                    //   child: LinearPercentIndicator(
+                    //     width: MediaQuery.of(context).size.width - 100,
+                    //     lineHeight: 20.0,
+                    //     percent: model.paHp / model.paHpMax,
+                    //     center: Text(
+                    //       "Pa:${model.paHp.toString()}",
+                    //       style: const TextStyle(fontSize: 12.0),
+                    //     ),
+                    //     animation: true,
+                    //     animationDuration: 1000,
+                    //     leading: const Icon(Icons.rowing_outlined),
+                    //     barRadius: const Radius.circular(16),
+                    //     backgroundColor: Colors.grey,
+                    //     progressColor: Colors.blue[200],
+                    //   ),
+                    // ),
+                    // Text(
+                    //     "知${model.paIntelligence.toString()}  心${model.paCare.toString()}  力${model.paPower.toString()}  技${model.paSkill.toString()}  忍${model.paPatience.toString()}  ♡${model.paThanks.toString()}"),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(15.0),
+                    //   child: LinearPercentIndicator(
+                    //     width: MediaQuery.of(context).size.width - 100,
+                    //     lineHeight: 20.0,
+                    //     leading: const Icon(Icons.pregnant_woman_rounded),
+                    //     // trailing: const Text("右"),
+                    //     percent: model.maHp / model.maHpMax,
+                    //     center: Text(
+                    //       "Ma:${model.maHp.toString()}",
+                    //     ),
+                    //     animation: true,
+                    //     animationDuration: 1000,
+                    //     barRadius: const Radius.circular(16),
+                    //     progressColor: Colors.pink[100],
+                    //   ),
+                    // ),
+                    // Text(
+                    //     "知${model.maIntelligence.toString()}  心${model.maCare.toString()}  力${model.maPower.toString()}  技${model.maSkill.toString()}  忍${model.maPatience.toString()}  ♡${model.maThanks.toString()}"),
+                    // テスト中ListView.builder
+                    Flexible(
+                      child: CustomScrollView(slivers: [
+                        SliverToBoxAdapter(child: bar("期限切れ")),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            childCount: 1,
+                            (context, index) {
+                              return TaskChan(todoListOverDue);
+                            },
+                          ),
+                        ),
+                        SliverToBoxAdapter(child: bar("今日")),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            childCount: 1,
+                            (context, index) {
+                              return TaskChan(todoListToday);
+                            },
+                          ),
+                        ),
+                        SliverToBoxAdapter(child: bar("明日以降")),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            childCount: 1,
+                            (context, index) {
+                              return TaskChan(todoListAfterToday);
+                            },
+                          ),
+                        ),
+                      ]),
+                    ),
+                  ],
+                );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: "hero2",
+        child: const Icon(Icons.egg_alt),
+        onPressed: () {
+          Navigator.push<void>(context,
+              MaterialPageRoute(builder: (context) => const TaskCard()));
+        },
+      ),
     );
   }
 }

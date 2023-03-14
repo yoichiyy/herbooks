@@ -16,14 +16,8 @@ class EditTaskPage extends StatefulWidget {
 }
 
 class _EditTaskPageState extends State<EditTaskPage> {
-  // bool checkBox = true;
-
   late EditTaskModel model;
-  //TODO:lateとは？　ここでなんで使ってるのか？
-  //地獄の解説　：　1.遅延初期化 2.宣言後に初期化されるnon-nullable変数の宣言
-  //…を、もう少し　噛み砕いた表現でいけないものだろうか？
-
-  @override //じゃあこのoverrideは、initStateについて、どういう意味を持たせている？
+  @override
   void initState() {
     model = EditTaskModel(widget.todo);
     super.initState();

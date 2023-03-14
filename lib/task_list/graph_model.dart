@@ -2,119 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class TaskModel extends ChangeNotifier {
-//Model ... クラス。TODOとか、THANKとか
-//MVVM
-//View..スクリーンtaskList.dart
-//ViewModel ...VIEWの状態ちをもたせたクラス TaskModel。
+class GraphModel extends ChangeNotifier {
 
-  @override
-  void dispose() {
-    debugPrint("おはよう");
-    super.dispose();
-  }
-
-//日本語訳「リストです。Todoクラスで定義した３つの変数を使います。」
-  List<Todo> todoListFromModelOverDue = [];
-  List<Todo> todoListFromModelToday = [];
-  List<Todo> todoListFromModelAfterToday = [];
   bool isLoading = false; //本当はプライベートにして、getter setter.ぽくわける。
-
-//こうすけさん授業2月末くらい：動画みないと思い出せぬ。特に最初の部分なにをやっているのか。
-//たしか、クエリ文をカスタマイズするためのものだった。
-//クエリ文を共通項でくくって、今日、過去、未来3種類のクエリを一発で作るメソッド…を作るためのメソッドだたと思う。
-  //「whereをつける」という作業を関数化。←これが正解。下で使ってる。
-
-  // Stream<QuerySnapshot<Map<String, dynamic>>> todoListQuerySnapshot({
-  //   required Query<Map<String, dynamic>> Function(
-  //     Query<Map<String, dynamic>> query,
-  //   )
-  //       queryBuilder,
-  // }) {
-  //   final collectionReference =
-  //       FirebaseFirestore.instance.collection('todoList');
-  //   // final query = collectionReference.where("dueDate", isLessThan: _now);
-  //   final query = queryBuilder(collectionReference);
-  //   return query.snapshots();
-  // }
-
-  void getTodoListRealtime() async {
-    final _now = DateTime.now();
-    DateTime _next = _now.add(const Duration(days: 1));
-    _next = DateTime(_next.year, _next.month, _next.day, 0, 0, 0);
-
-    // final kigengire = todoListQuerySnapshot(
-    //     queryBuilder: (query) => query.where("dueDate", isLessThan: _now));
-    //「whereをつける」という作業を関数化。
-
-    //過去
-//     final querySnapshotsOverDue = FirebaseFirestore.instance
-//         .collection('todoList')
-//         .where("dueDate", isLessThan: _now)
-//         .snapshots();
-
-// //なんでここで、リッスンしてるのかを理解すべし。
-//     querySnapshotsOverDue.listen((querySnapshot) {
-//       //TODO:次の行以降、通過されなくなった理由？
-//       final queryDocumentSnapshots = querySnapshot.docs; //コレクション内のドキュメント全部
-//       final todoList = queryDocumentSnapshots
-//           .map((doc) => Todo(doc))
-//           .toList(); //Todoクラスのコンストラクタに、idも追加
-//       todoList.sort((a, b) => a.dueDate!
-//           .compareTo(b.dueDate!)); //並べ替えて、最後にリストをtodoListというリストの箱に詰め替えてる
-//       todoListFromModelOverDue = todoList;
-//       notifyListeners();
-//     });
-
-// //フロントエンド→ライフサイクル。disposeもその一つ。初期化処理とか。
-// //決まりがある。listen と notifylisteners
-// //providerを　mainで呼べば解決されるかもしれない。
-// //再描画されるのはConsumer以下。再描画するときに、「listenを破棄して、また作る」ってことをやってる可能性
-
-//     //今日のタスクリスト
-//     final querySnapshotsToday = FirebaseFirestore.instance
-//         .collection('todoList')
-//         .where(
-//           "dueDate",
-//           isGreaterThanOrEqualTo: _now,
-//           isLessThan: _next,
-//         )
-//         .snapshots();
-
-//     querySnapshotsToday.listen((querySnapshot) {
-//       final queryDocumentSnapshots = querySnapshot.docs;
-//       final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-//       todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-//       todoListFromModelToday = todoList;
-//       notifyListeners(); //koko！
-//     });
-
-    //明日以降のタスクリスト
-    // FirebaseFirestore.instance
-    //     .collection('todoList')
-    //     // .where(
-    //     //   "dueDate",
-    //     //   isGreaterThan: _next,
-    //     // )
-    //     .snapshots()
-    //     .listen((querySnapshot) {
-    //   final queryDocumentSnapshots = querySnapshot.docs;
-    //   final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-    //   todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-    //   todoListFromModelAfterToday = todoList;
-    //   notifyListeners();
-    // });
-
-    final querySnapshot =
-        await FirebaseFirestore.instance.collection('todoList').get();
-
-    final queryDocumentSnapshots = querySnapshot.docs;
-    final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-    todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-    todoListFromModelAfterToday = todoList;
-    notifyListeners();
-  }
-
+  
   int paThanks = 0;
   int paIntelligence = 0;
   int paCare = 0;
@@ -423,3 +314,4 @@ class Todo {
     id = documentSnapshot.id;
   }
 }
+

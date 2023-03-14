@@ -1,7 +1,13 @@
 // import 'package:counter/counter/home_page.dart';
+import 'package:counter/counter/num_count.dart';
+import 'package:counter/counter_history/history_model.dart';
+import 'package:counter/counter_history/history_model_month.dart';
+import 'package:counter/task_list/task_model.dart';
 import 'package:counter/ui/pageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../user/signin.dart';
 
 class MyApp extends StatelessWidget {
@@ -9,8 +15,20 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  //こうすけさんコード
-  Widget build(BuildContext context) => MaterialApp(
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TaskModel>(
+          create: (_) => TaskModel()..getTodoListRealtime(),
+          // ..getUserGraph(),
+        ),
+        // ChangeNotifierProvider<EditTaskModel>(create: (_) => EditTaskModel()),
+        ChangeNotifierProvider<NumCountModel>(create: (_) => NumCountModel()),
+        ChangeNotifierProvider<HistoryModel>(create: (_) => HistoryModel()),
+        ChangeNotifierProvider<MonthlyHistoryModel>(
+            create: (_) => MonthlyHistoryModel()),
+      ],
+      child: MaterialApp(
         title: 'Flutter app',
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
@@ -29,21 +47,7 @@ class MyApp extends StatelessWidget {
             return const SigninPage();
           },
         ),
-      );
+      ),
+    );
+  } //まてりある
 }
-
-    //元のコード
-//     Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       title: 'HaruEhonApp',
-//       // theme: ThemeData(
-//       //   primarySwatch: Colors.amber,
-//       // ),
-//       home: Scaffold(
-//         // appBar: AppBar(title: const Text("HaruEhonApp")),
-//         body: LoginPage(),
-//         // home: PageView(),
-//       ),
-//     );
-//   }
-// }

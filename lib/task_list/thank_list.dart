@@ -1,8 +1,7 @@
+import 'package:counter/task_list/thank_model.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'task_model.dart';
 
 class ThankList extends StatelessWidget {
   const ThankList({super.key});
@@ -14,14 +13,14 @@ class ThankList extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //
-      home: ChangeNotifierProvider<TaskModel>(
-        create: (_) => TaskModel()..getThankList(),
+      home: ChangeNotifierProvider<ThankModel>(
+        create: (_) => ThankModel()..getThankList(),
         child: Scaffold(
           bottomNavigationBar: const BottomBar(currentIndex: 0),
           appBar: AppBar(
             title: const Text('THANKS'),
           ),
-          body: Consumer<TaskModel>(
+          body: Consumer<ThankModel>(
             builder: (context, model, child) {
               final thankList = model.thankListFromModel;
 
