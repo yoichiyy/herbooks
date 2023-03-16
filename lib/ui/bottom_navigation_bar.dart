@@ -1,8 +1,7 @@
 import 'package:counter/counter/home_page.dart';
 import 'package:counter/kakei_history/all_history.dart';
+import 'package:counter/task_list/task_monster.dart';
 import 'package:flutter/material.dart';
-
-import '../task_list/task_list.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({Key? key, required this.currentIndex}) : super(key: key);
@@ -38,7 +37,7 @@ class BottomBar extends StatelessWidget {
       onTap: (index) {
         if (index == 0) {
           Navigator.of(context).push<void>(
-              MaterialPageRoute(builder: (context) => TaskListPage()));
+              MaterialPageRoute(builder: (context) => const TaskMonster()));
         }
 
         if (index == 1) {

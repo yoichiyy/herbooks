@@ -1,7 +1,7 @@
 import 'package:counter/counter/home_page.dart';
 import 'package:counter/kakei_history/all_history.dart';
+import 'package:counter/task_list/task_monster.dart';
 import 'package:flutter/material.dart';
-
 import '../task_list/task_list.dart';
 
 class PageViewClass extends StatelessWidget {
@@ -9,7 +9,7 @@ class PageViewClass extends StatelessWidget {
 
 //変数であった。final。中身が変わる。 pagesというメソッドにした（getter)。「Javaゲッター　dartゲッター」
   List<Widget> get pages => [
-        TaskListPage(),
+        const TaskMonster(),
         const MyHomePage(),
         const AllHistory(),
       ];
@@ -20,14 +20,14 @@ class PageViewClass extends StatelessWidget {
 
     return PageView(
       controller: controller,
-      children: <Widget>[
+      children: const <Widget>[
         Center(
-          child: TaskListPage(),
+          child: TaskMonster(),
         ),
-        const Center(
+        Center(
           child: MyHomePage(),
         ),
-        const Center(
+        Center(
           child: AllHistory(),
         ),
       ],

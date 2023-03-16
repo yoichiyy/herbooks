@@ -391,8 +391,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                           HapticFeedback
                                               .mediumImpact(); // バイブレーション
                                           _confettiEventHaru();
-                                          // _controller.play(); // ココ！
-                                          debugPrint("confetti実行");
                                           model.bookNumRegister(1, "haru");
                                         },
                                       ),
@@ -433,8 +431,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   children: [
                                     Text(
                                       '$_tempCounterHaru',
-                                      style:
-                                          Theme.of(context).textTheme.headline4,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
                                     ),
                                   ],
                                 ),
@@ -532,8 +531,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   children: [
                                     Text(
                                       '$_tempCounterYume',
-                                      style:
-                                          Theme.of(context).textTheme.headline4,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium,
                                     ),
                                   ],
                                 ),

@@ -27,6 +27,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<HistoryModel>(create: (_) => HistoryModel()),
         ChangeNotifierProvider<MonthlyHistoryModel>(
             create: (_) => MonthlyHistoryModel()),
+        // ChangeNotifierProvider<TaskMonsterModel>(
+        //     create: (_) => TaskMonsterModel()),
       ],
       child: MaterialApp(
         title: 'Flutter app',
