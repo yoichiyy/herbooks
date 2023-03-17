@@ -72,9 +72,7 @@ class _TaskMonsterState extends State<TaskMonster> {
         builder: (context, model, child) {
           model.getTodoListRealtime();
           // model.getUserGraph();
-          // final double scaleFactor = isTapped ? 0.1 : 1.0;
-          // final todoList = model.todoList;
-          final todoList = model.todoListFromModelOverDue;
+          final todoListForTaskMonster = model.todoListFromModelOverDue;
 
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -94,7 +92,7 @@ class _TaskMonsterState extends State<TaskMonster> {
                     children: [
                       Image.asset('images/shoggoth.png'),
                       Text(
-                        todoList[1].taskNameOfTodoClass,
+                        todoListForTaskMonster[1].taskNameOfTodoClass,
                         // style: TextStyle(
                         //     fontSize:
                         //         _fontSize

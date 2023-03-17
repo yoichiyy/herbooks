@@ -1,7 +1,8 @@
 // import 'package:book_list_sample/domain/book.dart';
 // import 'package:book_list_sample/edit_book/edit_book_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
+
 import 'package:provider/provider.dart';
 
 import '../task_list/task_model.dart';
@@ -41,7 +42,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      DatePicker.showDateTimePicker(
+                      dp.showDateTimePicker(//TODO:許してくれない
                         context,
                         showTitleActions: true,
                         minTime: DateTime(2022, 3, 5),
