@@ -39,9 +39,9 @@ class TaskModel extends ChangeNotifier {
   // }
 
   void getTodoListRealtime() async {
-    final _now = DateTime.now();
-    DateTime _next = _now.add(const Duration(days: 1));
-    _next = DateTime(_next.year, _next.month, _next.day, 0, 0, 0);
+    // final _now = DateTime.now();
+    // DateTime _next = _now.add(const Duration(days: 1));
+    // _next = DateTime(_next.year, _next.month, _next.day, 0, 0, 0);
 
     // final kigengire = todoListQuerySnapshot(
     //     queryBuilder: (query) => query.where("dueDate", isLessThan: _now));
@@ -50,7 +50,7 @@ class TaskModel extends ChangeNotifier {
     // 過去
     final querySnapshotsOverDue = FirebaseFirestore.instance
         .collection('todoList')
-        .where("dueDate", isLessThan: _now)
+        // .where("dueDate", isLessThan: _now)
         .snapshots();
 
 //なんでここで、リッスンしてるのかを理解すべし。
@@ -71,40 +71,39 @@ class TaskModel extends ChangeNotifier {
 // //providerを　mainで呼べば解決されるかもしれない。
 // //再描画されるのはConsumer以下。再描画するときに、「listenを破棄して、また作る」ってことをやってる可能性
 
-    //今日のタスクリスト
-    final querySnapshotsToday = FirebaseFirestore.instance
-        .collection('todoList')
-        .where(
-          "dueDate",
-          isGreaterThanOrEqualTo: _now,
-          isLessThan: _next,
-        )
-        .snapshots();
+    // //今日のタスクリスト
+    // final querySnapshotsToday = FirebaseFirestore.instance
+    //     .collection('todoList')
+    //     .where(
+    //       "dueDate",
+    //       isGreaterThanOrEqualTo: _now,
+    //       isLessThan: _next,
+    //     )
+    //     .snapshots();
 
-    querySnapshotsToday.listen((querySnapshot) {
-      final queryDocumentSnapshots = querySnapshot.docs;
-      final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-      todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-      todoListFromModelToday = todoList;
-      notifyListeners(); //koko！
-    });
+    // querySnapshotsToday.listen((querySnapshot) {
+    //   final queryDocumentSnapshots = querySnapshot.docs;
+    //   final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
+    //   todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+    //   todoListFromModelToday = todoList;
+    //   notifyListeners(); //koko！
+    // });
 
-    //明日以降のタスクリスト
-    FirebaseFirestore.instance
-        .collection('todoList')
-        .where(
-          "dueDate",
-          isGreaterThan: _next,
-        )
-        .snapshots()
-        .listen((querySnapshot) {
-      final queryDocumentSnapshots = querySnapshot.docs;
-      final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
-      todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
-      todoListFromModelAfterToday = todoList;
-      notifyListeners();
-    });
-
+    // //明日以降のタスクリスト
+    // FirebaseFirestore.instance
+    //     .collection('todoList')
+    //     .where(
+    //       "dueDate",
+    //       isGreaterThan: _next,
+    //     )
+    //     .snapshots()
+    //     .listen((querySnapshot) {
+    //   final queryDocumentSnapshots = querySnapshot.docs;
+    //   final todoList = queryDocumentSnapshots.map((doc) => Todo(doc)).toList();
+    //   todoList.sort((a, b) => a.dueDate!.compareTo(b.dueDate!));
+    //   todoListFromModelAfterToday = todoList;
+    //   notifyListeners();
+    // });
   }
 
   int paThanks = 0;

@@ -16,10 +16,7 @@ class TaskMonster extends StatefulWidget {
 
 class _TaskMonsterState extends State<TaskMonster> {
   double _monsterSize = 150;
-  final double _fontSize = 13;
   int _tapCount = 0;
-  // final double _initialMonsterSize = 150;
-  // bool isTapped = false;
 
   void _updateImageSize() {
     setState(() {
@@ -74,36 +71,44 @@ class _TaskMonsterState extends State<TaskMonster> {
           // model.getUserGraph();
           final todoListForTaskMonster = model.todoListFromModelOverDue;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              GestureDetector(
-                onTap: _handleTap,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                  alignment: Alignment.center, //TODO:これじゃないみたい。どうすれば？
-                  // transform: Matrix4.identity()
-                  //   ..scale(scaleFactor, scaleFactor),
-                  width: _monsterSize,
-                  height: _monsterSize,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('images/shoggoth.png'),
-                      Text(
-                        todoListForTaskMonster[1].taskNameOfTodoClass,
-                        // style: TextStyle(
-                        //     fontSize:
-                        //         _fontSize
-                        //         ), //TODO:テキストサイズを、monsterSizeと対応させたいフォントサイズをDOUBLEとかにする方法？
+          return model.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: _handleTap,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        alignment: Alignment.center, //TODO:これじゃないみたい。どうすれば？
+                        // transform: Matrix4.identity()
+                        //   ..scale(scaleFactor, scaleFactor),
+                        width: _monsterSize,
+                        height: _monsterSize,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('images/shoggoth.png'),
+                              Text(
+                                todoListForTaskMonster.isEmpty
+                                    ? "task"
+                                    : todoListForTaskMonster[0]
+                                        .taskNameOfTodoClass,
+                                style: TextStyle(
+                                    fontSize: _monsterSize /
+                                        10), //TODO:テキストサイズを、monsterSizeと対応させたいフォントサイズをDOUBLEとかにする方法？
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
+                    ),
+                  ],
+                );
         },
       ),
       floatingActionButton: FloatingActionButton(
