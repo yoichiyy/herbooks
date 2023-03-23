@@ -55,4 +55,5 @@ flutter_icons:
   remove_alpha_ios: true
   image_path: "lib/assets/appstore.png"
   
-
+dependency_overrides:
+  firebase_core_platform_interface: 4.5.1
