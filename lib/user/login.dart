@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                       await Navigator.of(context)
                           .pushReplacement<MaterialPageRoute, PageViewClass>(
                         MaterialPageRoute(builder: (context) {
-                          return const PageViewClass();
+                          return const PageViewClass(key: ValueKey('pageView'));
                         }),
                       );
                     } catch (e) {

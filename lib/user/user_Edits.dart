@@ -32,7 +32,8 @@ class _UsersEditsState extends State<UsersEdits> {
             Navigator.pushReplacement<MaterialPageRoute, PageViewClass>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PageViewClass(),
+                  builder: (context) =>
+                      const PageViewClass(key: ValueKey('pageView')),
                 ));
           },
         ),
@@ -74,7 +75,8 @@ class _UsersEditsState extends State<UsersEdits> {
                   await Navigator.push<MaterialPageRoute>(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const PageViewClass(),
+                      builder: (context) =>
+                          const PageViewClass(key: ValueKey('pageView')),
                     ),
                   );
                 } catch (e) {

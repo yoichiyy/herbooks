@@ -2,16 +2,15 @@ import 'package:counter/counter/home_page.dart';
 import 'package:counter/kakei_history/all_history.dart';
 import 'package:counter/task_list/task_monster.dart';
 import 'package:flutter/material.dart';
-import '../task_list/task_list.dart';
 
 class PageViewClass extends StatelessWidget {
-  const PageViewClass({super.key});
+  const PageViewClass({required Key key}) : super(key: key);
 
 //変数であった。final。中身が変わる。 pagesというメソッドにした（getter)。「Javaゲッター　dartゲッター」
   List<Widget> get pages => [
-        const TaskMonster(),
-        const MyHomePage(),
-        const AllHistory(),
+        const TaskMonster(key: ValueKey('taskMonster')),
+        const MyHomePage(key: ValueKey('myHomePage')),
+        const AllHistory(key: ValueKey('allHistory')),
       ];
 
   @override
@@ -22,13 +21,13 @@ class PageViewClass extends StatelessWidget {
       controller: controller,
       children: const <Widget>[
         Center(
-          child: TaskMonster(),
+          child: TaskMonster(key: ValueKey('taskMonster')),
         ),
         Center(
-          child: MyHomePage(),
+          child: MyHomePage(key: ValueKey('myHomePage')),
         ),
         Center(
-          child: AllHistory(),
+          child: AllHistory(key: ValueKey('allHistory')),
         ),
       ],
     );

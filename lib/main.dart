@@ -13,7 +13,7 @@ void main() async {
 
   //多分hive使っていた時のファイル保管場所呼び出し
   // final directory = await getApplicationDocumentsDirectory();
-  runApp(const MyApp());
+  runApp(const MyApp(key: ValueKey('myApp')));
 }
 
   // get() async {

@@ -11,8 +11,8 @@ import 'package:provider/provider.dart';
 import '../user/signin.dart';
 
 class MyApp extends StatelessWidget {
-  // const MyApp({Key? key}) : super(key: key);
-  const MyApp({super.key});
+  const MyApp({required Key key}) : super(key: key);
+  // const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             }
             if (snapshot.hasData) {
               // 1.User が null でなないこと確認 →ホームへ
-              return const PageViewClass();
+              return const PageViewClass(key: ValueKey('pageView'));
             }
             //widget→変わらないものとして定義したいところ＝const
 

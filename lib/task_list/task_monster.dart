@@ -8,7 +8,7 @@ import '../task_edit/create_task.dart';
 import 'task_model.dart';
 
 class TaskMonster extends StatefulWidget {
-  const TaskMonster({super.key});
+  const TaskMonster({required Key key}) : super(key: key);
 
   @override
   State<TaskMonster> createState() => _TaskMonsterState();
@@ -17,11 +17,11 @@ class TaskMonster extends StatefulWidget {
 class _TaskMonsterState extends State<TaskMonster> {
   double _monsterSize = 150;
   int _tapCount = 0;
+  late AudioPlayer? _audioPlayer;
 
   void _updateImageSize() {
     setState(() {
       _tapCount++;
-      // isTapped = true;
       if (_tapCount == 3) {
         _monsterSize = 0.0;
       } else {
@@ -31,13 +31,28 @@ class _TaskMonsterState extends State<TaskMonster> {
   }
 
   Future<void> _playSound() async {
-    AudioPlayer _audioPlayer = AudioPlayer();
-    await _audioPlayer.setSource(AssetSource('sword.mp3'));
+    _audioPlayer = AudioPlayer();
+    await _audioPlayer!.setSource(AssetSource('sword.mp3'));
   }
 
   void _handleTap() async {
     await _playSound();
     _updateImageSize();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final model = Provider.of<TaskModel>(context, listen: false);
+    model.getTodoListRealtime();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _audioPlayer?.dispose();
+    final model = Provider.of<TaskModel>(context, listen: false);
+    model.disposeRealtimeListeners();
   }
 
   @override
@@ -62,13 +77,11 @@ class _TaskMonsterState extends State<TaskMonster> {
                 );
               },
             ),
-          )
+          ),
         ],
       ),
       body: Consumer<TaskModel>(
         builder: (context, model, child) {
-          model.getTodoListRealtime();
-          // model.getUserGraph();
           final todoListForTaskMonster = model.todoListFromModelOverDue;
 
           return model.isLoading
@@ -83,27 +96,25 @@ class _TaskMonsterState extends State<TaskMonster> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
-                        alignment: Alignment.center, //TODO:これじゃないみたい。どうすれば？
+                        alignment: Alignment.center,
                         // transform: Matrix4.identity()
                         //   ..scale(scaleFactor, scaleFactor),
                         width: _monsterSize,
-                        height: _monsterSize,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset('images/shoggoth.png'),
-                              Text(
+                        height: _monsterSize * 2,
+                        child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(child: Image.asset('images/shoggoth.png')),
+                            Expanded(
+                              child: Text(
                                 todoListForTaskMonster.isEmpty
                                     ? "task"
                                     : todoListForTaskMonster[0]
                                         .taskNameOfTodoClass,
-                                style: TextStyle(
-                                    fontSize: _monsterSize /
-                                        10), //TODO:テキストサイズを、monsterSizeと対応させたいフォントサイズをDOUBLEとかにする方法？
+                                style: TextStyle(fontSize: _monsterSize / 10),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
