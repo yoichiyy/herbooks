@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counter/task_list/task_monster.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../task_list/task_list.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({Key? key}) : super(key: key);
@@ -44,10 +43,11 @@ class _TaskCardState extends State<TaskCard> {
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
-              Navigator.pushReplacement<MaterialPageRoute, TaskListPage>(
+              Navigator.pushReplacement<MaterialPageRoute, TaskMonster>(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TaskListPage(),
+                    builder: (context) =>
+                        const TaskMonster(key: ValueKey('taskMonster')),
                   ));
             },
           ),

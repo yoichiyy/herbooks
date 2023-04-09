@@ -18,12 +18,15 @@ class _TaskMonsterState extends State<TaskMonster> {
   double _monsterSize = 150;
   int _tapCount = 0;
   late AudioPlayer? _audioPlayer;
+  bool taskComplete = false;
 
   void _updateImageSize() {
     setState(() {
       _tapCount++;
       if (_tapCount == 3) {
         _monsterSize = 0.0;
+        taskComplete = true;
+        debugPrint(taskComplete.toString());
       } else {
         _monsterSize /= 1.5;
       }

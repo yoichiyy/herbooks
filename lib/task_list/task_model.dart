@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,8 @@ import 'package:flutter/material.dart';
 class TaskModel extends ChangeNotifier {
 //日本語訳「リストです。Todoクラスで定義した３つの変数を使います。」
   List<Todo> todoListFromModelOverDue = [];
-  List<Todo> todoListFromModelToday = [];
-  List<Todo> todoListFromModelAfterToday = [];
+  // List<Todo> todoListFromModelToday = [];
+  // List<Todo> todoListFromModelAfterToday = [];
   bool isLoading = false;
 
   // Firestore のリアルタイムリスナー
@@ -19,8 +18,10 @@ class TaskModel extends ChangeNotifier {
     // すでにリスナーが登録されている場合は、削除する
     _overDueListener?.cancel();
 
-    final querySnapshotsOverDue =
-        FirebaseFirestore.instance.collection('todoList').snapshots();
+    final querySnapshotsOverDue = FirebaseFirestore.instance
+        .collection('todoList')
+        .where('user', isEqualTo: 'ぱぱ')
+        .snapshots();
 
     _overDueListener = querySnapshotsOverDue.listen((querySnapshot) {
       final queryDocumentSnapshots = querySnapshot.docs;
