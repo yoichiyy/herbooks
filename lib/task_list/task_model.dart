@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class TaskModel extends ChangeNotifier {
 
   void getTodoListRealtime() async {
     // すでにリスナーが登録されている場合は、削除する
+
     _overDueListener?.cancel();
 
     final querySnapshotsOverDue = FirebaseFirestore.instance
@@ -71,6 +73,21 @@ class TaskModel extends ChangeNotifier {
   //   isLoading = false;
   //   notifyListeners();
   // }
+
+  Future<void> createTaskForTomorrow(String docId) async {
+    //タスク情報取得
+    final docRefTask =
+        FirebaseFirestore.instance.collection('todoList').doc(docId);
+
+    //タスクのdueDateを今日の日付+1日後に更新
+    final dueDateUpdated = DateTime.now().add(const Duration(days: 1));
+    final dueDateAsTimeStamp = Timestamp.fromDate(dueDateUpdated);
+    await docRefTask.update({
+      "dueDate": dueDateAsTimeStamp,
+    });
+
+    notifyListeners();
+  }
 
   Future<void> getUserGraph() async {
     // _startLoading();

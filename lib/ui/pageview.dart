@@ -16,6 +16,7 @@ class PageViewClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PageController controller = PageController(initialPage: 0);
+    //(initialPage: taskComplete ? 0:1);
 
     return PageView(
       controller: controller,

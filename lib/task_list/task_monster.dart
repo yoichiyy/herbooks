@@ -14,7 +14,6 @@ class TaskMonster extends StatefulWidget {
   State<TaskMonster> createState() => _TaskMonsterState();
 }
 
-
 class _TaskMonsterState extends State<TaskMonster> {
   double _monsterSize = 150;
   int _tapCount = 0;
@@ -26,8 +25,10 @@ class _TaskMonsterState extends State<TaskMonster> {
       _tapCount++;
       if (_tapCount == 3) {
         _monsterSize = 0.0;
-        taskComplete = true;
-        debugPrint(taskComplete.toString());
+        //以下の2行は、重複しているがやむなし？
+        final model = Provider.of<TaskModel>(context, listen: false);
+        final todoListForTaskMonster = model.todoListFromModelOverDue;
+        model.createTaskForTomorrow(todoListForTaskMonster[0].id);
       } else {
         _monsterSize /= 1.5;
       }

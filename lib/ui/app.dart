@@ -1,4 +1,5 @@
 // import 'package:counter/counter/home_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/counter/num_count.dart';
 import 'package:counter/counter_history/history_model.dart';
 import 'package:counter/counter_history/history_model_month.dart';
@@ -16,12 +17,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final uid = FirebaseAuth.instance.currentUser!.uid;
+    // final docRefUser = FirebaseFirestore.instance.collection('users').doc(uid);
+    // final userInfo = await docRefUser.get();
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<TaskModel>(
-          create: (_) => TaskModel()..getTodoListRealtime(),
-          // ..getUserGraph(),
-        ),
+        ChangeNotifierProvider<TaskModel>(create: (_) => TaskModel()
+
+
+            // ..getTodoListRealtime(),
+            // ..getUserGraph(),
+            ),
         // ChangeNotifierProvider<EditTaskModel>(create: (_) => EditTaskModel()),
         ChangeNotifierProvider<NumCountModel>(create: (_) => NumCountModel()),
         ChangeNotifierProvider<HistoryModel>(create: (_) => HistoryModel()),
