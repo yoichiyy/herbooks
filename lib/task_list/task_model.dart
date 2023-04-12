@@ -14,6 +14,20 @@ class TaskModel extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? _overDueListener;
   StreamSubscription<QuerySnapshot>? _subscription;
 
+//最初にユーザー情報を取得して、
+//dueDateが今日のタスクがあるかどうかを判定するメソッド
+
+
+
+
+
+
+
+
+
+
+
+
   void getTodoListRealtime() async {
     // すでにリスナーが登録されている場合は、削除する
     _overDueListener?.cancel();

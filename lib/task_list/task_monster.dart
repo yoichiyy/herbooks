@@ -1,11 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:counter/task_list/task_model.dart';
 import 'package:counter/task_list/thank_list.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../task_edit/create_task.dart';
-import 'task_model.dart';
 
 class TaskMonster extends StatefulWidget {
   const TaskMonster({required Key key}) : super(key: key);
