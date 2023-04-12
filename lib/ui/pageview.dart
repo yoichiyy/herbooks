@@ -14,27 +14,30 @@ class PageViewClass extends StatelessWidget {
         const AllHistory(key: ValueKey('allHistory')),
       ];
 
-Future<bool> checkTodaysTask() async {
-  final now = DateTime.now();
-  final startOfDay = DateTime(now.year, now.month, now.day);
-  final endOfDay = startOfDay.add(const Duration(days: 1));
-
-  final user = FirebaseAuth.instance.currentUser;
-
-  if (user == null) {
-    // ユーザーがログインしていない場合は、falseを返す
-    return false;
+  Future<String?> getUserName(String uid) async {
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    return userDoc.data()?['name'];
   }
 
-  final querySnapshotTodaysTask = await FirebaseFirestore.instance
-    .collection('todoList')
-    .where('user', isEqualTo: user.uid)
-    .where('dueDate', isGreaterThanOrEqualTo: startOfDay)
-    .where('dueDate', isLessThan: endOfDay)
-    .get();
+  Future<bool> checkTodaysTask() async {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+    final user = FirebaseAuth.instance.currentUser;
 
-  return querySnapshotTodaysTask.docs.isNotEmpty;
-}
+    // user.uidを使ってuserNameを取得
+    final userName = await getUserName(user!.uid);
+
+    final querySnapshotTodaysTask = await FirebaseFirestore.instance
+        .collection('todoList')
+        .where('user', isEqualTo: userName)
+        .where('dueDate', isGreaterThanOrEqualTo: startOfDay)
+        .where('dueDate', isLessThan: endOfDay)
+        .get();
+
+    return querySnapshotTodaysTask.docs.isNotEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,8 @@ Future<bool> checkTodaysTask() async {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           final int initialPage = snapshot.data == true ? 0 : 1;
-          final PageController controller = PageController(initialPage: initialPage);
+          final PageController controller =
+              PageController(initialPage: initialPage);
 
           return PageView(
             controller: controller,
