@@ -28,7 +28,7 @@ class _TaskMonsterState extends State<TaskMonster> {
         //以下の2行は、重複しているがやむなし？
         final model = Provider.of<TaskModel>(context, listen: false);
         final todoListForTaskMonster = model.todoListFromModelOverDue;
-        
+
         model.createTaskForTomorrow(todoListForTaskMonster[0].id);
       } else {
         _monsterSize /= 1.5;
@@ -96,6 +96,8 @@ class _TaskMonsterState extends State<TaskMonster> {
                 )
               : Column(
                   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     GestureDetector(
                       onTap: _handleTap,
@@ -108,19 +110,31 @@ class _TaskMonsterState extends State<TaskMonster> {
                         width: _monsterSize,
                         height: _monsterSize * 2,
                         child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(child: Image.asset('images/shoggoth.png')),
-                            Expanded(
-                              child: Text(
-                                todoListForTaskMonster.isEmpty
-                                    ? "taskなし"
-                                    : todoListForTaskMonster[0]
-                                        .taskNameOfTodoClass,
-                                style: TextStyle(fontSize: _monsterSize / 10),
-                              ),
-                            ),
-                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: todoListForTaskMonster.isEmpty
+                              ? [
+                                  const Expanded(
+                                    child: Center(
+                                      child: Text('おめでとうございます！'),
+                                    ),
+                                  )
+                                ]
+                              : [
+                                  Expanded(
+                                      child:
+                                          Image.asset('images/shoggoth.png')),
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        todoListForTaskMonster[0]
+                                            .taskNameOfTodoClass,
+                                        style: TextStyle(
+                                            fontSize: _monsterSize / 10),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                         ),
                       ),
                     ),
