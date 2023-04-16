@@ -28,6 +28,7 @@ class _TaskMonsterState extends State<TaskMonster> {
         //以下の2行は、重複しているがやむなし？
         final model = Provider.of<TaskModel>(context, listen: false);
         final todoListForTaskMonster = model.todoListFromModelOverDue;
+        
         model.createTaskForTomorrow(todoListForTaskMonster[0].id);
       } else {
         _monsterSize /= 1.5;
@@ -113,7 +114,7 @@ class _TaskMonsterState extends State<TaskMonster> {
                             Expanded(
                               child: Text(
                                 todoListForTaskMonster.isEmpty
-                                    ? "task"
+                                    ? "taskなし"
                                     : todoListForTaskMonster[0]
                                         .taskNameOfTodoClass,
                                 style: TextStyle(fontSize: _monsterSize / 10),
@@ -132,7 +133,7 @@ class _TaskMonsterState extends State<TaskMonster> {
         child: const Icon(Icons.egg_alt),
         onPressed: () {
           Navigator.push<void>(context,
-              MaterialPageRoute(builder: (context) => const TaskCard()));
+              MaterialPageRoute(builder: (context) => const CreateTask()));
         },
       ),
     );

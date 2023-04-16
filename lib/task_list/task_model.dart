@@ -15,28 +15,29 @@ class TaskModel extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? _overDueListener;
   StreamSubscription<QuerySnapshot>? _subscription;
 
-//最初にユーザー情報を取得して、
-//dueDateが今日のタスクがあるかどうかを判定するメソッド
-
-
-
-
-
-
-
-
-
-
-
+  Future<String?> getUserName(String uid) async {
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    return userDoc.data()?['name'];
+  }
 
   void getTodoListRealtime() async {
     // すでにリスナーが登録されている場合は、削除する
-
     _overDueListener?.cancel();
+
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+    final user = FirebaseAuth.instance.currentUser;
+
+    // user.uidを使ってuserNameを取得
+    final userName = await getUserName(user!.uid);
 
     final querySnapshotsOverDue = FirebaseFirestore.instance
         .collection('todoList')
-        .where('user', isEqualTo: 'ぱぱ')
+        .where('user', isEqualTo: userName)
+        // .where('dueDate', isGreaterThanOrEqualTo: startOfDay)
+        .where('dueDate', isLessThan: endOfDay)
         .snapshots();
 
     _overDueListener = querySnapshotsOverDue.listen((querySnapshot) {
@@ -52,31 +53,31 @@ class TaskModel extends ChangeNotifier {
     _overDueListener?.cancel();
   }
 
-  int paThanks = 0;
-  int paIntelligence = 0;
-  int paCare = 0;
-  int paPower = 0;
-  int paSkill = 0;
-  int paPatience = 0;
-  int paHp = 0;
-  int paHpMax = 0;
+  // int paThanks = 0;
+  // int paIntelligence = 0;
+  // int paCare = 0;
+  // int paPower = 0;
+  // int paSkill = 0;
+  // int paPatience = 0;
+  // int paHp = 0;
+  // int paHpMax = 0;
 
-  int maThanks = 0;
-  int maIntelligence = 0;
-  int maCare = 0;
-  int maPower = 0;
-  int maSkill = 0;
-  int maPatience = 0;
-  int maHp = 0;
-  int maHpMax = 0;
+  // int maThanks = 0;
+  // int maIntelligence = 0;
+  // int maCare = 0;
+  // int maPower = 0;
+  // int maSkill = 0;
+  // int maPatience = 0;
+  // int maHp = 0;
+  // int maHpMax = 0;
 
-  int monsterOffense = 0;
-  int monsterHp = 0;
-  String monsterAbility = "";
-  int monsterAEffect = 0;
-  String monsterName = "";
-  int monsterHpMax = 0;
-  String monsterId = "";
+  // int monsterOffense = 0;
+  // int monsterHp = 0;
+  // String monsterAbility = "";
+  // int monsterAEffect = 0;
+  // String monsterName = "";
+  // int monsterHpMax = 0;
+  // String monsterId = "";
 
   // void _startLoading() {
   //   isLoading = true;
@@ -103,55 +104,55 @@ class TaskModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getUserGraph() async {
-    // _startLoading();
-    try {
-      //pa Data
-      final uid = FirebaseAuth.instance.currentUser!.uid;
-      final docRefUser =
-          FirebaseFirestore.instance.collection('users').doc(uid);
-      final paUserInfo = await docRefUser.get();
-      paThanks = paUserInfo.data()!["thanks"];
-      paIntelligence = paUserInfo.data()!['intelligence'] as int;
-      paCare = paUserInfo.data()!['care'] as int;
-      paPower = paUserInfo.data()!['power'] as int;
-      paSkill = paUserInfo.data()!['skill'] as int;
-      paPatience = paUserInfo.data()!['patience'] as int;
-      paHp = paUserInfo.data()!['hp'] as int;
-      paHpMax = paUserInfo.data()!['maxhp'] as int;
+  // Future<void> getUserGraph() async {
+  //   // _startLoading();
+  //   try {
+  //     //pa Data
+  //     final uid = FirebaseAuth.instance.currentUser!.uid;
+  //     final docRefUser =
+  //         FirebaseFirestore.instance.collection('users').doc(uid);
+  //     final paUserInfo = await docRefUser.get();
+  //     paThanks = paUserInfo.data()!["thanks"];
+  //     paIntelligence = paUserInfo.data()!['intelligence'] as int;
+  //     paCare = paUserInfo.data()!['care'] as int;
+  //     paPower = paUserInfo.data()!['power'] as int;
+  //     paSkill = paUserInfo.data()!['skill'] as int;
+  //     paPatience = paUserInfo.data()!['patience'] as int;
+  //     paHp = paUserInfo.data()!['hp'] as int;
+  //     paHpMax = paUserInfo.data()!['maxhp'] as int;
 
-      //ma Data
-      final maUserInfo = await FirebaseFirestore.instance
-          .collection('users')
-          .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
-          .get();
-      maThanks = maUserInfo.data()![
-          "thanks"]; //ローカス変数を新規でつく・・・らないので、finalやめろ。このクラスで使ったやつを、使うから。共有するから。になる。
-      maIntelligence = maUserInfo.data()!['intelligence'] as int;
-      maCare = maUserInfo.data()!['care'] as int;
-      maPower = maUserInfo.data()!['power'] as int;
-      maSkill = maUserInfo.data()!['skill'] as int;
-      maPatience = maUserInfo.data()!['patience'] as int;
-      maHp = maUserInfo.data()!['hp'] as int;
-      maHpMax = maUserInfo.data()!['maxhp'] as int;
+  //     //ma Data
+  //     final maUserInfo = await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc("NI7hic069bZSF6k2ZDOykEkJyRG2")
+  //         .get();
+  //     maThanks = maUserInfo.data()![
+  //         "thanks"]; //ローカス変数を新規でつく・・・らないので、finalやめろ。このクラスで使ったやつを、使うから。共有するから。になる。
+  //     maIntelligence = maUserInfo.data()!['intelligence'] as int;
+  //     maCare = maUserInfo.data()!['care'] as int;
+  //     maPower = maUserInfo.data()!['power'] as int;
+  //     maSkill = maUserInfo.data()!['skill'] as int;
+  //     maPatience = maUserInfo.data()!['patience'] as int;
+  //     maHp = maUserInfo.data()!['hp'] as int;
+  //     maHpMax = maUserInfo.data()!['maxhp'] as int;
 
-      //monster Data
-      final monsterInfo = await FirebaseFirestore.instance
-          .collection('monsters')
-          .doc("1slime")
-          .get();
-      monsterOffense = monsterInfo.data()!['offense'] as int;
-      monsterHp = monsterInfo.data()!['hp'] as int;
-      monsterAbility = monsterInfo.data()!['ability'] as String;
-      monsterAEffect = monsterInfo.data()!['a_effect'] as int;
-      monsterName = monsterInfo.data()!['name'] as String;
-      monsterHpMax = monsterInfo.data()!['maxhp'] as int;
-      monsterId = monsterInfo.id;
-    } finally {
-      //失敗しても、絶対これは呼ばれる。
-      // _endLoading();
-    }
-  } //getUserGraph
+  //     //monster Data
+  //     final monsterInfo = await FirebaseFirestore.instance
+  //         .collection('monsters')
+  //         .doc("1slime")
+  //         .get();
+  //     monsterOffense = monsterInfo.data()!['offense'] as int;
+  //     monsterHp = monsterInfo.data()!['hp'] as int;
+  //     monsterAbility = monsterInfo.data()!['ability'] as String;
+  //     monsterAEffect = monsterInfo.data()!['a_effect'] as int;
+  //     monsterName = monsterInfo.data()!['name'] as String;
+  //     monsterHpMax = monsterInfo.data()!['maxhp'] as int;
+  //     monsterId = monsterInfo.id;
+  //   } finally {
+  //     //失敗しても、絶対これは呼ばれる。
+  //     // _endLoading();
+  //   }
+  // } //getUserGraph
 
   Future<void> updateAndRepeatTask(String docId) async {
     //それぞれのdocRef取得（docRef VER）

@@ -3,14 +3,14 @@ import 'package:counter/task_list/task_monster.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class TaskCard extends StatefulWidget {
-  const TaskCard({Key? key}) : super(key: key);
+class CreateTask extends StatefulWidget {
+  const CreateTask({Key? key}) : super(key: key);
 
   @override
-  State<TaskCard> createState() => _TaskCardState();
+  State<CreateTask> createState() => _CreateTaskState();
 }
 
-class _TaskCardState extends State<TaskCard> {
+class _CreateTaskState extends State<CreateTask> {
   final TextEditingController _controller = TextEditingController();
 
   @override
