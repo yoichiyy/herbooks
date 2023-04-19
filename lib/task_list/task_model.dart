@@ -15,6 +15,14 @@ class TaskModel extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? _overDueListener;
   StreamSubscription<QuerySnapshot>? _subscription;
 
+  @override
+  void dispose() {
+    disposeRealtimeListeners();
+    super.dispose();
+  }
+ 
+//dispose メモリ領域を破棄する
+
   Future<String?> getUserName(String uid) async {
     final userDoc =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();

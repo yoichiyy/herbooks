@@ -48,6 +48,7 @@ flutter:
   assets:
     - images/
     - assets/
+    - assets/sword.mp3
 
 flutter_icons:
   android: true 

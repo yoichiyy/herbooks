@@ -4,14 +4,13 @@ import 'package:counter/counter_history/month_yume.dart';
 import 'package:flutter/material.dart';
 
 class HomeCardWidgetBook extends StatelessWidget {
-  HomeCardWidgetBook(
-      {Key? key,
-      required this.color,
-      required this.title,
-      required this.musume,
-      required this.buttonWidget,
-      })
-      : super(key: key);
+  HomeCardWidgetBook({
+    Key? key,
+    required this.color,
+    required this.title,
+    required this.musume,
+    required this.buttonWidget,
+  }) : super(key: key);
 
   final Color color;
   final String title;

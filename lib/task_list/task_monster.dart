@@ -20,6 +20,28 @@ class _TaskMonsterState extends State<TaskMonster> {
   late AudioPlayer? _audioPlayer;
   bool taskComplete = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+
+    final model = Provider.of<TaskModel>(context, listen: false);
+    model.getTodoListRealtime();
+  }
+
+  // @override
+  // void dispose() {
+  //   _audioPlayer?.dispose();
+  //   final model = Provider.of<TaskModel>(context, listen: false);
+  //   model.disposeRealtimeListeners();
+  //   super.dispose();
+  // }
+
+  void _handleTap() async {
+    await _playSound();
+    _updateImageSize();
+  }
+
   void _updateImageSize() {
     setState(() {
       _tapCount++;
@@ -37,28 +59,13 @@ class _TaskMonsterState extends State<TaskMonster> {
   }
 
   Future<void> _playSound() async {
-    _audioPlayer = AudioPlayer();
-    await _audioPlayer!.setSource(AssetSource('sword.mp3'));
-  }
-
-  void _handleTap() async {
-    await _playSound();
-    _updateImageSize();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    final model = Provider.of<TaskModel>(context, listen: false);
-    model.getTodoListRealtime();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _audioPlayer?.dispose();
-    final model = Provider.of<TaskModel>(context, listen: false);
-    model.disposeRealtimeListeners();
+    try {
+      await _audioPlayer!.setSource(AssetSource('sword.mp3'));
+      _audioPlayer!.setVolume(1.0);
+      await _audioPlayer!.resume();
+    } catch (e) {
+      debugPrint("ERROR PLAYING SOUND: $e");
+    }
   }
 
   @override
