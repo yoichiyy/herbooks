@@ -93,61 +93,63 @@ class _TaskMonsterState extends State<TaskMonster> {
           ),
         ],
       ),
-      body: Consumer<TaskModel>(
-        builder: (context, model, child) {
-          final todoListForTaskMonster = model.todoListFromModelOverDue;
+      body: Center(
+        child: Consumer<TaskModel>(
+          builder: (context, model, child) {
+            final todoListForTaskMonster = model.todoListFromModelOverDue;
 
-          return model.isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: _handleTap,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                        alignment: Alignment.center,
-                        // transform: Matrix4.identity()
-                        //   ..scale(scaleFactor, scaleFactor),
-                        width: _monsterSize,
-                        height: _monsterSize * 2,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: todoListForTaskMonster.isEmpty
-                              ? [
-                                  const Expanded(
-                                    child: Center(
-                                      child: Text('おめでとうございます！'),
-                                    ),
-                                  )
-                                ]
-                              : [
-                                  Expanded(
-                                      child:
-                                          Image.asset('images/shoggoth.png')),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        todoListForTaskMonster[0]
-                                            .taskNameOfTodoClass,
-                                        style: TextStyle(
-                                            fontSize: _monsterSize / 10),
+            return model.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: _handleTap,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                          alignment: Alignment.center,
+                          // transform: Matrix4.identity()
+                          //   ..scale(scaleFactor, scaleFactor),
+                          width: _monsterSize,
+                          height: _monsterSize * 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: todoListForTaskMonster.isEmpty
+                                ? [
+                                    const Expanded(
+                                      child: Center(
+                                        child: Text('おめでとうございます！'),
+                                      ),
+                                    )
+                                  ]
+                                : [
+                                    Expanded(
+                                        child:
+                                            Image.asset('images/shoggoth.png')),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          todoListForTaskMonster[0]
+                                              .taskNameOfTodoClass,
+                                          style: TextStyle(
+                                              fontSize: _monsterSize / 10),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-        },
+                    ],
+                  );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: "hero2",
