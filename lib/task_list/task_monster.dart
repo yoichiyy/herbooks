@@ -3,6 +3,7 @@ import 'package:counter/task_list/task_model.dart';
 import 'package:counter/task_list/thank_list.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../task_edit/create_task.dart';
@@ -63,6 +64,7 @@ class _TaskMonsterState extends State<TaskMonster> {
       await _audioPlayer!.setSource(AssetSource('sword.mp3'));
       _audioPlayer!.setVolume(1.0);
       await _audioPlayer!.resume();
+      HapticFeedback.mediumImpact(); // バイブレーション
     } catch (e) {
       debugPrint("ERROR PLAYING SOUND: $e");
     }
@@ -106,32 +108,32 @@ class _TaskMonsterState extends State<TaskMonster> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: _handleTap,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                          alignment: Alignment.center,
-                          // transform: Matrix4.identity()
-                          //   ..scale(scaleFactor, scaleFactor),
-                          width: _monsterSize,
-                          height: _monsterSize * 2,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: todoListForTaskMonster.isEmpty
-                                ? [
-                                    const Expanded(
-                                      child: Center(
-                                        child: Text('おめでとうございます！'),
-                                      ),
-                                    )
-                                  ]
-                                : [
+                    children: todoListForTaskMonster.isEmpty
+                        ? [
+                            const Expanded(
+                              child: Center(
+                                child: Text('おめでとうございます！'),
+                              ),
+                            ),
+                          ]
+                        : [
+                            GestureDetector(
+                              onTap: _handleTap,
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                                alignment: Alignment.center,
+                                // transform: Matrix4.identity()
+                                //   ..scale(scaleFactor, scaleFactor),
+                                width: _monsterSize,
+                                height: _monsterSize * 2,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
                                     Expanded(
-                                        child:
-                                            Image.asset('images/shoggoth.png')),
+                                      child: Image.asset('images/shoggoth.png'),
+                                    ),
                                     Expanded(
                                       child: Center(
                                         child: Text(
@@ -143,10 +145,10 @@ class _TaskMonsterState extends State<TaskMonster> {
                                       ),
                                     ),
                                   ],
-                          ),
-                        ),
-                      ),
-                    ],
+                                ),
+                              ),
+                            ),
+                          ],
                   );
           },
         ),

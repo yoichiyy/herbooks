@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/Util/date_time.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class APIS {
@@ -23,31 +22,32 @@ class APIS {
     // //スクリプト
     // https://script.google.com/home/projects/1d2Ky3fnyfbVn_CEZpWDSNz4pXSLOxCydhs7XpqgF-azqOSMAHAxh75wP/edit
 
-    try {
-      debugPrint("start submitting the form");
-      final body = {
-        'amount': amount,
-        'category': category,
-        'date': dateString,
-        'note': note,
-        'user': user,
-      };
-      debugPrint("Json Succeeded:$body");
+    // try {
+    //   debugPrint("start submitting the form");
+    final body = {
+      'amount': amount,
+      'category': category,
+      'date': dateString,
+      'note': note,
+      'user': user,
+    };
+    // debugPrint("Json Succeeded:$body");
 
-      //post リソース（≒データ）を作成するようなリクエスト
-      http.Response response = await http.post(
-        Uri.parse(_url),
-        body: body,
-        headers: <String, String>{
-          //リクエストに関するメタ情報
-          'Accept': 'application/json',
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      );
-      debugPrint(response.body);
-      debugPrint("http succeeded");
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    //post リソース（≒データ）を作成するようなリクエスト
+    // http.Response response =
+    await http.post(
+      Uri.parse(_url),
+      body: body,
+      headers: <String, String>{
+        //リクエストに関するメタ情報
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    );
+    //   debugPrint(response.body);
+    //   debugPrint("http succeeded");
+    // } catch (e) {
+    //   debugPrint(e.toString());
+    // }
   }
 }

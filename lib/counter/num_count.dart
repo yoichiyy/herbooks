@@ -187,27 +187,27 @@ class NumCountModel extends ChangeNotifier {
   }
 
   //登録メソッド家計→絵本
-  Future<void> kakeiRegister(String category) async {
-    int? amount = int.parse(kakeiController.text);
-    String? note = kakeiNoteController.text;
-    final snapshot =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    String userName = snapshot.data()!['name'];
+  // Future<void> kakeiRegister(String category) async {
+  //   int? amount = int.parse(kakeiController.text);
+  //   String? note = kakeiNoteController.text;
+  //   final snapshot =
+  //       await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  //   String userName = snapshot.data()!['name'];
 
-    await FirebaseFirestore.instance
-        .collection('kakei')
-        .doc(dailyCount + userName)
-        .set(<String, dynamic>{
-      'amount': amount,
-      "date": dailyCount,
-      "month": monthlyCount,
-      'note': note,
-      'category': category,
-      'user': userName,
-      // "repeat": repeat,
-    });
-    notifyListeners();
-  }
+  //   await FirebaseFirestore.instance
+  //       .collection('kakei')
+  //       .doc(dailyCount + userName)
+  //       .set(<String, dynamic>{
+  //     'amount': amount,
+  //     "date": dailyCount,
+  //     "month": monthlyCount,
+  //     'note': note,
+  //     'category': category,
+  //     'user': userName,
+  //     // "repeat": repeat,
+  //   });
+  //   notifyListeners();
+  // }
 
   Future<void> thankRegister() async {
     String uidCounterpart = "";

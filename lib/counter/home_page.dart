@@ -323,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 return;
                               } //if
                               await Future.wait([
-                                model.kakeiRegister(category),
+                                // model.kakeiRegister(category),
                                 APIS.addToSheet(model.kakeiController.text,
                                     category, model.kakeiNoteController.text),
                               ]);
