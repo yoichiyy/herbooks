@@ -1,7 +1,5 @@
 import 'package:counter/counter/book_count_area.dart';
 import 'package:counter/counter/history_sum_card.dart';
-import 'package:counter/counter/home_card_kakei.dart';
-import 'package:counter/counter/kakei_count_area.dart';
 import 'package:counter/counter/num_count.dart';
 import 'package:counter/ui/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +29,7 @@ class _AllHistoryState extends State<AllHistory> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: const Text("おこづかい"),
+            title: const Text("履歴"),
           ),
           body: Consumer<NumCountModel>(
             builder: (context, model, child) {
@@ -85,21 +83,21 @@ class _AllHistoryState extends State<AllHistory> {
                         ),
                       ),
 
-                      //かけい部分
-                      HomeCardWidgetKakei(
-                        title: "おこづかい",
-                        color: Colors.green[100]!,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            kakeiCountArea("kakei"),
-                            const SizedBox(
-                              width: 10,
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // //かけい部分
+                      // HomeCardWidgetKakei(
+                      //   title: "おこづかい",
+                      //   color: Colors.green[100]!,
+                      //   child: Column(
+                      //     mainAxisSize: MainAxisSize.min,
+                      //     children: [
+                      //       kakeiCountArea("kakei"),
+                      //       const SizedBox(
+                      //         width: 10,
+                      //         height: 10,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
 
 //はる
                       HistorySumCard(

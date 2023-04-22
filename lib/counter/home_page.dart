@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../task_list/task_model.dart';
 import '../user/goal_setting_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -34,8 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final _controllerHuhu =
       ConfettiController(duration: const Duration(milliseconds: 500));
 
-  // DateTime _pickedDate = DateTime.now();
-
   int _tempCounterYume = 0;
   void incrementTempCounterYume() {
     setState(() {
@@ -58,7 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   String category = "";
-
   final List<IconData> categoryIconList = [
     Icons.dining,
     Icons.coffee,
@@ -76,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Icons.electric_bolt,
     Icons.android,
   ];
-
 //この２つをenumに統合
   final List<String> categoryList = [
     "食事",
@@ -99,6 +96,14 @@ class _MyHomePageState extends State<MyHomePage> {
   //enhanced enum実装前
   int castId = 0;
   final List<int> checkedList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final model = Provider.of<NumCountModel>(context, listen: false);
+    model.getGraphData();
+  }
+
 
   void _checked(int index) {
     setState(() {
@@ -181,7 +186,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Consumer<NumCountModel>(
           builder: (context, model, child) {
-            model.getGraphData();
             return GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
               behavior: HitTestBehavior.opaque,
@@ -290,10 +294,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                               );
                             },
-
                             shrinkWrap: true,
                           ),
-
                           //登録ボタン
                           MaterialButton(
                             color: Colors.lightBlue.shade900,
