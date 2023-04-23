@@ -297,7 +297,25 @@ class _MyHomePageState extends State<MyHomePage> {
                               FocusScope.of(context).unfocus();
                               if (model.kakeiController.text.isEmpty ||
                                   category.isEmpty) {
-                                // 省略
+                                showDialog<AlertDialog>(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Oops"),
+                                      content: const Text("ちゃんと書きなさい"),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('OK'),
+                                          onPressed: () {
+                                            // Navigator.of(context).pop();
+                                            FocusScope.of(context).unfocus();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                return;
                               } else {
                                 _addToSheetInBackground();
                               }
@@ -339,25 +357,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           //     FocusScope.of(context).unfocus();
                           //     if (model.kakeiController.text.isEmpty ||
                           //         category.isEmpty) {
-                          //       showDialog<AlertDialog>(
-                          //         context: context,
-                          //         builder: (context) {
-                          //           return AlertDialog(
-                          //             title: const Text("Oops"),
-                          //             content: const Text("ちゃんと書きなさい"),
-                          //             actions: [
-                          //               TextButton(
-                          //                 child: const Text('OK'),
-                          //                 onPressed: () {
-                          //                   // Navigator.of(context).pop();
-                          //                   FocusScope.of(context).unfocus();
-                          //                 },
-                          //               ),
-                          //             ],
-                          //           );
-                          //         },
-                          //       );
-                          //       return;
+
                           //     } //if
 
                           //     ScaffoldMessenger.of(context).showSnackBar(
