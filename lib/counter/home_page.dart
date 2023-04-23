@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../task_list/task_model.dart';
 import '../user/goal_setting_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -104,7 +103,6 @@ class _MyHomePageState extends State<MyHomePage> {
     model.getGraphData();
   }
 
-
   void _checked(int index) {
     setState(() {
       checkedList.clear();
@@ -155,17 +153,6 @@ class _MyHomePageState extends State<MyHomePage> {
           actions: [
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-              // child: OutlinedButton(
-              //   child: Image.asset('images/shoggoth.png'),
-              //   onPressed: () async {
-              //     await Navigator.push<void>(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => const BattlePage(),
-              //       ),
-              //     );
-              //   },
-              // ),
             ),
             Padding(
                 padding: const EdgeInsets.symmetric(
@@ -186,6 +173,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Consumer<NumCountModel>(
           builder: (context, model, child) {
+            Future<void> _addToSheetInBackground() async {
+              await APIS.addToSheet(model.kakeiController.text, category,
+                  model.kakeiNoteController.text);
+            }
+
             return GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
               behavior: HitTestBehavior.opaque,
@@ -296,44 +288,19 @@ class _MyHomePageState extends State<MyHomePage> {
                             },
                             shrinkWrap: true,
                           ),
-                          //登録ボタン
+
+                          //登録ボタンNEW
                           MaterialButton(
                             color: Colors.lightBlue.shade900,
-                            onPressed: () async {
-                              HapticFeedback.mediumImpact(); // バイブレーション
+                            onPressed: () {
+                              HapticFeedback.mediumImpact();
                               FocusScope.of(context).unfocus();
                               if (model.kakeiController.text.isEmpty ||
                                   category.isEmpty) {
-                                showDialog<AlertDialog>(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text("Oops"),
-                                      content: const Text("ちゃんと書きなさい"),
-                                      actions: [
-                                        TextButton(
-                                          child: const Text('OK'),
-                                          onPressed: () {
-                                            // Navigator.of(context).pop();
-                                            FocusScope.of(context).unfocus();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                                return;
-                              } //if
-                              await Future.wait([
-                                // model.kakeiRegister(category),
-                                APIS.addToSheet(model.kakeiController.text,
-                                    category, model.kakeiNoteController.text),
-                              ]);
-                              setState(() {
-                                model.kakeiController.clear();
-                                model.kakeiNoteController.clear();
-                                checkedList.clear();
-                              });
+                                // 省略
+                              } else {
+                                _addToSheetInBackground();
+                              }
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -347,6 +314,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                               50),
                                 ),
                               );
+
+                              setState(() {
+                                model.kakeiController.clear();
+                                model.kakeiNoteController.clear();
+                                checkedList.clear();
+                              });
                             },
                             child: const Text(
                               "登録",
@@ -357,6 +330,69 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                           ),
+
+                          //登録ボタン旧式
+                          // MaterialButton(
+                          //   color: Colors.lightBlue.shade900,
+                          //   onPressed: () async {
+                          //     HapticFeedback.mediumImpact(); // バイブレーション
+                          //     FocusScope.of(context).unfocus();
+                          //     if (model.kakeiController.text.isEmpty ||
+                          //         category.isEmpty) {
+                          //       showDialog<AlertDialog>(
+                          //         context: context,
+                          //         builder: (context) {
+                          //           return AlertDialog(
+                          //             title: const Text("Oops"),
+                          //             content: const Text("ちゃんと書きなさい"),
+                          //             actions: [
+                          //               TextButton(
+                          //                 child: const Text('OK'),
+                          //                 onPressed: () {
+                          //                   // Navigator.of(context).pop();
+                          //                   FocusScope.of(context).unfocus();
+                          //                 },
+                          //               ),
+                          //             ],
+                          //           );
+                          //         },
+                          //       );
+                          //       return;
+                          //     } //if
+
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //       SnackBar(
+                          //         content: const Text('おめでとうございます。'),
+                          //         behavior: SnackBarBehavior.floating,
+                          //         duration: const Duration(milliseconds: 400),
+                          //         margin: EdgeInsets.only(
+                          //             bottom:
+                          //                 MediaQuery.of(context).size.height /
+                          //                         2 -
+                          //                     50),
+                          //       ),
+                          //     );
+
+                          //     await Future.wait([
+                          //       APIS.addToSheet(model.kakeiController.text,
+                          //           category, model.kakeiNoteController.text),
+                          //     ]);
+
+                          //     setState(() {
+                          //       model.kakeiController.clear();
+                          //       model.kakeiNoteController.clear();
+                          //       checkedList.clear();
+                          //     });
+                          //   },
+                          //   child: const Text(
+                          //     "登録",
+                          //     style: TextStyle(
+                          //       color: Colors.white,
+                          //       fontSize: 20,
+                          //       fontWeight: FontWeight.bold,
+                          //     ),
+                          //   ),
+                          // ),
                           const SizedBox(
                             width: 10,
                             height: 10,
@@ -680,7 +716,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 //   children: [
                                 Text(
                                   '$_tempCounterHuhu',
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
                                 ),
                                 //   ],
                                 // ),
