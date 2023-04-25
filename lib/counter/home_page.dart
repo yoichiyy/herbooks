@@ -177,7 +177,6 @@ class _MyHomePageState extends State<MyHomePage> {
               await APIS.addToSheet(model.kakeiController.text, category,
                   model.kakeiNoteController.text);
             }
-
             return GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
               behavior: HitTestBehavior.opaque,
