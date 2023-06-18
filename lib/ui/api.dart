@@ -16,7 +16,8 @@ class APIS {
 
     //WEBデプロイしたURL
     String _url =
-        "https://script.google.com/macros/s/AKfycbx71CsPQ45szUDVIR4R0DMP6S71VoCT6cB3HYSJTICO7qVJP-EYeU-M6G_tPH3Aw65e_Q/exec";
+        "https://script.google.com/macros/s/AKfycbzpVwqskwWb3qxJxVva3mQ7qztrQ-WgRZsNfv0hXyXwn3U8-tRIvOCbmuZxYKNx6uZGvg/exec";
+
     // //スプレッドシート
     // https://docs.google.com/spreadsheets/d/1sByIb872RedVQjnWZZR6C8IlHKp6ujmXzYDWFPyz0iE/edit#gid=1174254070
     // //スクリプト
