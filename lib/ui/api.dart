@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counter/Util/date_time.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class APIS {
@@ -16,39 +19,36 @@ class APIS {
 
     //WEBデプロイしたURL
     String _url =
-        "https://script.google.com/macros/s/AKfycbzpVwqskwWb3qxJxVva3mQ7qztrQ-WgRZsNfv0hXyXwn3U8-tRIvOCbmuZxYKNx6uZGvg/exec";
+        "https://script.google.com/macros/s/AKfycbwQ6zYYfdiOR3-sqVeIQYp1q3VZSpU3YtTxETB7QS4ELOpLB4vj4IRpC7200c9kqrs/exec";
 
-    // //スプレッドシート
-    // https://docs.google.com/spreadsheets/d/1sByIb872RedVQjnWZZR6C8IlHKp6ujmXzYDWFPyz0iE/edit#gid=1174254070
-    // //スクリプト
-    // https://script.google.com/home/projects/1d2Ky3fnyfbVn_CEZpWDSNz4pXSLOxCydhs7XpqgF-azqOSMAHAxh75wP/edit
+    try {
+      debugPrint("start submitting the form");
+      final body = jsonEncode({
+        'amount': amount,
+        'category': category,
+        'date': dateString,
+        'note': note,
+        'user': user,
+      });
+      debugPrint("Json Succeeded:$body");
 
-    // try {
-    //   debugPrint("start submitting the form");
-    final body = {
-      'amount': amount,
-      'category': category,
-      'date': dateString,
-      'note': note,
-      'user': user,
-    };
-    // debugPrint("Json Succeeded:$body");
+      //結果はどうだったか、サーバーから返されるresponseを取得
+      http.Response response = await http.post(
+        Uri.parse(_url),
+        body: body,
+        headers: <String, String>{
+          //リクエストに関するメタ情報
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+      Map<String, dynamic> responseJson = jsonDecode(response.body);
+      debugPrint(responseJson[
+          'status']); // This will output the "status" field of the response.
 
-    //post リソース（≒データ）を作成するようなリクエスト
-    // http.Response response =
-    await http.post(
-      Uri.parse(_url),
-      body: body,
-      headers: <String, String>{
-        //リクエストに関するメタ情報
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    );
-    //   debugPrint(response.body);
-    //   debugPrint("http succeeded");
-    // } catch (e) {
-    //   debugPrint(e.toString());
-    // }
+      debugPrint(response.body);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

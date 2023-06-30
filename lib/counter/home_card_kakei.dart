@@ -46,12 +46,13 @@ class HomeCardWidgetKakei extends StatelessWidget {
     );
   }
 }
+
 void _openUrl() async {
-  final url = Uri.parse('https://tinyurl.com/2d5c6cvc');
+  final url = Uri.parse(
+      'https://docs.google.com/spreadsheets/d/1fMdeCbePbmxmJ_3rjz69g-ng1dOaoyuR9zZl6KugPy8/edit#gid=1174254070&range=A1');
   if (await canLaunchUrl(url)) {
     await launchUrl(url);
   } else {
     throw 'このURLにはアクセスできません';
   }
 }
-
